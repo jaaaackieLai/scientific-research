@@ -1,0 +1,16 @@
+{
+  "name": "scientific-research",
+  "description": "Deep learning research skills for Claude Code.",
+  "owner": {
+    "name": "jacky"
+  },
+  "plugins": [
+    {
+      "name": "scientific-research",
+      "version": "0.2.0",
+      "description": "Skills for deep learning research: paper search, draft review, matplotlib figures, LaTeX tables, Astro docs site, and a hand-maintained background knowledge base.",
+      "category": "productivity",
+      "source": "./plugins/scientific-research"
+    }
+  ]
+}

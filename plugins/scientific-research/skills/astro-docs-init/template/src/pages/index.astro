@@ -1,0 +1,66 @@
+---
+import DocLayout from '../layouts/DocLayout.astro';
+
+// Section-to-page mapping; add new pages to the matching section. Unregistered pages are listed under "Uncategorized".
+const sections = [
+  { heading: 'Method design', desc: 'Definitions of models, losses, and algorithms', pages: [] as string[] },
+  { heading: 'Plans', desc: 'Unfinished or planned architecture and experiment designs', pages: [] as string[] },
+  { heading: 'Implementation', desc: 'Data processing, computation pipeline, and how to run', pages: [] as string[] },
+  { heading: 'Results and analysis', desc: 'Experimental results and diagnostic reports', pages: [] as string[] },
+];
+
+// Read each page's source and extract DocLayout's title and subtitle as the list text.
+const sources = import.meta.glob('./*.astro', { query: '?raw', import: 'default', eager: true }) as Record<string, string>;
+const pageInfo = Object.fromEntries(
+  Object.entries(sources)
+    .map(([path, src]) => [path.replace('./', '').replace('.astro', ''), src] as const)
+    .filter(([name]) => name !== 'index')
+    .map(([name, src]) => [name, {
+      name,
+      title: src.match(/<DocLayout[^>]*\stitle="([^"]*)"/)?.[1] ?? name,
+      subtitle: src.match(/<DocLayout[^>]*\ssubtitle="([^"]*)"/)?.[1] ?? '',
+    }]),
+);
+
+const listed = new Set(sections.flatMap((s) => s.pages));
+const unlisted = Object.keys(pageInfo).filter((name) => !listed.has(name)).sort();
+const groups = [
+  ...sections,
+  { heading: 'Uncategorized', desc: 'Pages not yet registered in a section', pages: unlisted },
+]
+  .map((s) => ({ ...s, pages: s.pages.filter((name) => name in pageInfo).map((name) => pageInfo[name]) }))
+  .filter((s) => s.pages.length > 0);
+---
+<DocLayout title="{{TITLE}}" subtitle="{{SUBTITLE}}">
+  {groups.length === 0 && <p class="empty">No pages yet: add a <code>.astro</code> file in <code>src/pages/</code> and it will be listed here automatically.</p>}
+  {groups.map((group) => (
+    <section class="doc-group">
+      <h2>{group.heading}</h2>
+      <p class="group-desc">{group.desc}</p>
+      <ul class="doc-list">
+        {group.pages.map((page) => (
+          <li>
+            <a href={`${page.name}.html`}>{page.title}</a>
+            {page.subtitle && <p>{page.subtitle}</p>}
+          </li>
+        ))}
+      </ul>
+    </section>
+  ))}
+</DocLayout>
+
+<style>
+  .doc-group h2 { margin-top: 40px; }
+  .empty { color: var(--muted); }
+  .group-desc { color: var(--muted); font-size: 0.9rem; margin: -6px 0 12px; }
+  .doc-list { list-style: none; padding: 0; margin: 0; }
+  .doc-list li {
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 10px;
+  }
+  .doc-list a { text-decoration: none; font-weight: 500; }
+  .doc-list a:hover { text-decoration: underline; }
+  .doc-list p { margin: 4px 0 0; color: var(--muted); font-size: 0.9rem; line-height: 1.6; }
+</style>

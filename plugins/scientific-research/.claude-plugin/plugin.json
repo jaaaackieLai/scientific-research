@@ -1,0 +1,16 @@
+{
+  "name": "scientific-research",
+  "version": "0.2.0",
+  "description": "Skills for deep learning research: paper search, draft review, matplotlib figures, LaTeX tables, Astro docs site, and a hand-maintained background knowledge base.",
+  "author": {
+    "name": "jacky"
+  },
+  "keywords": [
+    "deep-learning",
+    "research",
+    "paper",
+    "latex",
+    "matplotlib"
+  ],
+  "skills": "./skills/"
+}

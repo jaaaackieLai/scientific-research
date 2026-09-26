@@ -1,0 +1,23 @@
+% Illustrative numbers only, not real experimental results.
+% Bold = best, underline = second best, compared per column (higher is better).
+\begin{table}[!htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\caption{Classification Performance on Cifar-10 Dataset}
+\label{tab:example}
+
+\resizebox{\linewidth}{!}{
+\begin{tabular}{@{}lcccc@{}}
+
+\toprule
+\textbf{Method}  &\textbf{ACC} & \textbf{Precision} & \textbf{Recall} & \textbf{F1} \\
+
+\midrule
+RNN         & 0.583 $\pm$ 0.007             & 0.576 $\pm$ 0.009             & 0.552 $\pm$ 0.008             & 0.559 $\pm$ 0.006 \\
+CNN         & \underline{0.672 $\pm$ 0.003} & \underline{0.665 $\pm$ 0.004} & \textbf{0.671 $\pm$ 0.004}    & \underline{0.662 $\pm$ 0.003} \\
+Transformer & \textbf{0.694 $\pm$ 0.001}    & \textbf{0.687 $\pm$ 0.005}    & \underline{0.664 $\pm$ 0.003} & \textbf{0.667 $\pm$ 0.002} \\
+
+\bottomrule
+\end{tabular}
+}
+\end{table}

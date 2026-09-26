@@ -1,0 +1,171 @@
+---
+import katexPkg from 'katex/package.json';
+import ThemeToggle from '../components/ThemeToggle.astro';
+
+interface Props {
+  title: string;
+  subtitle?: string;
+  pageTitle?: string;
+}
+
+// title is the page h1; pageTitle is the browser tab title, and falls back to title when not given.
+const { title, subtitle, pageTitle = title } = Astro.props;
+const katexCss = `https://cdn.jsdelivr.net/npm/katex@${katexPkg.version}/dist/katex.min.css`;
+---
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{pageTitle}</title>
+<script is:inline>
+  // Apply the user's chosen day/night mode before painting to avoid a flash.
+  try {
+    const saved = localStorage.getItem('docs-theme');
+    if (saved === 'light' || saved === 'dark') document.documentElement.dataset.theme = saved;
+  } catch (e) {}
+</script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500&display=swap">
+<link rel="stylesheet" href={katexCss}>
+</head>
+<body>
+<header class="banner">
+  <div class="banner-inner">
+    <a class="home" href="index.html">← Docs home</a>
+    <ThemeToggle />
+  </div>
+</header>
+<main>
+  <h1>{title}</h1>
+  {subtitle && <p class="subtitle">{subtitle}</p>}
+  <slot />
+</main>
+</body>
+</html>
+
+<style is:global>
+  /* Styled after Kami (tw93/Kami): parchment background, a single ink-blue accent, warm grays, a single serif typeface, headings at 500 without bold. */
+  :root {
+    color-scheme: light;
+    --bg: #f5f4ed;
+    --surface: #faf9f5;
+    --sand: #e8e6dc;
+    --text: #141413;
+    --heading: #141413;
+    --muted: #6b6a64;
+    --border: #e3e1d6;
+    --accent: #1b365d;
+    --note-bg: #eef2f7;
+    --warn: #8a4a1f;
+    --warn-bg: #f6ece1;
+    --serif: "Noto Serif TC", "Source Han Serif TC", "Songti TC", "PMingLiU", Georgia, serif;
+    --mono: "JetBrains Mono", "SF Mono", Consolas, "Noto Serif TC", monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      color-scheme: dark;
+      --bg: #1f1e1c;
+      --surface: #282724;
+      --sand: #33322e;
+      --text: #d6d4cb;
+      --heading: #ebe8df;
+      --muted: #9a988f;
+      --border: #3a3935;
+      --accent: #9db8da;
+      --note-bg: #252c35;
+      --warn: #d9a066;
+      --warn-bg: #30271e;
+    }
+  }
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #1f1e1c;
+    --surface: #282724;
+    --sand: #33322e;
+    --text: #d6d4cb;
+    --heading: #ebe8df;
+    --muted: #9a988f;
+    --border: #3a3935;
+    --accent: #9db8da;
+    --note-bg: #252c35;
+    --warn: #d9a066;
+    --warn-bg: #30271e;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+  /* The banner stays pinned to the top while scrolling; scroll-padding keeps TOC anchors from being hidden under the banner. */
+  html { scroll-padding-top: 64px; }
+  .banner {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  .banner-inner {
+    max-width: 752px;
+    margin: 0 auto;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .home { font-size: 0.9rem; color: var(--muted); text-decoration: none; }
+  .home:hover { color: var(--accent); }
+  main { max-width: 752px; margin: 0 auto; padding: 40px 16px 80px; }
+  h1, h2, h3 { color: var(--heading); font-weight: 500; letter-spacing: 0.01em; }
+  h1 { font-size: 2rem; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-size: 1.45rem; line-height: 1.25; margin: 56px 0 12px; }
+  h3 { font-size: 1.15rem; line-height: 1.3; margin: 36px 0 8px; }
+  strong, b { font-weight: 500; color: var(--heading); }
+  a { color: var(--accent); text-underline-offset: 3px; text-decoration-thickness: 1px; }
+  .subtitle { color: var(--muted); margin: 0 0 32px; }
+  nav {
+    background: var(--surface);
+    border-radius: 8px;
+    padding: 14px 18px;
+  }
+  nav ol { margin: 0; padding-left: 20px; }
+  nav ol ol { padding-left: 18px; }
+  .note, .warn {
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin: 20px 0;
+  }
+  .note { background: var(--note-bg); }
+  .warn { background: var(--warn-bg); color: var(--text); }
+  .warn strong, .warn b { color: var(--warn); }
+  .katex-display { overflow-x: auto; overflow-y: hidden; padding: 4px 0; }
+  code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--sand);
+    border-radius: 3px;
+    padding: 1px 5px;
+    letter-spacing: 0;
+  }
+  pre {
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  pre code { background: none; padding: 0; font-size: 0.84em; }
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.93em; line-height: 1.5; }
+  th, td { padding: 8px 10px; text-align: left; vertical-align: top; }
+  th { font-weight: 500; color: var(--muted); border-bottom: 1px solid var(--muted); }
+  td { border-bottom: 1px solid var(--border); }
+  td.num, th.num { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums; }
+</style>

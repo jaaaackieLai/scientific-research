@@ -1,0 +1,28 @@
+% Illustrative numbers only, not real experimental results.
+% \checkmark = module used, blank = not used; full model in the last row.
+% Bold = best, underline = second best, compared per column (higher is better).
+% Requires: booktabs, graphicx, amssymb
+\begin{table}[!htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\caption{Ablation Study on Cifar-10 Dataset}
+\label{tab:ablation}
+
+\resizebox{\linewidth}{!}{
+\begin{tabular}{@{}ccccc@{}}
+
+\toprule
+\multicolumn{3}{c}{\textbf{Components}} & \multicolumn{2}{c}{\textbf{Metrics}} \\
+\cmidrule(lr){1-3} \cmidrule(lr){4-5}
+\textbf{Module A} & \textbf{Module B} & \textbf{Module C} & \textbf{ACC} & \textbf{F1} \\
+
+\midrule
+           &            &            & 0.612 $\pm$ 0.004             & 0.598 $\pm$ 0.005 \\
+\checkmark &            &            & 0.655 $\pm$ 0.003             & 0.641 $\pm$ 0.004 \\
+\checkmark & \checkmark &            & \underline{0.681 $\pm$ 0.002} & \underline{0.670 $\pm$ 0.003} \\
+\checkmark & \checkmark & \checkmark & \textbf{0.694 $\pm$ 0.001}    & \textbf{0.682 $\pm$ 0.002} \\
+
+\bottomrule
+\end{tabular}
+}
+\end{table}

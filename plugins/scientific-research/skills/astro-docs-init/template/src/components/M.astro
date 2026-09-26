@@ -1,0 +1,13 @@
+---
+// Convert LaTeX to HTML with KaTeX at build time; display=true renders math on its own line.
+import katex from 'katex';
+
+interface Props {
+  tex: string;
+  display?: boolean;
+}
+
+const { tex, display = false } = Astro.props;
+const html = katex.renderToString(tex, { displayMode: display, throwOnError: true });
+---
+<Fragment set:html={html} />

@@ -1,0 +1,20 @@
+{
+  "name": "scientific-research",
+  "interface": {
+    "displayName": "Scientific Research"
+  },
+  "plugins": [
+    {
+      "name": "scientific-research",
+      "source": {
+        "source": "local",
+        "path": "./plugins/scientific-research"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}

@@ -1,0 +1,58 @@
+---
+// Doc page sample: copy to src/pages/<name>.astro, rewrite the content, and add <name> to sections in index.astro.
+import DocLayout from '../layouts/DocLayout.astro';
+import M from '../components/M.astro';
+import Note from '../components/Note.astro';
+import Warn from '../components/Warn.astro';
+import CodeBlock from '../components/CodeBlock.astro';
+// Read result numbers from JSON, do not copy by hand: import results from '../data/<run>.json';
+---
+<DocLayout title="Page title" subtitle="One sentence on the purpose of this page; shown in the index list">
+
+  <Note>
+    Put background, assumptions, or symbol definitions here; if there is a project-wide glossary (e.g. CONTEXT.md), link to it instead of redefining.
+  </Note>
+
+  <nav>
+    <ol>
+      <li><a href="#goal">Goal</a></li>
+      <li><a href="#method">Approach</a>
+        <ol>
+          <li><a href="#formula">Formula</a></li>
+          <li><a href="#run">How to run</a></li>
+        </ol>
+      </li>
+      <li><a href="#result">Results</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="goal">1. Goal</h2>
+  <p>The question to answer and the criteria for judging it. Inline math uses <M tex={String.raw`x\in\mathbb{R}^{B\times T\times C}`} />.</p>
+
+  <h2 id="method">2. Approach</h2>
+
+  <h3 id="formula">2.1 Formula</h3>
+  <p>Add <code>display</code> for math on its own line:</p>
+  <M display tex={String.raw`\mathcal{L}=-\frac{1}{N}\sum_{i=1}^{N}\log p_i.`} />
+
+  <h3 id="run">2.2 How to run</h3>
+  <CodeBlock code={String.raw`python scripts/run.py --config configs/{name}.yaml`} />
+
+  <Warn>
+    <strong>Limitation:</strong> assumptions that affect the conclusions or are easy to trip over go in a warning box.
+  </Warn>
+
+  <h2 id="result">3. Results</h2>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr><th>Setting</th><th class="num">Accuracy</th><th class="num">95% CI</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>baseline</td><td class="num">0.812</td><td class="num">[0.790, 0.834]</td></tr>
+        <tr><td>ours</td><td class="num">0.845</td><td class="num">[0.826, 0.863]</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</DocLayout>
