@@ -24,7 +24,7 @@ import pubstyle as ps
 # lighter = more components removed, so the reds build up toward the full method (OURS).
 METHODS = ["Baseline A", "Baseline B", "Baseline C",
            "Ours (w/o X + Y)", "Ours (w/o Y)", "Ours"]
-COLORS = [ps.GREENS[1], ps.GREENS[2], ps.PURPLES[1], ps.REDS[0], ps.REDS[1], ps.OURS]
+COLORS = [ps.GREENS[-2], ps.GREENS[2], ps.PURPLES[-2], ps.REDS[1], ps.REDS[0], ps.OURS]
 METRICS = {  # metric (with direction arrow) -> (mean per method, std per method)
     "RMSE ↓": ([0.94, 1.05, 0.99, 0.89, 0.75, 0.62], [0.08, 0.09, 0.09, 0.07, 0.06, 0.05]),
     "MAE ↓": ([0.75, 0.85, 0.78, 0.70, 0.59, 0.48], [0.07, 0.08, 0.07, 0.06, 0.05, 0.04]),

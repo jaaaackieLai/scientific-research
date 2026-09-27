@@ -17,23 +17,23 @@ from matplotlib.ticker import FuncFormatter
 # Font sizes in pt. Sized for panels of about 7-12 x 6-8 inches.
 FONT = {"title": 36, "label": 32, "tick": 28, "legend": 28, "annot": 24}
 
-# Approved family palettes. Arrays are light -> dark so index order means weak -> strong.
-# OURS is the darkest red; REDS contains its three lighter ablation shades.
-OURS = "#c50000"
-BLUES = ["#83e1ff", "#64b9da", "#4693b5", "#276e90", "#004c6d"]
-GREENS = ["#a7eb96", "#7ebf6f", "#56944a", "#2f6b26", "#014502"]
-YELLOWS = ["#fddc91", "#f4ba4a", "#de9319"]
-REDS = ["#ef8368", "#df5a3e", "#d33a21"]
-PURPLES = ["#f2c3ff", "#c692d8", "#9b63b3", "#70358f", "#44006c"]
-YELLOW = YELLOWS[0]  # backward-compatible single-family color
+# Approved family palettes. Arrays are dark -> light: index 0 is the strongest shade, -1 the softest.
+# OURS is the darkest red; REDS contains its four lighter ablation shades.
+OURS = "#b62b2e"
+BLUES = ["#163973", "#23629e", "#3290cb", "#6dbfe2", "#b9ebf6"]
+GREENS = ["#014e31", "#1f7b42", "#429a4d", "#8dcb83", "#c5efb9"]
+YELLOWS = ["#995313", "#c67d1c", "#f0a928", "#ffc95c", "#ffe091"]
+REDS = ["#e85941", "#f58667", "#ffbfa4", "#ffe3d5"]
+PURPLES = ["#5d338c", "#8d56b7", "#b885d3", "#d3a8e3", "#edcef4"]
+YELLOW = YELLOWS[-1]  # backward-compatible single-family color
 GRAY = "#CFCECE"
 # Independent baselines: soft shades from the approved families, plus neutral gray.
-PASTELS = [GRAY, YELLOWS[0], PURPLES[0], GREENS[0], BLUES[0],
-           YELLOWS[1], PURPLES[1], GREENS[1], BLUES[1], YELLOWS[2]]
+PASTELS = [GRAY, YELLOWS[-1], PURPLES[-1], GREENS[-1], BLUES[-1],
+           YELLOWS[-2], PURPLES[-2], GREENS[-2], BLUES[-2], YELLOWS[-3]]
 # (fill, outline) pairs for area charts: lightest fill + darkest outline.
-AREA_BLUE = (BLUES[0], BLUES[-1])
-AREA_RED = (REDS[0], OURS)
-AREA_GREEN = (GREENS[0], GREENS[-1])
+AREA_BLUE = (BLUES[-1], BLUES[0])
+AREA_RED = (REDS[-1], OURS)
+AREA_GREEN = (GREENS[-1], GREENS[0])
 # Horizontal reference line, e.g. "SFT only" or "random policy".
 REFERENCE = {"color": "black", "alpha": 0.3, "linewidth": 4, "linestyle": "--"}
 # Uncertainty band around a mean curve (+-1 std).
@@ -101,7 +101,7 @@ def set_sci_axis(ax, axis="x", minor=False):
         axis_obj.set_minor_formatter(formatter)
 
 
-def ranked(n, dark=BLUES[-1], light=BLUES[0]):
+def ranked(n, dark=BLUES[0], light=BLUES[-1]):
     """n soft shades of one hue, dark -> light, for baselines listed best to worst."""
     if n == 1:
         return [dark]

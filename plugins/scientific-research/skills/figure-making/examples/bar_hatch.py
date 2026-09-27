@@ -22,7 +22,7 @@ import pubstyle as ps
 
 # Replace with real data.
 METHODS = ["Baseline A", "Baseline B", "Ours"]
-COLORS = [ps.GREENS[2], ps.PURPLES[1], ps.OURS]
+COLORS = [ps.GREENS[2], ps.PURPLES[-2], ps.OURS]
 YLABEL = "Probability"
 PANELS = {  # panel title -> {condition: one value per method}
     "Correctness ↑": {

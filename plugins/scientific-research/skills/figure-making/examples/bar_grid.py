@@ -23,7 +23,7 @@ import pubstyle as ps
 # Replace with real data. Soft hue = model family, shade = model size (light = small);
 # ours is the only saturated color.
 METHODS = ["Family A 1B", "Family A 7B", "Family A 70B", "Family B chat", "Family B reasoner", "Ours"]
-COLORS = [ps.GREENS[0], ps.GREENS[1], ps.GREENS[2], ps.PURPLES[0], ps.PURPLES[1], ps.OURS]
+COLORS = [ps.GREENS[-1], ps.GREENS[-2], ps.GREENS[2], ps.PURPLES[-1], ps.PURPLES[-2], ps.OURS]
 YLABEL = "Accuracy ↑"
 CATEGORIES = {  # category -> one value per method
     "Algebra": [0.20, 0.54, 0.57, 0.66, 0.75, 0.82],

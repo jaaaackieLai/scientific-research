@@ -23,9 +23,9 @@ Regular line width is 5 pt and markers are 10 pt. Gradient lines from `fade_line
 
 | Role | `pubstyle` constant |
 |---|---|
-| Proposed method | `OURS` (`#c50000`), the only deep red in the whole figure |
+| Proposed method | `OURS` (`#b62b2e`), the only deep red in the whole figure |
 | Ablation variants of the proposed method | `REDS`, lighter the more components are removed, deepening toward the full method |
-| Baseline methods in the same family | `BLUES`, `GREENS`, `YELLOWS`, `PURPLES`; all arrays go from light to dark, small or weak ones light, large or strong ones dark |
+| Baseline methods in the same family | `BLUES`, `GREENS`, `YELLOWS`, `PURPLES`; all arrays go from dark to light (index 0 darkest), small or weak ones light, large or strong ones dark |
 | Unrelated baseline methods | Take one color each from `PASTELS` in order |
 | A group of baseline methods ranked by performance | `ranked(n)`: one hue from dark to light |
 | Category to emphasize when there is no proposed method | `BLUES[2]`; the rest use `GRAY` |
@@ -33,10 +33,10 @@ Regular line width is 5 pt and markers are 10 pt. Gradient lines from `fade_line
 | Error band of a mean curve | Same-color `fill_between`, ±1 standard deviation, `BAND_ALPHA` |
 | Area chart | `AREA_BLUE`, `AREA_RED`, `AREA_GREEN`: light fill with a dark outline; when drawn as lines, follow the method colors above |
 
-- All palettes go from light to dark: `BLUES = [#83e1ff, #64b9da, #4693b5, #276e90, #004c6d]`, `GREENS = [#a7eb96, #7ebf6f, #56944a, #2f6b26, #014502]`, `YELLOWS = [#fddc91, #f4ba4a, #de9319]`, `PURPLES = [#f2c3ff, #c692d8, #9b63b3, #70358f, #44006c]`.
-- The proposed method's red scale is `REDS = [#ef8368, #df5a3e, #d33a21]`, followed by the full method `OURS = #c50000`.
+- All palettes go from dark to light: `BLUES = [#163973, #23629e, #3290cb, #6dbfe2, #b9ebf6]`, `GREENS = [#014e31, #1f7b42, #429a4d, #8dcb83, #c5efb9]`, `YELLOWS = [#995313, #c67d1c, #f0a928, #ffc95c, #ffe091]`, `PURPLES = [#5d338c, #8d56b7, #b885d3, #d3a8e3, #edcef4]`.
+- The proposed method's red scale is the full method `OURS = #b62b2e`, followed by the lighter ablation shades `REDS = [#e85941, #f58667, #ffbfa4, #ffe3d5]`.
 - When the proposed method is present, baseline methods do not use red; prefer light or mid tones of blue, green, yellow, and purple; the red scale is only for the proposed method and its ablations.
-- When a family has more than 3 members, use `ranked(n, dark=darkest color of the family, light=lightest color of the family)` to generate n steps of the same hue (reversed to go light to dark).
+- When a family has more than 5 members, use `ranked(n, dark=darkest color of the family, light=lightest color of the family)` to generate n steps of the same hue, dark to light like the arrays.
 - Within the same paper, the same method uses the same color in every figure.
 - When several lines from the same family appear together, use different markers (`o`, `s`, `^`) and line styles (solid, dashed, dash-dot) in addition to color; do not rely on color shades alone.
 - Hatching and text on dark fills are white (`is_dark()`).
