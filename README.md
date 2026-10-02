@@ -10,8 +10,9 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 
 | Skill | Description |
 | --- | --- |
-| background-knowledge | Hand-maintained domain knowledge base (label settings, model architectures, data types, training scenarios); manual invocation only |
+| background-knowledge | Hand-maintained domain knowledge base (label settings, model architectures, data types, training scenarios) and paper notes; manual invocation only |
 | paper-search | Search and filter papers by fixed quality criteria; outputs a list of qualifying papers with the reason for each decision |
+| paper-reading | Deep-read one paper (insight, motivation, problem, method, why it works), always check it against the official code, and write a note into background-knowledge |
 | article-advice | Review and rewrite your own paper draft, section by section, plus cross-section consistency checks |
 | figure-making | Make or review paper data figures with matplotlib |
 | table-making | Make or review paper tables with LaTeX (booktabs) |
