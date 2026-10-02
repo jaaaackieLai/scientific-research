@@ -16,6 +16,7 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 | article-advice | Review and rewrite your own paper draft, section by section, plus cross-section consistency checks |
 | figure-making | Make or review paper data figures with matplotlib |
 | table-making | Make or review paper tables with LaTeX (booktabs) |
+| presentation | Make scientific talk slides: English slide text sized for 24 pt, plus a spoken Chinese script for presenting to your professor |
 | astro-docs-init | Create a Kami-style Astro documentation site in the project's `docs/` |
 
 ## Usage
