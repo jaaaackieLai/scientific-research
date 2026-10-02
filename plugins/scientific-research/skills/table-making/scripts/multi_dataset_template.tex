@@ -1,0 +1,34 @@
+% Illustrative numbers only, not real experimental results.
+% Multiple datasets: dataset in the first column via \multirow (one group per dataset), methods in the second column,
+% metrics on the top axis. \midrule separates dataset groups; the proposed method is the last row of every group.
+% Yes/no properties (here "Pretrain") are \checkmark columns instead of suffixes in the method name.
+% Bold = best, underline = second best, compared per column WITHIN each dataset group (higher is better).
+% Requires: booktabs, graphicx, multirow, amssymb
+\begin{table}[!htbp]
+\centering
+\renewcommand{\arraystretch}{1.2}
+\caption{Classification Performance on Two Datasets}
+\label{tab:multi_dataset}
+
+\resizebox{\linewidth}{!}{
+\begin{tabular}{@{}llcccc@{}}
+
+\toprule
+\textbf{Dataset} & \textbf{Method} & \textbf{Pretrain} & \textbf{ACC} & \textbf{F1} & \textbf{AUPRC} \\
+
+\midrule
+\multirow{3}{*}{\textbf{Dataset A}}
+ & Baseline      &            & 0.612 $\pm$ 0.004             & 0.598 $\pm$ 0.005             & \underline{0.701 $\pm$ 0.006} \\
+ & Baseline      & \checkmark & \underline{0.655 $\pm$ 0.003} & \underline{0.641 $\pm$ 0.004} & 0.688 $\pm$ 0.005 \\
+ & \textbf{Ours} & \checkmark & \textbf{0.694 $\pm$ 0.001}    & \textbf{0.682 $\pm$ 0.002}    & \textbf{0.735 $\pm$ 0.003} \\
+
+\midrule
+\multirow{3}{*}{\textbf{Dataset B}}
+ & Baseline      &            & \underline{0.702 $\pm$ 0.006} & 0.671 $\pm$ 0.007             & 0.744 $\pm$ 0.008 \\
+ & Baseline      & \checkmark & 0.698 $\pm$ 0.004             & \underline{0.680 $\pm$ 0.005} & \underline{0.751 $\pm$ 0.006} \\
+ & \textbf{Ours} & \checkmark & \textbf{0.731 $\pm$ 0.002}    & \textbf{0.709 $\pm$ 0.003}    & \textbf{0.772 $\pm$ 0.004} \\
+
+\bottomrule
+\end{tabular}
+}
+\end{table}

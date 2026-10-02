@@ -23,14 +23,17 @@ Save output tables as `.tex` files in the project's `tables/` folder (e.g. `tabl
 | Template | Difference |
 |---|---|
 | `scripts/table_template.tex` | **Use by default**. |
+| `scripts/multi_dataset_template.tex` | **Multiple datasets**. Dataset in the first column with `\multirow{n}{*}{\textbf{Dataset}}`, methods in the second column, one row group per dataset separated by `\midrule`; includes a yes/no `\checkmark` property column |
 | `scripts/ablation_template.tex` | Ablation. Same layout as above; module columns use `\checkmark`, and upper grouped headers (Components / Metrics) are separated with `\cmidrule` instead of vertical lines |
 
 Required packages: `booktabs`, `graphicx` (`\resizebox`), `amssymb` (`\checkmark`), `multirow` (when there are merged rows).
 
 ## Row and column arrangement
 
-- **Metrics always go on the top horizontal axis**: metrics such as ACC and F1 are columns and methods are rows, so the reader compares the same metric vertically. With multiple datasets, use grouped headers (datasets on the upper level, metrics on the lower level); do not move metrics to rows.
-- **The proposed method always goes in the last row**; in ablations the full model is the proposed method, and also goes in the last row.
+- **Metrics always go on the top horizontal axis**: metrics such as ACC and F1 are columns and methods are rows, so the reader compares the same metric vertically. Do not move metrics to rows.
+- **Multiple datasets go in the first column**, not in grouped headers: add a `Dataset` column before `Method`, write each dataset once with `\multirow{n}{*}{\textbf{APAVA}}` (n = number of methods), leave that cell empty in the group's other rows, and separate dataset groups with `\midrule`. Use `scripts/multi_dataset_template.tex`.
+- **Binary attributes get their own `\checkmark` column**: when rows differ by a yes/no property (e.g. channelwise or not, with or without pretraining, a module on or off), do not encode it as a suffix in the method name such as `SoftCLT (channelwise)`. Keep the base method name and add one column per property (header = property name), with `\checkmark` if it applies and blank if not. The same applies to ablations, where each module is such a property.
+- **The proposed method always goes in the last row** (of every dataset group); in ablations the full model is the proposed method, and also goes in the last row. The proposed method's name may be bold (e.g. `\textbf{Ours}`).
 
 ## Layout rules (Püschel, *Small Guide to Making Nice Tables*)
 
@@ -48,14 +51,16 @@ Required packages: `booktabs`, `graphicx` (`\resizebox`), `amssymb` (`\checkmark
 
 ## Highlighting rules
 
-- **Best**: `\textbf{}`; **second best**: `\underline{}`. Compare each column (each metric, each dataset) separately, according to that metric's direction.
+- **Best**: `\textbf{}`; **second best**: `\underline{}`. Compare each column (each metric) separately, according to that metric's direction; with multiple datasets, compare only within the same dataset group.
 - With standard deviations, mark the whole cell: `\textbf{0.694 $\pm$ 0.001}`.
 - When tied for best, bold all of them, and do not mark a second best in that case.
 - **Ablations**: one column per module, `\checkmark` if used, blank if not; the full model goes in the last row. See `scripts/ablation_template.tex`.
 
 ## Checks before delivery
 
-- Metrics on the top horizontal axis, proposed method in the last row
+- Metrics on the top horizontal axis, proposed method in the last row (of every dataset group)
+- Multiple datasets: `Dataset` first column with `\multirow`, groups separated by `\midrule`
+- Yes/no properties are `\checkmark` columns, not suffixes in method names
 - No extra vertical lines, `\hline`, or double rules
 - Bold and underline in each column follow that metric's direction, with only one best (unless tied)
 - Consistent decimal places within a column, with spaces around `$\pm$`

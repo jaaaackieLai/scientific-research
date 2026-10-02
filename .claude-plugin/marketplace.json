@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "scientific-research",
-      "version": "0.3.4",
+      "version": "0.3.5",
       "description": "Skills for deep learning research: paper search, paper reading, draft review, matplotlib figures, LaTeX tables, Astro docs site, and a hand-maintained background knowledge base.",
       "category": "productivity",
       "source": "./plugins/scientific-research"
