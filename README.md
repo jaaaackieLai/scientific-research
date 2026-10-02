@@ -13,7 +13,7 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 | background-knowledge | Hand-maintained domain knowledge base (label settings, model architectures, data types, training scenarios) and paper notes; manual invocation only |
 | paper-search | Search and filter papers by fixed quality criteria; outputs a list of qualifying papers with the reason for each decision |
 | paper-reading | Deep-read one paper (insight, motivation, problem, method, why it works), always check it against the official code, and write a note into background-knowledge |
-| article-advice | Review and rewrite your own paper draft, section by section, plus cross-section consistency checks |
+| article-advice | Review, rewrite, or draft paper sections from your own material, plus cross-section consistency checks; AI-written text always carries an academic-ethics notice |
 | figure-making | Make or review paper data figures with matplotlib |
 | table-making | Make or review paper tables with LaTeX (booktabs) |
 | presentation | Make scientific talk slides: English slide text sized for 24 pt, plus a spoken Chinese script for presenting to your professor |
@@ -68,4 +68,4 @@ cp -rf "scientific-research/plugins/scientific-research/skills/"* ".agents/skill
 
 Notes:
 - This copies the current version. After the skills here are updated, copy them again to sync.
-- With this method, skill names have no prefix; use `/paper-search` directly.
+- With this method, skill names have no prefix.
