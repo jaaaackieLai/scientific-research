@@ -1,6 +1,6 @@
 # Word bank
 
-Basis: word usage statistics and reading of the main text of 10 example papers (list in "Sources" of writing-patterns.md).
+Basis: word usage statistics and reading of the main text of 35 example papers (list in "Sources" of writing-patterns.md).
 
 Criterion: most of these words are not banned; rather, they carry no information when they appear alone. If replacing them with numbers or mechanisms makes the sentence concrete, suggest the change; if not, leave it. Good papers use these words too, but immediately followed by numbers, comparison targets, or mechanisms.
 
@@ -32,7 +32,8 @@ Criterion: most of these words are not banned; rather, they carry no information
 
 | Word | Suggestion |
 |---|---|
-| significantly | With a test: write statistically significant and the test used. Without: change to substantially or give the number directly |
+| significantly | With a test: write statistically significant and the test used. Without: change to substantially or give the number directly (in 25 arXiv 2026 papers: 49 uses in 17 papers, "statistically significant" 0 times) |
+| consistently / across all / dominates / on all benchmarks | Check every cell of the table; the most common false sentence in good papers (contradicted by the paper's own table in 5 of 25). Rewrite as a count (lowest on two of four datasets, second on the other two) or name the exceptions |
 | greatly / dramatically / seriously / very | Replace with numbers or ratios: two orders of magnitude fewer parameters |
 | clearly / obviously | Delete |
 
@@ -74,6 +75,7 @@ A good pattern is asserting the number first and hedging the cause in the same s
 | large / small | Add a comparison target: two orders of magnitude fewer than MLLMs |
 | fast / efficient | Give time or complexity: +0.67% end-to-end overhead, O(MN) |
 | improves performance | State the metric and the change: from 43.7% to 96.0% |
+| up to N× / N% | Also give the typical value or the condition where the maximum occurs, and say whether it is relative or absolute |
 
 ## G. Common usage by native Chinese-speaking authors
 
@@ -99,6 +101,8 @@ A good pattern is asserting the number first and hedging the cause in the same s
 | Delimiting scope | is beyond the scope of this paper / we leave X to future work |
 | Limits of a claim | This does not imply that ... / should be read conditionally |
 | What the goal is not | Our aim is not to X, but rather to Y. |
+| Difference in mechanism | does X rather than Y / enters only through X, not through Y (rather than: 100 uses in 23 of 25 papers) |
+| Correlation, not cause | We do not claim that X causes Y, only that X is correlated with Y. |
 
 ## Updating the word bank
 

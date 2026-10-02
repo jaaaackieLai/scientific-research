@@ -46,5 +46,8 @@ Mark "supported" only when a concrete number or result is found; every "needs ev
 ## 6. Consistent statements
 
 - Methods criticized in the introduction are described and criticized consistently in related work.
-- Limitations in the conclusion do not contradict claims in the introduction or experiments.
+- Limitations in the conclusion do not contradict claims in the introduction or experiments; future work does not contradict limitations (e.g., "should scale better" while limitations say more data did not help).
+- The same result keeps the same verb strength in the abstract, figure captions, and conclusion (not mitigates in a caption and overcomes in the conclusion).
+- The conclusion claims no capability that was not measured (e.g., data efficiency with no data-scaling experiment).
+- The same method on the same task with different numbers in two tables: the setting difference is explained.
 - A concrete example from the introduction reads better if it reappears in the method or experiments; you may suggest this, but it is not an error.

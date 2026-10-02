@@ -23,7 +23,8 @@ When explaining why existing methods fail, walk through the causal chain: existi
 
 - [ ] Importance is "necessary" rather than "popular": "X is popular" is not motivation
 - [ ] Limitations are concrete failure cases, not abstract criticism
-- [ ] The i-th limitation → i-th challenge → i-th module correspond; when the counts do not match, there is an explanation
+- [ ] The i-th limitation → i-th challenge → i-th module correspond; when the counts do not match, there is an explanation. Short labels reused across sections make this visible (writing-patterns.md 1.6)
+- [ ] Contributions say which components are borrowed and what is new (writing-patterns.md 1.4)
 - [ ] Challenges are derived from the problem, not reasons invented for the modules
 - [ ] Contributions contain no vague items like extensive experiments, and nothing the paper did not actually do
 - [ ] Numbers in the contributions can be found in the experiments section

@@ -52,11 +52,16 @@ Experimental setup (datasets, metrics and the reason for choosing them, baseline
 - [ ] Baseline and proposed-method numbers come from the same source (do not use paper-reported numbers on one side and your own runs on the other); explain when they differ
 - [ ] Metrics are the standard metrics for this task
 - [ ] Custom measures have a name, are defined on first appearance, are placed in a table column, and are referred to by name afterward (do not write by this measure)
+- [ ] Reimplemented baselines reproduce the originally reported numbers, or the discrepancy and its likely cause are stated
+- [ ] Differences in training data, compute, and parameter count from the baselines are stated, including costs outside the compared module
+- [ ] Evaluation on a subset: the subset was chosen in advance and checked to be representative; missing baselines or settings are explained
+- [ ] Failed runs (divergence, NaN) and design choices that did not help are reported, at least in the appendix
+- [ ] When a knob trades two metrics, compare whole curves or compare at a matched value of one metric, not single points
 
 ## Figures and tables
 
 - Captions: define every method name, variant, abbreviation, and subscript in them, plus what bold, underline, and colors mean. Readers should understand from the figure and caption alone.
-- Architecture figure captions explain the pipeline, not just Overview of the model; the first sentence of a results figure caption states the point to be read from it.
+- Architecture figure captions explain the pipeline, not just Overview of the model; the first sentence of a results figure caption states the point to be read from it. For trade-off plots, say which direction is better (lower-right is better); state where each number comes from (reported vs. reproduced) and key settings.
 - Tables: caption goes above; headers mark the metric direction (Acc ↑, Error ↓) and units; decimal places are consistent within a column; one point per table; highlight with bold or underline, not heavy coloring.
 
 ## Rewrite example
