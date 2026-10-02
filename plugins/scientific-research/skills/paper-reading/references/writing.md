@@ -5,6 +5,7 @@ The reader should finish the note understanding the idea well enough to explain 
 ## 1. Define everything, once
 - Every symbol and term is defined at first use, in words, including what it depends on. Not "$h_t$ depends on $h_{t-1}$", but "the RNN keeps a representation of the sequence read so far, the hidden state $s_t$; computing $s_t$ needs $s_{t-1}$, so positions must be processed one after another".
 - One symbol, one meaning across the whole note. If the paper reuses a symbol (e.g. $h$ for both the RNN hidden state and the number of heads), rename one and say so in the notation table.
+- One concept, one name. Pick one term (e.g. "head", "baseline") and use it every time; do not rotate synonyms or translations.
 - The notation table sits at the top, before any equation.
 - Abbreviations (BLEU, BPE, FLOPs) are spelled out and explained in one sentence the first time.
 
@@ -31,3 +32,5 @@ Do not list components as bullets of facts. Each component is a short paragraph 
 - Prose for explanations. Tables only for look-up content: notation, setup checklist, baselines, claims, code comparison.
 - Every factual statement cites its location (Sec., Eq., Table, Fig.).
 - Short paragraphs. No emoji, no star ratings.
+- Keep the source's certainty. If the paper says "we suspect", write that the authors suspect; do not turn a guess into a fact or an estimate into a measurement.
+- No hollow modifiers: no stacked hedges ("may potentially help to some extent") and no quality words ("powerful", "significant") without a number behind them.
