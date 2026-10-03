@@ -3,6 +3,7 @@
 Confirm item by item before delivering a figure you made; when reviewing the user's figure or code, also check item by item, and for each problem state the location, the reason, and the fix.
 
 - The proposed method is identifiable at a glance: it is the only saturated color, and baseline methods are all light colors
+- At crossings and overlapping points, the proposed method's line and markers remain above baseline/ablation lines, reference lines, and fills/error bands; explicit `zorder` preserves this even when another method is plotted later
 - Gaps are visible: no row of bars at almost the same height
 - Text in the figure keeps only the values the claim needs; other explanations go into suggested caption text
 - Every number in the figure can be recomputed directly from the user's data; differences, cumulative values, proportions, and lead times are allowed, but no imputed values or arbitrary merging of different metrics

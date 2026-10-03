@@ -32,7 +32,7 @@ Every file in `examples/` runs as is, with demo data written at the top of the f
 
 When there is no matching template (e.g. heatmaps, training curves, class distributions), adapt the closest template following `style.md`.
 
-All templates import `scripts/pubstyle.py` (font sizes, color constants, `ranked()`, `sci_label()`, `axis_labels()`, `set_sci_axis()`, `patches()`, `legend_panel()`, `label_bars()`, `tight_ylim()`, `fade_line()`, `pad_ylim()`, `is_dark()`, `save()`).
+All templates import `scripts/pubstyle.py` (font sizes, color constants, `ranked()`, `sci_label()`, `axis_labels()`, `set_sci_axis()`, `patches()`, `legend_panel()`, `label_bars()`, `tight_ylim()`, `line_zorder()`, `fade_line()`, `pad_ylim()`, `is_dark()`, `save()`).
 
 ## Files to read
 

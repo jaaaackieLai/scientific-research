@@ -35,7 +35,7 @@ AREA_BLUE = (BLUES[-1], BLUES[0])
 AREA_RED = (REDS[-1], OURS)
 AREA_GREEN = (GREENS[-1], GREENS[0])
 # Horizontal reference line, e.g. "SFT only" or "random policy".
-REFERENCE = {"color": "black", "alpha": 0.3, "linewidth": 4, "linestyle": "--"}
+REFERENCE = {"color": "black", "alpha": 0.3, "linewidth": 4, "linestyle": "--", "zorder": 1}
 # Uncertainty band around a mean curve (+-1 std).
 BAND_ALPHA = 0.2
 
@@ -153,16 +153,22 @@ def tight_ylim(ax, values, errs=None, pad=0.25):
     ax.set_ylim(max(0.0, lo - pad * span) if lo >= 0 else lo - pad * span, hi + pad * span)
 
 
+def line_zorder(color):
+    """Keep the proposed method (OURS) above baseline and ablation curves."""
+    return 3 if to_hex(color).lower() == OURS else 2
+
+
 def fade_line(ax, x, y, color, label=None, alpha=(0.3, 0.9), marker="o"):
     """Line whose segments fade in from left to right, with solid markers on top."""
     x, y = np.asarray(x, dtype=float), np.asarray(y, dtype=float)
     points = np.column_stack([x, y]).reshape(-1, 1, 2)
     segments = np.concatenate([points[:-1], points[1:]], axis=1)
     rgb = to_rgb(color)
+    zorder = line_zorder(color)
     colors = [(*rgb, a) for a in np.linspace(*alpha, len(segments))]
-    ax.add_collection(LineCollection(segments, colors=colors, linewidths=4, capstyle="round"))
-    ax.plot(x, y, linestyle="none", marker=marker, markersize=16, color=color)
-    ax.plot([], [], color=color, linewidth=4, marker=marker, markersize=16, label=label)  # legend entry
+    ax.add_collection(LineCollection(segments, colors=colors, linewidths=4, capstyle="round", zorder=zorder))
+    ax.plot(x, y, linestyle="none", marker=marker, markersize=16, color=color, zorder=zorder)
+    ax.plot([], [], color=color, linewidth=4, marker=marker, markersize=16, label=label, zorder=zorder)  # legend entry
     ax.autoscale_view()
 
 

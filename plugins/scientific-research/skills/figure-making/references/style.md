@@ -57,6 +57,7 @@ Regular line width is 5 pt and markers are 10 pt. Gradient lines from `fade_line
   - Event annotations label only the events the claim needs; when dense, specify each label's coordinates individually.
 - Legend: when method names are in the legend, the x axis has no tick labels. The legend does not cover data: put it in a separate subplot (`legend_panel()`), in blank space at the top (`pad_ylim()`), or in a full column on the right.
 - Lines:
+  - Keep the proposed method's line and markers above all other data layers at crossings and overlapping points. Set explicit `zorder`: fills/error bands and reference lines `1`, baseline/ablation lines and markers `2`, proposed-method lines and markers `3`. Use `line_zorder(color)` for method lines; `fade_line()` applies it to both segments and markers. This priority is independent of plotting order; legends and annotations remain readable above the data.
   - When the x axis has a direction (training steps, data size), you may use `fade_line()`: segments go from light to dark, with enlarged dots.
 - When cumulative quantities, totals, and overtaking events are the claim, overlapping area charts may be used; draw all fills first, then all outlines, so crossings stay visible. Switch to lines only when crossings are so dense that fills interfere with reading values.
 - Add black borders to bars only when they are distinguished by hatching alone. When two dimensions must be distinguished at once, color and hatching each handle one.

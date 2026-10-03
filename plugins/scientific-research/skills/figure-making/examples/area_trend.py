@@ -83,10 +83,10 @@ if __name__ == "__main__":
                 fill, _ = COLORS[name]
                 hatch = hatches.get(name)
                 ax.fill_between(x, 0, curves[name], facecolor=fill, edgecolor="black" if hatch else fill,
-                                hatch=hatch, linewidth=0, label=name)
+                                hatch=hatch, linewidth=0, label=name, zorder=1)
         for name in order:
             ax.plot(x, curves[name], color=COLORS[name][1], linewidth=4,
-                    label=None if AREA else name)
+                    label=None if AREA else name, zorder=ps.line_zorder(COLORS[name][1]))
         top = shared_top if SHARE_Y else max(y.max() for y in curves.values())
         ax.set_ylim(0, top * 1.35)
         ax.set_xlim(-1.5, N_MONTHS - 0.5)  # room for a label on the first month

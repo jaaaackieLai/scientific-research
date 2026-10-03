@@ -45,7 +45,7 @@ def curves(ax, xs, ys, fade=False):
         if fade:
             ps.fade_line(ax, pos, y, color, label=method, marker=marker)
         else:
-            ax.plot(pos, y, color=color, marker=marker, label=method)
+            ax.plot(pos, y, color=color, marker=marker, label=method, zorder=ps.line_zorder(color))
     ax.set_xticks(pos)
     return pos
 
@@ -57,7 +57,7 @@ if __name__ == "__main__":
     ax = axes[0]
     pos = curves(ax, FRACTION["x"], FRACTION["y"], fade=True)
     ax.axhline(REFERENCE[1], label=REFERENCE[0], **ps.REFERENCE)
-    ax.hlines(FRACTION["y"][-1][OURS_MARK], pos[0] - 0.1, pos[-1] + 0.1, color=ps.OURS, linestyle=":")
+    ax.hlines(FRACTION["y"][-1][OURS_MARK], pos[0] - 0.1, pos[-1] + 0.1, color=ps.OURS, linestyle=":", zorder=1)
     ax.set_xticklabels([f"{v:.0%}" for v in FRACTION["x"]])
     ax.set_xlabel("Fraction of training data")
     ax.set_ylabel(METRIC)
@@ -77,11 +77,13 @@ if __name__ == "__main__":
     ax = axes[2]
     pos = np.arange(len(TWIN["x"]))
     (name_l, y_l), (name_r, y_r) = TWIN["left"], TWIN["right"]
-    line_l, = ax.plot(pos, y_l, color=ps.OURS, alpha=0.4, marker="o", label=f"{name_l} (left)")
+    line_l, = ax.plot(pos, y_l, color=ps.OURS, alpha=0.4, marker="o", label=f"{name_l} (left)",
+                      zorder=ps.line_zorder(ps.OURS))
     ax.set_ylabel(name_l, color=ps.OURS, alpha=0.4)
     ax2 = ax.twinx()
     ax2.spines["right"].set_visible(True)
-    line_r, = ax2.plot(pos, y_r, color=ps.OURS, marker="o", label=f"{name_r} (right)")
+    line_r, = ax2.plot(pos, y_r, color=ps.OURS, marker="o", label=f"{name_r} (right)",
+                       zorder=ps.line_zorder(ps.OURS))
     ax2.set_ylabel(name_r, color=ps.OURS, rotation=270, labelpad=40)
     ax.set_xticks(pos, [str(v) for v in TWIN["x"]])
     ax.set_xlabel(r"Hyperparameter $\lambda$")
