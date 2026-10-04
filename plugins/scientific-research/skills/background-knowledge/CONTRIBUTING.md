@@ -13,8 +13,6 @@ Include only if it meets one of the following:
 
 Do not include: textbook common knowledge, special settings of a single project (put those in that project's AGENTS.md).
 
-Paper notes in `papers/` are the exception: they follow the paper-reading skill's note template instead of these criteria, but Sections 2, 4, and 8 still apply.
-
 ## 2. Sources
 
 Every claim comes with a verifiable source. Content without a source is not included.

@@ -1,6 +1,6 @@
 ---
 name: background-knowledge
-description: Reads hand-maintained deep learning domain knowledge (label settings, model architectures, data types, training scenarios) and paper notes for experiment design, evaluation, and reviewing. Use only when the user invokes it manually.
+description: Reads hand-maintained deep learning domain knowledge (label settings, model architectures, data types, training scenarios) for experiment design, evaluation, and reviewing. Use only when the user invokes it manually.
 disable-model-invocation: true
 ---
 
@@ -16,7 +16,6 @@ A hand-maintained domain knowledge base that only holds content that affects exp
 | Model architectures | `core/architectures/<architecture>.md` |
 | Data types | `data/<type>.md` |
 | Training scenarios | `settings/<scenario>.md` |
-| Paper notes | `papers/<first-author>-<year>-<keyword>.md`, written by the paper-reading skill; list the folder to see them |
 
 ## Existing files
 

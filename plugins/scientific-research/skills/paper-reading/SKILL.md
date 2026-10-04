@@ -1,6 +1,6 @@
 ---
 name: paper-reading
-description: Deep-read one deep learning paper and write a note into the background-knowledge base. The note teaches the reader the paper's idea (how and why, not only what): the insight, the problem with existing methods, which parts of the method are borrowed and which are new and why, why it works, the datasets and baselines, and the experimental setup checklist; it checks every claim against the experiments and always compares the paper against its official code, flagging every mismatch. Lean verification of derivations only when the user asks. Use when the user says "read this paper", "help me understand this paper", "deep dive into", "take notes on this paper", or gives an arXiv link / PDF and wants it analyzed.
+description: Deep-read one deep learning paper and write a note into the current project's `docs/papers/`. The note teaches the reader the paper's idea (how and why, not only what): the insight, the problem with existing methods, which parts of the method are borrowed and which are new and why, why it works, the datasets and baselines, and the experimental setup checklist; it checks every claim against the experiments and always compares the paper against its official code, flagging every mismatch. Lean verification of derivations only when the user asks. Use when the user says "read this paper", "help me understand this paper", "deep dive into", "take notes on this paper", or gives an arXiv link / PDF and wants it analyzed.
 ---
 
 # paper-reading
@@ -46,8 +46,8 @@ Only when the user asks. Follow `references/lean.md`.
 
 ### 7. Write the note
 - Follow `references/note-template.md` and `references/writing.md`. Write in the user's language; keep equations, code identifiers, and paper terms in their original form.
-- Location: `papers/<first-author-surname>-<year>-<keyword>.md` inside the background-knowledge skill **of the scientific-research source repo** (the git checkout at `plugins/scientific-research/skills/background-knowledge/`). Never write into a plugin cache or a copied skill folder; they are overwritten on update. If the repo location is unclear, ask the user for it.
-- Before writing, show the user the full draft and the target path, and write only after they confirm (background-knowledge `CONTRIBUTING.md` Section 8). If the file already exists, show what changes.
+- Location: `docs/papers/<first-author-surname>-<year>-<keyword>.md` under the current project's root; create the folder if it does not exist. If the project root is unclear, ask the user.
+- Before writing, show the user the full draft and the target path, and write only after they confirm. If the file already exists, show what changes.
 - At most 200 lines. Cut restated results and secondary details before cutting the explanations in Sections 1 to 5 or the code mismatches.
 
 ### 8. Reply
