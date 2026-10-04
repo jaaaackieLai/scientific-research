@@ -25,7 +25,7 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 Claude Code (run inside Claude Code):
 
 ```
-/plugin marketplace add E:\Projects\scientific-research
+/plugin marketplace add jaaaackieLai/scientific-research
 /plugin install scientific-research@scientific-research
 ```
 
@@ -34,7 +34,7 @@ Update: `/plugin marketplace update scientific-research`, then reinstall or rest
 Codex (run in a terminal):
 
 ```bash
-codex plugin marketplace add E:/Projects/scientific-research
+codex plugin marketplace add jaaaackieLai/scientific-research
 codex plugin add scientific-research@scientific-research
 ```
 
