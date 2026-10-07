@@ -193,3 +193,12 @@ def test_domain_only_adds_rules_to_existing_astro_docs(tmp_path):
     agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
     assert "## Domain docs" in agents
     assert "npm run dev" not in agents
+
+
+def test_domain_marker_matches_whole_heading_only(tmp_path):
+    (tmp_path / "AGENTS.md").write_text("## Agent skills\n\n### Domain docs\nSee CONTEXT.md.\n", encoding="utf-8")
+
+    run(tmp_path)
+
+    agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    assert "\n## Domain docs\n" in agents

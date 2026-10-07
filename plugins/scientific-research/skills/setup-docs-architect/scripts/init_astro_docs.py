@@ -82,12 +82,16 @@ def snippet(name, values):
 
 
 def append_section(path, section, marker):
-    """Append section to the end of path; leave it alone if the file already contains marker. Return a description of the action."""
+    """Append section to the end of path; leave it alone if the file already contains marker. Return a description of the action.
+
+    A marker starting with # is a heading and must match a whole line, so "### Domain docs" does not count as "## Domain docs".
+    """
     if not path.exists():
         path.write_text(section.lstrip("\n"), encoding="utf-8")
         return "created"
     text = path.read_text(encoding="utf-8")
-    if marker in text:
+    found = (marker in (line.strip() for line in text.splitlines())) if marker.startswith("#") else marker in text
+    if found:
         return "unchanged"
     sep = "" if text.endswith("\n") else "\n"
     path.write_text(text + sep + section, encoding="utf-8")
