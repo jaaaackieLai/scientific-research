@@ -12,7 +12,7 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 | --- | --- |
 | paper-search | Search and filter papers by fixed quality criteria; outputs a list of qualifying papers with the reason for each decision |
 | paper-dissector | Deep-read one paper (insight, motivation, problem, method, why it works), always check it against the official code, and write a note into the project's `docs/papers/` |
-| reviewer-2 | Review, rewrite, or draft paper sections from your own material, plus cross-section consistency checks; AI-written text always carries an academic-ethics notice |
+| article-advice | Review, rewrite, or draft paper sections from your own material, plus cross-section consistency checks; AI-written text always carries an academic-ethics notice |
 | figure-smith | Make or review paper data figures with matplotlib |
 | table-smith | Make or review paper tables with LaTeX (booktabs) |
 | talk-coach | Make scientific talk slides: English slide text sized for 24 pt, plus a spoken Chinese script for presenting to your professor |

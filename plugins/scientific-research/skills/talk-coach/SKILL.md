@@ -1,6 +1,6 @@
 ---
 name: talk-coach
-description: Use when the user wants slides for a scientific talk (lab meeting, progress report to their professor, proposal, defense, paper presentation) - generating slide text in English plus a spoken Chinese script, or reviewing an existing deck's layout, text amount, or script. Trigger phrases such as "make slides", "presentation", "簡報", "投影片", "講稿", "報告給老師", "meeting 要報告", "這頁字太多", "這頁太空". Not for paper writing (use reviewer-2) or making plots (use figure-smith).
+description: Use when the user wants slides for a scientific talk (lab meeting, progress report to their professor, proposal, defense, paper presentation) - generating slide text in English plus a spoken Chinese script, or reviewing an existing deck's layout, text amount, or script. Trigger phrases such as "make slides", "presentation", "簡報", "投影片", "講稿", "報告給老師", "meeting 要報告", "這頁字太多", "這頁太空". Not for paper writing (use article-advice) or making plots (use figure-smith).
 ---
 
 # talk-coach
