@@ -1,4 +1,4 @@
-"""Illustrative sparsity curves adapted from figure-making/line_sensitivity.py.
+"""Illustrative sparsity curves adapted from figure-smith/line_sensitivity.py.
 
 Synthetic data only: these are not measured results or digitized image values.
 Style adapted from figures4papers by Chen Liu, CC BY-NC 4.0.
@@ -9,7 +9,7 @@ from pathlib import Path
 
 sys.dont_write_bytecode = True
 SCRIPTS = Path(
-    r"E:\Projects\scientific-research\plugins\scientific-research\skills\figure-making\scripts"
+    r"E:\Projects\scientific-research\plugins\scientific-research\skills\figure-smith\scripts"
 )
 sys.path.insert(0, str(SCRIPTS))
 

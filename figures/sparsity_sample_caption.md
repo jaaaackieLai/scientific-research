@@ -1,6 +1,6 @@
 # Sparsity sample
 
-**Illustrative data only.** The curves are generated from deterministic formulas to demonstrate the figure-making style; they are not experimental results or values digitized from the reference image.
+**Illustrative data only.** The curves are generated from deterministic formulas to demonstrate the figure-smith style; they are not experimental results or values digitized from the reference image.
 
 Suggested caption: Relative test accuracy change as sparsity increases, with sparsity applied to (a) the first convolutional layer or (b) all convolutional layers. Relative change is defined as `100 × (A(s) − A(0)) / A(0)`, where `A(s)` denotes test accuracy at sparsity `s`; higher values indicate better accuracy retention. Both panels use the same y-axis range, which extends below zero to show accuracy reductions. These illustrative curves have no repeated runs or uncertainty estimates, so no error bands are shown.
 

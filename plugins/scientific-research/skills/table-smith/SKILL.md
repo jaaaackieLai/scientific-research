@@ -1,9 +1,9 @@
 ---
-name: table-making
+name: table-smith
 description: Use when the user wants to make or modify paper tables in LaTeX (main result comparisons, ablations, tables with multiple datasets or metrics), or asks you to check existing tables. Trigger phrases such as "make a table for me", "organize the results into a table", "how can I improve this table", "ablation table", "this table doesn't look professional". Not for Word, Excel, or Markdown tables.
 ---
 
-# table-making
+# table-smith
 
 One table answers only one question (e.g. "is the proposed method best on every metric"). First decide which two directions the reader will compare (row vs. row, column vs. column), then lay it out.
 

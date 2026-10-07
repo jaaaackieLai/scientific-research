@@ -1,9 +1,9 @@
 ---
-name: figure-making
+name: figure-smith
 description: Use when the user wants to make or modify data figures for papers or slides with matplotlib (method comparisons, per-category performance, ablations, sensitivity to hyperparameters or data size, trends over time, multi-panel figures), or asks you to check existing figures and plotting code. Trigger phrases such as "make a plot for me", "make a comparison figure", "how can I improve this figure", "this figure doesn't look professional". Not for interactive or web charts (Plotly, Altair, Bokeh), and not for schematic diagrams such as architecture or flow diagrams.
 ---
 
-# figure-making
+# figure-smith
 
 One figure supports only one claim. First write down the conclusion the reader should draw from it, then choose a template.
 
