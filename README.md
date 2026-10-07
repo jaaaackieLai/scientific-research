@@ -10,7 +10,6 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 
 | Skill | Description |
 | --- | --- |
-| background-knowledge | Hand-maintained domain knowledge base (label settings, model architectures, data types, training scenarios); manual invocation only |
 | paper-search | Search and filter papers by fixed quality criteria; outputs a list of qualifying papers with the reason for each decision |
 | paper-reading | Deep-read one paper (insight, motivation, problem, method, why it works), always check it against the official code, and write a note into the project's `docs/papers/` |
 | article-advice | Review, rewrite, or draft paper sections from your own material, plus cross-section consistency checks; AI-written text always carries an academic-ethics notice |
