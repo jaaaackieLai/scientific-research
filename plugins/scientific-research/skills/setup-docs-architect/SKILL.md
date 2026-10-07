@@ -9,7 +9,7 @@ description: Use when initializing or bootstrapping a project's documentation si
 Creates `<root>/docs/` as an Astro site from `template/` (the shared DocLayout, the core components and an auto-grouping index page). It also adds startup instructions to the root `AGENTS.md` and writing rules to `docs/AGENTS.md`, plus the domain docs: the root `AGENTS.md` tells agents to read `GLOSSARY.md` and `docs/adr/` before working, and `docs/AGENTS.md` holds their formats (`## ADRs and glossary`). `scripts/init_astro_docs.py` does the file work so every project gets the same result. Do not copy the files by hand.
 
 ## Steps
-If `docs/` is already an Astro site (from this skill or by hand) and the user only wants ADRs and the glossary, run `python3 <skill-dir>/scripts/init_astro_docs.py --root . --domain-only` (add `--docs-dir` if it is not `docs`), report the two AGENTS.md changes, and stop.
+If `docs/` is already an Astro site (from this skill or by hand) and the user only wants ADRs and the glossary, run `python3 <skill-dir>/scripts/init_astro_docs.py --root . --domain-only` (add `--docs-dir` if it is not `docs`; it exits 1 if that folder is not an Astro site), report the two AGENTS.md changes, and stop.
 
 1. **Collect inputs.**
    - `--title`: the site h1. `--subtitle`: one line. Ask the user if the README and AGENTS.md don't make them obvious. Neither may contain `"` (the script exits 1); use 「」 instead.
@@ -20,7 +20,7 @@ If `docs/` is already an Astro site (from this skill or by hand) and the user on
    python3 <skill-dir>/scripts/init_astro_docs.py --root . --title "..." --subtitle "..." --repo-url "..."
    ```
    - It refuses to run (exit 1) when `docs/` already has `package.json` or `astro.config.*`. Stop there and tell the user.
-   - It never overwrites anything. Existing files are reported as `skipped`, and an existing `docs/AGENTS.md` gets the `## Astro pages` section appended. An existing `docs/.gitignore` gets its missing lines (`node_modules/`, `dist/`, `.astro/`) appended.
+   - It never overwrites anything. Existing files are reported as `skipped`, and an existing `docs/AGENTS.md` gets the `## Astro pages` and `## ADRs and glossary` sections appended, and the root `AGENTS.md` gets `## Docs` and `## Domain docs`. A section whose heading is already there is left alone. An existing `docs/.gitignore` gets its missing lines (`node_modules/`, `dist/`, `.astro/`) appended.
 3. **Register existing docs.** If `docs/` already held `.md` or `.html` files, leave them where they are and list each one under `## Contents` in `docs/AGENTS.md`.
 4. **Verify the build:**
    ```bash
