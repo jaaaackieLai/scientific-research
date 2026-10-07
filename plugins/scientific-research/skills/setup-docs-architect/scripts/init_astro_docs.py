@@ -109,50 +109,42 @@ def write_domain_docs(root, docs, values):
                                  "## ADRs and glossary")
     root_domain = append_section(root / "AGENTS.md", snippet("root-agents-domain.md", values),
                                  "## Domain docs")
-    return docs_domain, root_domain
-
-
-def add_domain_only(root, args):
-    docs = root / args.docs_dir
-    docs.mkdir(parents=True, exist_ok=True)
-    values = {"REPO_URL": args.repo_url.rstrip("/"), "DOCS_DIR": args.docs_dir.strip("/")}
-    docs_domain, root_domain = write_domain_docs(root, docs, values)
-    print(f"{args.docs_dir}/AGENTS.md ADRs and glossary: {docs_domain}")
+    print(f"{values['DOCS_DIR']}/AGENTS.md ADRs and glossary: {docs_domain}")
     print(f"AGENTS.md domain docs: {root_domain}")
-    return 0
 
 
 def main(argv=None):
     args = parse_args(argv)
     root = Path(args.root)
+    docs = root / args.docs_dir
+    values = {
+        "TITLE": args.title or "",
+        "SUBTITLE": args.subtitle,
+        "REPO_URL": args.repo_url.rstrip("/"),
+        "DOCS_DIR": args.docs_dir.strip("/"),
+        "PACKAGE_NAME": package_name(root),
+    }
     if args.domain_only:
-        return add_domain_only(root, args)
+        docs.mkdir(parents=True, exist_ok=True)
+        write_domain_docs(root, docs, values)
+        return 0
     # Astro escapes &quot; in attributes a second time so it shows up literally, and the index's title extraction is cut off at double quotes, so reject outright.
     quoted = [flag for flag, value in (("--title", args.title), ("--subtitle", args.subtitle)) if '"' in value]
     if quoted:
         print(f'error: {", ".join(quoted)} must not contain a double quote ("); use 「」 instead.',
               file=sys.stderr)
         return 1
-    docs = root / args.docs_dir
     existing = [m for m in ASTRO_MARKERS if (docs / m).exists()]
     if existing:
         print(f"error: {docs} already has {', '.join(existing)}; refusing to overwrite an existing project.",
               file=sys.stderr)
         return 1
 
-    values = {
-        "TITLE": args.title,
-        "SUBTITLE": args.subtitle,
-        "REPO_URL": args.repo_url.rstrip("/"),
-        "DOCS_DIR": args.docs_dir.strip("/"),
-        "PACKAGE_NAME": package_name(root),
-    }
     docs.mkdir(parents=True, exist_ok=True)
     created, skipped, merged = copy_template(docs, values)
     docs_agents = write_docs_agents(docs, values)
     root_agents = append_section(root / "AGENTS.md", snippet("root-agents-docs.md", values),
                                  f"{values['DOCS_DIR']}/src/pages")
-    docs_domain, root_domain = write_domain_docs(root, docs, values)
 
     print(f"docs dir: {docs}")
     print(f"created {len(created)} files")
@@ -161,9 +153,8 @@ def main(argv=None):
     for rel in skipped:
         print(f"skipped (exists): {rel}")
     print(f"{args.docs_dir}/AGENTS.md: {docs_agents}")
-    print(f"{args.docs_dir}/AGENTS.md ADRs and glossary: {docs_domain}")
     print(f"AGENTS.md: {root_agents}")
-    print(f"AGENTS.md domain docs: {root_domain}")
+    write_domain_docs(root, docs, values)
     return 0
 
 
