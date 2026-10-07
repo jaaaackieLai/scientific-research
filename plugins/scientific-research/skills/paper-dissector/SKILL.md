@@ -13,7 +13,6 @@ Purpose: the reader learns something useful and interesting from the paper: how 
 - `references/setup-checklist.md`: data, training, evaluation, and baseline questions every note answers
 - `references/experiment-check.md`: whether the experiments support the claims
 - `references/code-check.md`: comparing the paper against the official code (always done)
-- `references/lean.md`: Lean verification of derivations (only when the user asks)
 
 ## Workflow
 
@@ -42,7 +41,7 @@ Follow `references/experiment-check.md`.
 Follow `references/code-check.md`. Every mismatch goes into the note and is reported to the user. If there is no official code, say so in the note header and in the reply; the reading is then marked unverified against code.
 
 ### 6. Lean verification (only on request)
-Only when the user asks. Follow `references/lean.md`.
+Only when the user asks. Load the theory-auditor skill and audit the derivation the user picks; it fills Section 10 of the note.
 
 ### 7. Write the note
 - Follow `references/note-template.md` and `references/writing.md`. Write in the user's language; keep equations, code identifiers, and paper terms in their original form.
