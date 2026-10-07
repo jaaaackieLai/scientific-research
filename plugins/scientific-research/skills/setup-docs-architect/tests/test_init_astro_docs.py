@@ -153,3 +153,25 @@ def test_only_agents_md_is_written(tmp_path):
 
     assert (tmp_path / "AGENTS.md").is_file()
     assert not (tmp_path / "CLAUDE.md").exists()
+
+
+def test_root_agents_md_gets_domain_docs_rules_once(tmp_path):
+    (tmp_path / "AGENTS.md").write_text("# AGENTS\n", encoding="utf-8")
+
+    run(tmp_path)
+
+    agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    assert agents.count("## Domain docs") == 1
+    assert "GLOSSARY.md" in agents
+    assert "docs/adr/" in agents
+
+
+def test_docs_agents_md_gets_adr_and_glossary_formats(tmp_path):
+    run(tmp_path)
+
+    text = (tmp_path / "docs/AGENTS.md").read_text(encoding="utf-8")
+    assert text.count("## ADRs and glossary") == 1
+    assert "adr/0001-" in text
+    assert "## Notation" in text
+    assert "_Avoid_" in text
+

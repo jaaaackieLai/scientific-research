@@ -122,8 +122,12 @@ def main(argv=None):
     docs.mkdir(parents=True, exist_ok=True)
     created, skipped, merged = copy_template(docs, values)
     docs_agents = write_docs_agents(docs, values)
+    docs_domain = append_section(docs / "AGENTS.md", snippet("docs-agents-domain.md", values),
+                                 "## ADRs and glossary")
     root_agents = append_section(root / "AGENTS.md", snippet("root-agents-docs.md", values),
                                  f"{values['DOCS_DIR']}/src/pages")
+    root_domain = append_section(root / "AGENTS.md", snippet("root-agents-domain.md", values),
+                                 "## Domain docs")
 
     print(f"docs dir: {docs}")
     print(f"created {len(created)} files")
@@ -132,7 +136,9 @@ def main(argv=None):
     for rel in skipped:
         print(f"skipped (exists): {rel}")
     print(f"{args.docs_dir}/AGENTS.md: {docs_agents}")
+    print(f"{args.docs_dir}/AGENTS.md ADRs and glossary: {docs_domain}")
     print(f"AGENTS.md: {root_agents}")
+    print(f"AGENTS.md domain docs: {root_domain}")
     return 0
 
 
