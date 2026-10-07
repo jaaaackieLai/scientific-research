@@ -153,3 +153,74 @@ def test_only_agents_md_is_written(tmp_path):
 
     assert (tmp_path / "AGENTS.md").is_file()
     assert not (tmp_path / "CLAUDE.md").exists()
+
+
+def test_root_agents_md_gets_domain_docs_rules_once(tmp_path):
+    (tmp_path / "AGENTS.md").write_text("# AGENTS\n", encoding="utf-8")
+
+    run(tmp_path)
+
+    agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    assert agents.count("## Domain docs") == 1
+    assert "GLOSSARY.md" in agents
+    assert "docs/adr/" in agents
+
+
+def test_docs_agents_md_gets_adr_and_glossary_formats(tmp_path):
+    run(tmp_path)
+
+    text = (tmp_path / "docs/AGENTS.md").read_text(encoding="utf-8")
+    assert text.count("## ADRs and glossary") == 1
+    assert "adr/0001-" in text
+    assert "## Notation" in text
+    assert "_Avoid_" in text
+
+
+def test_domain_only_adds_rules_to_existing_astro_docs(tmp_path):
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    (docs / "astro.config.mjs").write_text("// existing", encoding="utf-8")
+    (docs / "AGENTS.md").write_text("# docs\n", encoding="utf-8")
+
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--root", str(tmp_path), "--domain-only"],
+        capture_output=True, text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert not (docs / "package.json").exists()
+    assert "## ADRs and glossary" in (docs / "AGENTS.md").read_text(encoding="utf-8")
+    agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    assert "## Domain docs" in agents
+    assert "npm run dev" not in agents
+
+
+def test_domain_marker_matches_whole_heading_only(tmp_path):
+    (tmp_path / "AGENTS.md").write_text("## Agent skills\n\n### Domain docs\nSee CONTEXT.md.\n", encoding="utf-8")
+
+    run(tmp_path)
+
+    agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    assert "\n## Domain docs\n" in agents
+
+
+def test_domain_only_refuses_without_astro_docs(tmp_path):
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--root", str(tmp_path), "--domain-only", "--docs-dir", "docs2"],
+        capture_output=True, text=True,
+    )
+
+    assert result.returncode != 0
+    assert "not an Astro" in result.stderr
+    assert not (tmp_path / "docs2").exists()
+    assert not (tmp_path / "AGENTS.md").exists()
+
+
+def test_domain_only_rejects_title(tmp_path):
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--root", str(tmp_path), "--domain-only", "--title", "T"],
+        capture_output=True, text=True,
+    )
+
+    assert result.returncode != 0
+    assert "--domain-only" in result.stderr

@@ -26,6 +26,7 @@ Review, rewrite, or draft from the user's own material. Every piece of AI-writte
 | Every time | `references/principles.md` (issue severity levels are defined in Section 8) |
 | Sections involved | `abstract` / `introduction` / `related-work` / `method` / `experiments` / `conclusion`.md, only the ones involved |
 | Two or more sections | `consistency.md` |
+| The project has `GLOSSARY.md` at its root | Read it: a term or symbol that differs from it, or one of its _Avoid_ synonyms, is an issue |
 | Rewriting, or the problem is word choice | `word-bank.md` |
 | The problem is how things are explained (missing research question, contrast, plain-language explanation, unfavorable results) | `writing-patterns.md`, and cite the technique number |
 

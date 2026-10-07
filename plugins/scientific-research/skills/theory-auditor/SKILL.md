@@ -17,6 +17,7 @@ Purpose: tell the user exactly which parts of a derivation are proved, which are
 ### 1. Split the derivation
 - Get the derivation from the user, a paper (cite the equation numbers), or the calling skill. Pick one derivation with the user; do not audit a whole paper at once.
 - Number the steps so that each step is one transformation, from the first premise to the final result.
+- If the project has `GLOSSARY.md` at its root, use the symbols from its `## Notation` table and flag any symbol in the derivation that means something else there.
 - List every assumption, in three groups:
   - **Physical model**: what the derivation takes as true about the world (ideal gas, spherical symmetry, point masses).
   - **Approximations**: every ≈, "neglect higher-order terms", "v ≪ c", "for large N".

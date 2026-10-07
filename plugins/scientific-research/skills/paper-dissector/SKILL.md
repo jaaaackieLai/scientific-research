@@ -45,6 +45,7 @@ Only when the user asks. Load the theory-auditor skill and audit the derivation 
 
 ### 7. Write the note
 - Follow `references/note-template.md` and `references/writing.md`. Write in the user's language; keep equations, code identifiers, and paper terms in their original form.
+- If the project has `GLOSSARY.md` at its root, keep the paper's own terms but map each one that names a glossary concept to the glossary term once (paper "teacher" = project "reference model"). If the paper's setup differs from a project ADR (in the folder the root `AGENTS.md` names under `## Domain docs`, `docs/adr/` by default), such as the evaluation split or a metric definition, say so in the note.
 - Location: `docs/papers/<first-author-surname>-<year>-<keyword>.md` under the current project's root; create the folder if it does not exist. If the project root is unclear, ask the user.
 - Before writing, show the user the full draft and the target path, and write only after they confirm. If the file already exists, show what changes.
 - At most 200 lines. Cut restated results and secondary details before cutting the explanations in Sections 1 to 5 or the code mismatches.

@@ -1,5 +1,7 @@
 """Create an Astro docs site in the project (copy template/ to <root>/<docs-dir>/) and add startup instructions to AGENTS.md.
 
+Also adds the ADR/glossary rules to the root and docs AGENTS.md; --domain-only adds just those, for an existing docs site.
+
 See SKILL.md in the same skill for usage. Standard library only; refuses to run when it is already an Astro project, and never overwrites existing files.
 """
 import argparse
@@ -18,11 +20,18 @@ MERGE_FILES = {Path(".gitignore")}
 def parse_args(argv):
     parser = argparse.ArgumentParser(description="Initialize an Astro docs site from the template.")
     parser.add_argument("--root", required=True, help="project root directory")
-    parser.add_argument("--title", required=True, help="docs home page h1")
+    parser.add_argument("--title", help="docs home page h1 (required unless --domain-only)")
     parser.add_argument("--subtitle", default="", help="docs home page subtitle")
     parser.add_argument("--repo-url", default="", help="prefix for code links, e.g. https://github.com/<owner>/<repo>/blob/main")
     parser.add_argument("--docs-dir", default="docs", help="docs directory (relative to root), defaults to docs")
-    return parser.parse_args(argv)
+    parser.add_argument("--domain-only", action="store_true",
+                        help="only add the ADR/glossary rules to the AGENTS.md files (for an existing docs site)")
+    args = parser.parse_args(argv)
+    if not args.domain_only and not args.title:
+        parser.error("--title is required unless --domain-only is given")
+    if args.domain_only and (args.title or args.subtitle):
+        parser.error("--domain-only builds no site, so it takes no --title or --subtitle")
+    return args
 
 
 def package_name(root):
@@ -75,12 +84,16 @@ def snippet(name, values):
 
 
 def append_section(path, section, marker):
-    """Append section to the end of path; leave it alone if the file already contains marker. Return a description of the action."""
+    """Append section to the end of path; leave it alone if the file already contains marker. Return a description of the action.
+
+    A marker starting with # is a heading and must match a whole line, so "### Domain docs" does not count as "## Domain docs".
+    """
     if not path.exists():
         path.write_text(section.lstrip("\n"), encoding="utf-8")
         return "created"
     text = path.read_text(encoding="utf-8")
-    if marker in text:
+    found = (marker in (line.strip() for line in text.splitlines())) if marker.startswith("#") else marker in text
+    if found:
         return "unchanged"
     sep = "" if text.endswith("\n") else "\n"
     path.write_text(text + sep + section, encoding="utf-8")
@@ -96,29 +109,46 @@ def write_docs_agents(docs, values):
     return append_section(path, astro, "## Astro pages")
 
 
+def write_domain_docs(root, docs, values):
+    """Append the ADR/glossary formats to docs/AGENTS.md and the reading rules to the root AGENTS.md."""
+    docs_domain = append_section(docs / "AGENTS.md", snippet("docs-agents-domain.md", values),
+                                 "## ADRs and glossary")
+    root_domain = append_section(root / "AGENTS.md", snippet("root-agents-domain.md", values),
+                                 "## Domain docs")
+    print(f"{values['DOCS_DIR']}/AGENTS.md ADRs and glossary: {docs_domain}")
+    print(f"AGENTS.md domain docs: {root_domain}")
+
+
 def main(argv=None):
     args = parse_args(argv)
     root = Path(args.root)
+    docs = root / args.docs_dir
+    values = {
+        "TITLE": args.title or "",
+        "SUBTITLE": args.subtitle,
+        "REPO_URL": args.repo_url.rstrip("/"),
+        "DOCS_DIR": args.docs_dir.strip("/"),
+        "PACKAGE_NAME": package_name(root),
+    }
+    existing = [m for m in ASTRO_MARKERS if (docs / m).exists()]
+    if args.domain_only:
+        if not existing:
+            print(f"error: {docs} is not an Astro docs site; run the full init first (or fix --docs-dir).",
+                  file=sys.stderr)
+            return 1
+        write_domain_docs(root, docs, values)
+        return 0
     # Astro escapes &quot; in attributes a second time so it shows up literally, and the index's title extraction is cut off at double quotes, so reject outright.
     quoted = [flag for flag, value in (("--title", args.title), ("--subtitle", args.subtitle)) if '"' in value]
     if quoted:
         print(f'error: {", ".join(quoted)} must not contain a double quote ("); use 「」 instead.',
               file=sys.stderr)
         return 1
-    docs = root / args.docs_dir
-    existing = [m for m in ASTRO_MARKERS if (docs / m).exists()]
     if existing:
         print(f"error: {docs} already has {', '.join(existing)}; refusing to overwrite an existing project.",
               file=sys.stderr)
         return 1
 
-    values = {
-        "TITLE": args.title,
-        "SUBTITLE": args.subtitle,
-        "REPO_URL": args.repo_url.rstrip("/"),
-        "DOCS_DIR": args.docs_dir.strip("/"),
-        "PACKAGE_NAME": package_name(root),
-    }
     docs.mkdir(parents=True, exist_ok=True)
     created, skipped, merged = copy_template(docs, values)
     docs_agents = write_docs_agents(docs, values)
@@ -133,6 +163,7 @@ def main(argv=None):
         print(f"skipped (exists): {rel}")
     print(f"{args.docs_dir}/AGENTS.md: {docs_agents}")
     print(f"AGENTS.md: {root_agents}")
+    write_domain_docs(root, docs, values)
     return 0
 
 
