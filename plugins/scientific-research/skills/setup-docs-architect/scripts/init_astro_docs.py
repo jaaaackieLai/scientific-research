@@ -96,6 +96,15 @@ def write_docs_agents(docs, values):
     return append_section(path, astro, "## Astro pages")
 
 
+def write_domain_docs(root, docs, values):
+    """Append the ADR/glossary formats to docs/AGENTS.md and the reading rules to the root AGENTS.md."""
+    docs_domain = append_section(docs / "AGENTS.md", snippet("docs-agents-domain.md", values),
+                                 "## ADRs and glossary")
+    root_domain = append_section(root / "AGENTS.md", snippet("root-agents-domain.md", values),
+                                 "## Domain docs")
+    return docs_domain, root_domain
+
+
 def main(argv=None):
     args = parse_args(argv)
     root = Path(args.root)
@@ -122,12 +131,9 @@ def main(argv=None):
     docs.mkdir(parents=True, exist_ok=True)
     created, skipped, merged = copy_template(docs, values)
     docs_agents = write_docs_agents(docs, values)
-    docs_domain = append_section(docs / "AGENTS.md", snippet("docs-agents-domain.md", values),
-                                 "## ADRs and glossary")
     root_agents = append_section(root / "AGENTS.md", snippet("root-agents-docs.md", values),
                                  f"{values['DOCS_DIR']}/src/pages")
-    root_domain = append_section(root / "AGENTS.md", snippet("root-agents-domain.md", values),
-                                 "## Domain docs")
+    docs_domain, root_domain = write_domain_docs(root, docs, values)
 
     print(f"docs dir: {docs}")
     print(f"created {len(created)} files")
