@@ -214,3 +214,13 @@ def test_domain_only_refuses_without_astro_docs(tmp_path):
     assert "not an Astro" in result.stderr
     assert not (tmp_path / "docs2").exists()
     assert not (tmp_path / "AGENTS.md").exists()
+
+
+def test_domain_only_rejects_title(tmp_path):
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--root", str(tmp_path), "--domain-only", "--title", "T"],
+        capture_output=True, text=True,
+    )
+
+    assert result.returncode != 0
+    assert "--domain-only" in result.stderr

@@ -29,6 +29,8 @@ def parse_args(argv):
     args = parser.parse_args(argv)
     if not args.domain_only and not args.title:
         parser.error("--title is required unless --domain-only is given")
+    if args.domain_only and (args.title or args.subtitle):
+        parser.error("--domain-only builds no site, so it takes no --title or --subtitle")
     return args
 
 
