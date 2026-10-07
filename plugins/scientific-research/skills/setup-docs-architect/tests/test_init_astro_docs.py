@@ -202,3 +202,15 @@ def test_domain_marker_matches_whole_heading_only(tmp_path):
 
     agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
     assert "\n## Domain docs\n" in agents
+
+
+def test_domain_only_refuses_without_astro_docs(tmp_path):
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--root", str(tmp_path), "--domain-only", "--docs-dir", "docs2"],
+        capture_output=True, text=True,
+    )
+
+    assert result.returncode != 0
+    assert "not an Astro" in result.stderr
+    assert not (tmp_path / "docs2").exists()
+    assert not (tmp_path / "AGENTS.md").exists()

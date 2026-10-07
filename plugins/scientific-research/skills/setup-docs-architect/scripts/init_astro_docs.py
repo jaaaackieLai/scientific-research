@@ -128,8 +128,12 @@ def main(argv=None):
         "DOCS_DIR": args.docs_dir.strip("/"),
         "PACKAGE_NAME": package_name(root),
     }
+    existing = [m for m in ASTRO_MARKERS if (docs / m).exists()]
     if args.domain_only:
-        docs.mkdir(parents=True, exist_ok=True)
+        if not existing:
+            print(f"error: {docs} is not an Astro docs site; run the full init first (or fix --docs-dir).",
+                  file=sys.stderr)
+            return 1
         write_domain_docs(root, docs, values)
         return 0
     # Astro escapes &quot; in attributes a second time so it shows up literally, and the index's title extraction is cut off at double quotes, so reject outright.
@@ -138,7 +142,6 @@ def main(argv=None):
         print(f'error: {", ".join(quoted)} must not contain a double quote ("); use 「」 instead.',
               file=sys.stderr)
         return 1
-    existing = [m for m in ASTRO_MARKERS if (docs / m).exists()]
     if existing:
         print(f"error: {docs} already has {', '.join(existing)}; refusing to overwrite an existing project.",
               file=sys.stderr)
