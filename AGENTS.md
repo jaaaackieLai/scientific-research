@@ -2,7 +2,10 @@
 
 ## Versioning
 
-The plugin version lives only in `.claude-plugin/marketplace.json` (`plugins[0].version`).
+The plugin version lives in two places, which must match (a test checks this):
+
+- `.claude-plugin/marketplace.json` (`plugins[0].version`), read by Claude Code.
+- `plugins/scientific-research/.codex-plugin/plugin.json` (`version`), read by Codex, which keys its plugin cache by this version: if it does not change, Codex keeps serving the old copy.
 
 - Add or remove a skill, or add behavior to one: bump minor (`0.5.2` → `0.6.0`).
 - Fix or reword without new behavior: bump patch (`0.6.0` → `0.6.1`).
