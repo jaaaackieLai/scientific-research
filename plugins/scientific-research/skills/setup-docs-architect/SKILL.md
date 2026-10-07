@@ -1,14 +1,16 @@
 ---
 name: setup-docs-architect
-description: Use when initializing or bootstrapping a project's documentation site, setting up docs/ as an Astro project, or adding the Kami-style (parchment, ink-blue, Noto Serif TC, KaTeX) doc layout and page template to a new repository. Initialize project documentation, build an Astro docs site.
+description: Use when initializing or bootstrapping a project's documentation site, setting up docs/ as an Astro project, or adding the Kami-style (parchment, ink-blue, Noto Serif TC, KaTeX) doc layout and page template to a new repository; also when setting up a project's ADRs (architecture/experiment decision records) and GLOSSARY.md, including for a docs site that already exists. Initialize project documentation, build an Astro docs site, set up ADR and glossary.
 ---
 
 # Astro Docs Init
 
 ## Overview
-Creates `<root>/docs/` as an Astro site from `template/` (the shared DocLayout, the core components and an auto-grouping index page). It also adds startup instructions to the root `AGENTS.md` and writing rules to `docs/AGENTS.md`. `scripts/init_astro_docs.py` does the file work so every project gets the same result. Do not copy the files by hand.
+Creates `<root>/docs/` as an Astro site from `template/` (the shared DocLayout, the core components and an auto-grouping index page). It also adds startup instructions to the root `AGENTS.md` and writing rules to `docs/AGENTS.md`, plus the domain docs: the root `AGENTS.md` tells agents to read `GLOSSARY.md` and `docs/adr/` before working, and `docs/AGENTS.md` holds their formats (`## ADRs and glossary`). `scripts/init_astro_docs.py` does the file work so every project gets the same result. Do not copy the files by hand.
 
 ## Steps
+If `docs/` is already an Astro site (from this skill or by hand) and the user only wants ADRs and the glossary, run `python3 <skill-dir>/scripts/init_astro_docs.py --root . --domain-only` (add `--docs-dir` if it is not `docs`), report the two AGENTS.md changes, and stop.
+
 1. **Collect inputs.**
    - `--title`: the site h1. `--subtitle`: one line. Ask the user if the README and AGENTS.md don't make them obvious. Neither may contain `"` (the script exits 1); use 「」 instead.
    - `--repo-url`: build it from `git remote get-url origin` as `https://github.com/<owner>/<repo>/blob/<default-branch>`. Leave it out if there is no remote.
@@ -30,6 +32,11 @@ Creates `<root>/docs/` as an Astro site from `template/` (the shared DocLayout, 
 ## Adding pages
 - Copy `reference/page-template.astro` to `docs/src/pages/<name>.astro`. It shows the Note, nav TOC, numbered h2/h3, `<M>`, `<CodeBlock>`, `<Warn>` and table conventions.
 - Add `<name>` to `sections` in `src/pages/index.astro`, then add a line for it under `## Contents` in `docs/AGENTS.md`.
+
+## ADRs and glossary
+- The script writes only the rules. `GLOSSARY.md` (repository root) and `docs/adr/NNNN-<slug>.md` are created lazily, when the first term or decision is settled; do not create empty ones during setup.
+- The formats live in the `## ADRs and glossary` section of `docs/AGENTS.md`, adapted for research: an ADR records a decision that would invalidate past results if changed (evaluation protocol, data split, baseline settings, seed policy), and the glossary has a `## Notation` table mapping each symbol to its meaning and its name in code.
+- Adapted from the domain docs part of [mattpocock/skills `setup-matt-pocock-skills`](https://github.com/mattpocock/skills/tree/main/skills/engineering/setup-matt-pocock-skills); its issue tracker and triage label parts are left out.
 
 ## Quick reference
 | Need | Use |

@@ -175,3 +175,21 @@ def test_docs_agents_md_gets_adr_and_glossary_formats(tmp_path):
     assert "## Notation" in text
     assert "_Avoid_" in text
 
+
+def test_domain_only_adds_rules_to_existing_astro_docs(tmp_path):
+    docs = tmp_path / "docs"
+    docs.mkdir()
+    (docs / "astro.config.mjs").write_text("// existing", encoding="utf-8")
+    (docs / "AGENTS.md").write_text("# docs\n", encoding="utf-8")
+
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), "--root", str(tmp_path), "--domain-only"],
+        capture_output=True, text=True,
+    )
+
+    assert result.returncode == 0, result.stderr
+    assert not (docs / "package.json").exists()
+    assert "## ADRs and glossary" in (docs / "AGENTS.md").read_text(encoding="utf-8")
+    agents = (tmp_path / "AGENTS.md").read_text(encoding="utf-8")
+    assert "## Domain docs" in agents
+    assert "npm run dev" not in agents
