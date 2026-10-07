@@ -36,6 +36,7 @@ Mark "supported" only when a concrete number or result is found; every "needs ev
 - Keywords in the method name (Adaptive, Sparse) are explained in the body text as to what operation they denote.
 - The same name does not refer to different settings (e.g., Ours in one table is the full version, in another the simplified version).
 - List all key terms (method and variants, categories, model roles, metrics) and confirm what each refers to section by section. The ones most likely to silently change meaning are generic words: target, source, baseline, original.
+- If the project has `GLOSSARY.md`, start that list from its terms and `## Notation` table.
 
 ## 5. Unfavorable results
 
