@@ -1,9 +1,9 @@
 ---
-name: presentation
-description: Use when the user wants slides for a scientific talk (lab meeting, progress report to their professor, proposal, defense, paper presentation) - generating slide text in English plus a spoken Chinese script, or reviewing an existing deck's layout, text amount, or script. Trigger phrases such as "make slides", "presentation", "簡報", "投影片", "講稿", "報告給老師", "meeting 要報告", "這頁字太多", "這頁太空". Not for paper writing (use article-advice) or making plots (use figure-making).
+name: talk-coach
+description: Use when the user wants slides for a scientific talk (lab meeting, progress report to their professor, proposal, defense, paper presentation) - generating slide text in English plus a spoken Chinese script, or reviewing an existing deck's layout, text amount, or script. Trigger phrases such as "make slides", "presentation", "簡報", "投影片", "講稿", "報告給老師", "meeting 要報告", "這頁字太多", "這頁太空". Not for paper writing (use reviewer-2) or making plots (use figure-smith).
 ---
 
-# presentation
+# talk-coach
 
 Produces two things per slide: **slide content in English** (complete sentences) and a **script in spoken Traditional Chinese**, as a PhD student talking to their professor. Layout and structure advice follows Püschel's guide; text amount follows the user's measured 24 pt capacity.
 
@@ -31,10 +31,10 @@ Ask if missing; if no one can answer, decide and list the decisions on delivery:
 - Template: section name in the top bar, title 44 pt bold, subtitle 24 pt bold underlined, body 24 pt, bullet spacing 12 pt (sub-bullet 6 pt), gray page number `n / N`.
 - Title fits one line (≤ ~50 characters). The subtitle, if used, states the slide's takeaway in one sentence.
 - Body: complete sentences, one idea each, one line preferred, two at most. Text-only slides 5–8 lines, never over 10.
-- First slide and no two consecutive slides are text-only. Where a picture would explain better (problem setup, pipeline, method, results), specify the figure: what it shows, where it sits (half or full width), and which existing file it comes from, or mark it `TODO: make with figure-making`.
+- First slide and no two consecutive slides are text-only. Where a picture would explain better (problem setup, pipeline, method, results), specify the figure: what it shows, where it sits (half or full width), and which existing file it comes from, or mark it `TODO: make with figure-smith`.
 - Left-align everything. Sans-serif (Calibri). Emphasis in desaturated red text; boxes in pastel colors. Math in LaTeX.
 - Related work cited on the slide by name: `Author et al. [Venue Year]`. Borrowed figures carry a small gray source line.
-- Results slides: one plot or table with the conclusion as the subtitle. Plot rules (axis labels, horizontal y-label, direct labels instead of a legend) are in `puschel-guide.md`; produce plots with figure-making and tables with table-making.
+- Results slides: one plot or table with the conclusion as the subtitle. Plot rules (axis labels, horizontal y-label, direct labels instead of a legend) are in `puschel-guide.md`; produce plots with figure-smith and tables with table-smith.
 - Conclusion slide repeats the one or two key messages from the talk.
 
 ## Output format

@@ -1,8 +1,8 @@
 ---
-name: article-advice
+name: reviewer-2
 description: Use when the user wants to review or rewrite a deep learning paper draft they wrote themselves (abstract, introduction, related work, method, experiments, conclusion, or cross-section consistency of the whole paper). Trigger phrases such as "take a look at this paragraph", "give me revision suggestions", "how should I write this paragraph", "rewrite this for me", "polish this", "check my abstract", "review my paper", "will this get rejected", "write this section for me", "draft the introduction". Also drafts paragraphs from the user's own material (results, notes, outline), always with an AI-generation notice.
 
-# article-advice
+# reviewer-2
 
 Review, rewrite, or draft from the user's own material. Every piece of AI-written paper text carries an academic-ethics notice.
 

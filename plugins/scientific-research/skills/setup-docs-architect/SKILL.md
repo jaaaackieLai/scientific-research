@@ -1,5 +1,5 @@
 ---
-name: astro-docs-init
+name: setup-docs-architect
 description: Use when initializing or bootstrapping a project's documentation site, setting up docs/ as an Astro project, or adding the Kami-style (parchment, ink-blue, Noto Serif TC, KaTeX) doc layout and page template to a new repository. Initialize project documentation, build an Astro docs site.
 ---
 

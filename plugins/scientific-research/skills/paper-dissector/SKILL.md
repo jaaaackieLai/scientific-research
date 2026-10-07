@@ -1,9 +1,9 @@
 ---
-name: paper-reading
+name: paper-dissector
 description: Deep-read one deep learning paper and write a note into the current project's `docs/papers/`. The note teaches the reader the paper's idea (how and why, not only what): the insight, the problem with existing methods, which parts of the method are borrowed and which are new and why, why it works, the datasets and baselines, and the experimental setup checklist; it checks every claim against the experiments and always compares the paper against its official code, flagging every mismatch. Lean verification of derivations only when the user asks. Use when the user says "read this paper", "help me understand this paper", "deep dive into", "take notes on this paper", or gives an arXiv link / PDF and wants it analyzed.
 ---
 
-# paper-reading
+# paper-dissector
 
 Purpose: the reader learns something useful and interesting from the paper: how and why, not only what. The note must work for a person reading it once (a grad student new to the topic) and for an AI using it later. The output is a note file, not a chat reply.
 
