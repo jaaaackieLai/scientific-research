@@ -40,6 +40,8 @@ codex plugin add scientific-research@scientific-research
 
 Update: `codex plugin marketplace upgrade scientific-research`, then run `codex plugin add scientific-research@scientific-research` again.
 
+Installed before 0.9.2 (when the plugin had no Codex manifest)? Delete `~/.codex/plugins/cache/scientific-research/` once, then run the two update commands above.
+
 
 ### Option 2: Use in a single project only
 

@@ -1,0 +1,16 @@
+{
+  "name": "scientific-research",
+  "version": "0.9.2",
+  "description": "Skills for deep learning research: paper search, paper reading, draft review, matplotlib figures, LaTeX tables, talk slides and scripts, Astro docs site, and Lean-verified derivation audits.",
+  "author": {
+    "name": "jacky"
+  },
+  "repository": "https://github.com/jaaaackieLai/scientific-research",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Scientific Research",
+    "shortDescription": "Deep learning research skills",
+    "developerName": "jacky",
+    "category": "Productivity"
+  }
+}
