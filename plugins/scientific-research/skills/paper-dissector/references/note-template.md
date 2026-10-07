@@ -44,7 +44,7 @@ Mismatch table from code-check.md (architecture and stated values only), then op
 - Not stated, but follow from the assumptions in Section 4: ...
 
 ## 10. Lean verification
-(Only when requested; see lean.md.)
+(Only when requested; filled by the theory-auditor skill.)
 
 ## Sources
 - Paper: <link>
