@@ -17,6 +17,7 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 | table-smith | Make or review paper tables with LaTeX (booktabs) |
 | talk-coach | Make scientific talk slides: English slide text sized for 24 pt, plus a spoken Chinese script for presenting to your professor |
 | setup-docs-architect | Create a Kami-style Astro documentation site in the project's `docs/` |
+| theory-auditor | Audit a formula derivation step by step and verify it with Lean 4 + Mathlib (PhysLib for physics definitions); first checks whether this machine can run Lean, otherwise labels results as agent checks not verified by Lean |
 
 ## Usage
 ### Option 1: Install as a plugin (available in all projects)
