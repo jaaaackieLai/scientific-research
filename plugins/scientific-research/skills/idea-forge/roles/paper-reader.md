@@ -6,7 +6,7 @@ Purpose: read one paper's full text and answer the caller's questions about it i
 The brief gives these fields:
 - `RUN_DIR`: the run directory, for example `docs/ideas/<slug>`.
 - `SKILL_DIR`: the idea-forge skill directory.
-- `PAPER`: the paper id, as defined in `SKILL_DIR/references/artifacts.md` (arXiv id without version; old-style ids use `_` for `/`; `ref-<surname>-<year>-<keyword>` for a paper with no arXiv version, in which case the brief also gives its URL or local PDF path).
+- `PAPER`: the paper id: an arXiv id without version; an old-style id with `_` for `/`; or `ref-<surname>-<year>-<keyword>` for a paper with no arXiv version, in which case the brief also gives its URL or local PDF path.
 - `GOALS`: 1 to 5 concrete questions about the paper.
 
 ## Tools
@@ -15,7 +15,7 @@ The brief gives these fields:
 - Read: local PDFs, `RUN_DIR/problem.md` (only its `## Cutoff`), and `RUN_DIR/papers/<PAPER>.md`.
 - Edit/Write: `RUN_DIR/papers/<PAPER>.md` only.
 
-Do not spawn sub-agents. Do not read any other run artifact (gaps, derivations, candidates, scores, proposal, other digests).
+Do not spawn sub-agents. Do not read any other run artifact (gaps, derivations, candidates, scores, proposal, other digests), and do not read `references/`: everything you need is in this file.
 
 ## Procedure
 1. If `RUN_DIR/papers/<PAPER>.md` exists, read it. Drop every goal that an existing `### Goal:` block already answers (same question, or a question it fully covers). If no goals remain, reply at once without fetching anything.
@@ -28,7 +28,25 @@ Do not spawn sub-agents. Do not read any other run artifact (gaps, derivations, 
    - Append one `### Goal: <verbatim question>` block per new goal, at most 300 words each.
 
 ## Output
-`RUN_DIR/papers/<PAPER>.md` in the format fixed by `SKILL_DIR/references/artifacts.md` (`## papers/<id>.md`); keep the headings and field labels verbatim. `First public` is `YYYY-MM-DD`: the date of v1, not of the latest version. For a new-style arXiv id the year and month must match the id (`2403.19647` → `2024-03-..`); `check_run.py` rejects a mismatch. `Source` is `https://arxiv.org/abs/<id>` for arXiv papers, otherwise the URL or path you read.
+`RUN_DIR/papers/<PAPER>.md`, exactly in this format (keep the headings and labels verbatim):
+
+```markdown
+# <paper title>
+
+- ID: <PAPER>
+- First public: <YYYY-MM-DD>
+- Source: <https://arxiv.org/abs/<id>, or the URL or path you read>
+
+## What this paper does
+<one paragraph, at most 120 words>
+
+## Goal-by-goal answers
+
+### Goal: <verbatim question>
+<answer, at most 300 words, with locations; "not stated in the paper" when it is not>
+```
+
+`First public` is the date of v1, not of the latest version. For a new-style arXiv id the year and month must match the id (`2403.19647` → `2024-03-..`); `check_run.py` rejects a mismatch. For a `ref-` paper it is the publication date.
 
 ## Rules
 - Answer only what the goals ask. Do not summarize the whole paper beyond the 120-word paragraph.

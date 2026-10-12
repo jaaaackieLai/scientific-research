@@ -7,10 +7,11 @@ description: Turn a research problem (what current methods fail at, plus the set
 
 Purpose: one methodological idea that addresses a real gap, borrows a mechanism that solved a structurally similar difficulty elsewhere, says why it transfers, and survives an adversarial check against the solutions anyone would try first. The output is a proposal file and its trail of evidence, not a chat answer.
 
-The method adapts IdeaScientist (Liu et al., 2026, arXiv:2610.04074): gap finding, cross-domain innovation, and report writing as separate roles that share only files. The roles here are written from scratch; no prompt text is copied. One change is deliberate: the paper's strictest measure (a blind derivation of the obvious mechanisms, then a comparison against it) barely moved under cross-domain search, while softer novelty scores rose. So that check runs inside the loop here (the deriver and the reviewer), not only as an afterthought.
+The method adapts IdeaScientist (Liu et al., 2026, arXiv:2610.04074), rewritten from scratch. Unlike the paper, the blind derivation of obvious mechanisms runs inside the loop (deriver, then reviewer), because cross-domain framing alone inflates judged novelty.
 
 ## Related files
 - `references/artifacts.md`: the run directory and the exact format of every file (always follow it)
+- `references/roles-common.md`: rules every sub-agent shares (reading papers, metadata, citations, cutoff)
 - `roles/*.md`: the instructions each sub-agent follows (gap-finder, deriver, innovator, reviewer, writer, paper-reader)
 - `scripts/check_run.py`: the deterministic gate for a run directory (always run it in step 7)
 
@@ -21,7 +22,7 @@ The method adapts IdeaScientist (Liu et al., 2026, arXiv:2610.04074): gap findin
 - Each brief is narrow and self-contained: the sub-agent sees only its brief and the files, never this conversation.
 
 ## Spawning a role
-Each role has a plugin agent `scientific-research:idea-<role>` (paper-reader: `scientific-research:paper-reader`). Brief it with the named fields its role file lists under `## Input`, always including `RUN_DIR` and `SKILL_DIR` (the absolute path of this skill's directory).
+Each role has a plugin agent `scientific-research:idea-<role>`. Brief it with the named fields its role file lists under `## Input`, always including `RUN_DIR` and `SKILL_DIR` (the absolute path of this skill's directory).
 
 If those agent types are not available (the skill was copied without the plugin, or the host has no such agents), spawn a general-purpose sub-agent whose brief starts with `Follow <SKILL_DIR>/roles/<role>.md.` and then the fields. If the host cannot spawn sub-agents at all (for example Codex unless the user asks for sub-agents), play each role yourself, one at a time, reading its role file first; tell the user that isolation is weaker this way, because full paper text and other roles' files then pass through one context.
 
@@ -91,8 +92,5 @@ In chat, give only:
 - A paper seen only as a search hit is never cited; `check_run.py` enforces that every citation has a digest.
 
 ## Do not
-- Do not search, fetch papers, or read full text yourself.
-- Do not edit `gaps.md`, `derivations.md`, `candidates.md`, `scores.md`, `proposal.md`, or anything in `papers/`.
-- Do not let an innovator run on a gap before the deriver has frozen that gap's derivations.
 - Do not skip the reviewer, and do not treat `unscored` as evidence of non-obviousness.
 - Do not rank or filter papers by venue here; credibility labels inform the user, paper-search decides inclusion.

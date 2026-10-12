@@ -38,3 +38,13 @@ def test_proposal_template_matches_checker():
 
     assert re.findall(r"^## (.+)$", text, re.M) == list(check_run.PROPOSAL_SECTIONS)
     assert check_run.NOTICE in ARTIFACTS_MD
+
+
+def test_paper_reader_digest_template_matches_artifacts():
+    reader = (SKILL_DIR / "roles" / "paper-reader.md").read_text(encoding="utf-8")
+    reader_template = re.search(r"^```markdown\n(.*?)^```", reader, re.M | re.S).group(1)
+
+    def skeleton(text):
+        return re.findall(r"^(#+ [A-Z][\w -]*|- [A-Z][\w ]*:)", text, re.M)
+
+    assert skeleton(reader_template) == skeleton(template("papers/<id>.md"))

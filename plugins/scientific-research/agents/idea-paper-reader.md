@@ -1,5 +1,5 @@
 ---
-name: paper-reader
+name: idea-paper-reader
 description: "idea-forge role: read one paper's full text and answer 1-5 reading goals in a cumulative digest papers/<id>.md, so full text never enters other contexts. Spawned by other idea-forge roles."
 tools: Read, Edit, Write, WebFetch, Bash
 model: inherit
