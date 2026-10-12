@@ -124,7 +124,7 @@ When `problem.md` gives a cutoff date, a paper whose first public date is **on o
 ```
 
 - `<dimension>` is one of `novelty`, `grounding`, `mapping`, `feasibility`, `clarity`, `coherence`.
-- `unscored` means `derivations.md` had no usable derivation for this gap; it is not evidence of non-obviousness. `unscored` goes with **Closest derivation:** `NONE`.
+- `unscored` is used exactly when the candidate's gap has zero derivations in `derivations.md`; it is not evidence of non-obviousness. `unscored` goes with **Closest derivation:** `NONE`; otherwise **Closest derivation:** is one of that gap's `D` ids.
 
 ## `proposal.md` (writer)
 

@@ -153,6 +153,23 @@ def test_derivation_missing_field_is_reported(tmp_path):
     assert any("derivations.md:3" in p and "D1.1" in p and "Key assumption" in p for p in problems)
 
 
+def test_derivations_for_unknown_gap_are_reported(tmp_path):
+    valid_run(tmp_path)
+
+    problems = problems_for(tmp_path, {"derivations.md": "## Gap: G7\n\nNo concrete derivation: x.\n"})
+
+    assert any("derivations.md:1" in p and "G7" in p and "gaps.md" in p for p in problems)
+
+
+def test_unknown_deficiency_kind_is_reported(tmp_path):
+    valid_run(tmp_path)
+    gaps = (tmp_path / "gaps.md").read_text(encoding="utf-8").replace("credit-assignment flaw", "bad vibes")
+
+    problems = problems_for(tmp_path, {"gaps.md": gaps})
+
+    assert any("gaps.md" in p and "G1" in p and "bad vibes" in p for p in problems)
+
+
 # candidates.md
 
 
@@ -198,6 +215,30 @@ def test_unscored_needs_closest_derivation_none(tmp_path):
     problems = problems_for(tmp_path, {"scores.md": score_block(Obviousness="unscored")})
 
     assert any("scores.md:1" in p and "unscored" in p and "NONE" in p for p in problems)
+
+
+def test_scored_verdict_on_gap_without_derivations_is_reported(tmp_path):
+    valid_run(tmp_path)
+
+    problems = problems_for(tmp_path, {"derivations.md": "## Gap: G1\n\nNo concrete derivation: too vague.\n"})
+
+    assert any("scores.md:1" in p and "C1" in p and "G1" in p and "unscored" in p for p in problems)
+
+
+def test_unscored_verdict_on_gap_with_derivations_is_reported(tmp_path):
+    valid_run(tmp_path)
+
+    problems = problems_for(tmp_path, {"scores.md": score_block(Closest_derivation="NONE", Obviousness="unscored")})
+
+    assert any("scores.md:1" in p and "C1" in p and "D1.1" in p for p in problems)
+
+
+def test_closest_derivation_from_another_gap_is_reported(tmp_path):
+    valid_run(tmp_path)
+
+    problems = problems_for(tmp_path, {"scores.md": score_block(Closest_derivation="D2.1")})
+
+    assert any("scores.md:1" in p and "D2.1" in p and "G1" in p for p in problems)
 
 
 # proposal.md

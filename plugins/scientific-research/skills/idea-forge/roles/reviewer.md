@@ -34,7 +34,7 @@ Read, Write, Edit, WebSearch, Bash (only for the paper-search scripts), and the 
      - `routine_extension`: a derivation reaches it with only ordinary implementation steps.
      - `non_obvious_step`: every derivation misses a consequential step or structural observation that C<n> supplies.
      - `surprising`: that missing step also runs against an expectation the papers set.
-     - `unscored`: the gap's section has zero derivations or only vague ones. This is not evidence of non-obviousness. With `unscored`, **Closest derivation** is `NONE`.
+     - `unscored`: only when the gap's section has zero derivations. This is not evidence of non-obviousness. With `unscored`, **Closest derivation** is `NONE`. If the derivations exist but look weak, still compare against the closest one and say in **Evidence** why it is weak.
    - Give `non_obvious_step` or `surprising` only when you can name the missing step. Do not reward new vocabulary, cross-domain framing, or length.
 6. **Mapping.** Can you restate what plays the role of what in the target problem? Penalize an evocative analogy with no mapping behind it. Do not demand equations or pseudocode.
 7. **Transfer plausibility.** Is the key assumption named? Given what the source digest says about when the mechanism works, is it plausible here?

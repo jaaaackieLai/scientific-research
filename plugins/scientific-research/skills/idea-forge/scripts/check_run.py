@@ -23,7 +23,7 @@ BLOCK_ID_RE = re.compile(r"^([CDG]\d+(?:\.\d+)?)\b")
 # One entry per block-structured artifact, mirroring references/artifacts.md.
 #   heading: regex of a block heading, group 1 is the block id
 #   fields:  required `- **Label:**` fields
-#   parent:  (regex of a parent section, most blocks allowed under it)
+#   parent:  (regex of a parent section, most blocks allowed under it, artifact the parent id must be in or None)
 #   values:  {label: regex the value must match}
 #   refs:    {label: artifact whose block ids the value must start with}
 #   id_in:   artifact whose block ids this block's own id must be one of
@@ -32,12 +32,17 @@ SPECS = {
     "gaps.md": Spec(
         heading=re.compile(r"^#### (G\d+)\s+[—-]\s+\S"),
         fields=("Gap", "Near-miss methods", "Methodological deficiency", "Why it matters", "Evidence route"),
-        parent=(re.compile(r"^## (Axis: .+?)\s*$"), 2),
+        parent=(re.compile(r"^## (Axis: .+?)\s*$"), 2, None),
+        values={
+            "Methodological deficiency": re.compile(
+                r"^(missing mechanism|algorithmic limitation|wrong inductive bias|credit-assignment flaw"
+                r"|training-objective mismatch|representation limitation|scalability limit|other: [^—]+?) — \S"),
+        },
     ),
     "derivations.md": Spec(
         heading=re.compile(r"^### (D\d+\.\d+)\s+[—-]\s+\S"),
         fields=("Central mechanism", "Derivation steps", "References used", "Key assumption"),
-        parent=(re.compile(r"^## Gap: (G\d+)\s*$"), 3),
+        parent=(re.compile(r"^## Gap: (G\d+)\s*$"), 3, "gaps.md"),
     ),
     "candidates.md": Spec(
         heading=re.compile(r"^### (C\d+)\s+[—-]\s+\S"),
@@ -56,7 +61,8 @@ SPECS = {
                 r"^(survive|revise\(focus=(novelty|grounding|mapping|feasibility|clarity|coherence)\)"
                 r"|reject\(reason=.+\))$"),
             "Closest derivation": re.compile(r"^(D\d+\.\d+|NONE)$"),
-            "Obviousness": re.compile(r"^(trivial_combination|routine_extension|non_obvious_step|surprising|unscored)$"),
+            "Obviousness": re.compile(
+                r"^(trivial_combination|routine_extension|non_obvious_step|surprising|unscored)$"),
         },
         id_in="candidates.md",
     ),
@@ -113,26 +119,35 @@ def blocks(text, heading_re):
     return found
 
 
-def too_many(name, text, parent, heading_re):
-    """Each parent section (e.g. an axis) may hold at most `limit` blocks (e.g. gaps)."""
-    parent_re, limit = parent
+def children(text, parent_re, heading_re):
+    """[line number, parent id, [child block ids]] for each parent section (e.g. an axis and its gaps)."""
     sections = []
     for lineno, line in enumerate(text.splitlines(), 1):
-        match = parent_re.match(line)
-        if match:
-            sections.append([lineno, match.group(1), 0])
-        elif sections and heading_re.match(line):
-            sections[-1][2] += 1
-    return [
-        f"{name}:{lineno}: {label} has {count} {Path(name).stem}, at most {limit} allowed"
-        for lineno, label, count in sections
-        if count > limit
-    ]
+        parent = parent_re.match(line)
+        child = heading_re.match(line)
+        if parent:
+            sections.append((lineno, parent.group(1), []))
+        elif sections and child:
+            sections[-1][2].append(child.group(1))
+    return sections
+
+
+def check_parents(name, text, parent, heading_re, ids):
+    """Each parent section (e.g. an axis) holds at most `limit` blocks (e.g. gaps) and names a known id."""
+    parent_re, limit, parent_in = parent
+    problems = []
+    for lineno, label, children_ids in children(text, parent_re, heading_re):
+        if len(children_ids) > limit:
+            problems.append(
+                f"{name}:{lineno}: {label} has {len(children_ids)} {Path(name).stem}, at most {limit} allowed")
+        if parent_in and label not in ids[parent_in]:
+            problems.append(f"{name}:{lineno}: {label} is not in {parent_in}")
+    return problems
 
 
 def check_blocks(name, text, spec, parsed):
-    problems = too_many(name, text, spec.parent, spec.heading) if spec.parent else []
     ids = {artifact: {b.id for b in found} for artifact, found in parsed.items()}
+    problems = check_parents(name, text, spec.parent, spec.heading, ids) if spec.parent else []
     for block in parsed[name]:
         where = f"{name}:{block.lineno}: {block.id}"
         for label in spec.fields:
@@ -150,12 +165,31 @@ def check_blocks(name, text, spec, parsed):
     return problems
 
 
-def check_scores(scores):
-    return [
-        f"scores.md:{b.lineno}: {b.id} is unscored, so **Closest derivation:** must be NONE"
-        for b in scores
-        if b.fields.get("Obviousness") == "unscored" and b.fields.get("Closest derivation") != "NONE"
-    ]
+def check_scores(scores, candidates, derivations_text):
+    """A verdict's obviousness must agree with the frozen derivations of the gap its candidate attacks."""
+    spec = SPECS["derivations.md"]
+    derived = {gap: ids for _, gap, ids in children(derivations_text, spec.parent[0], spec.heading)}
+    gap_of = {}
+    for c in candidates:
+        match = BLOCK_ID_RE.match(c.fields.get("Gap it attacks", ""))
+        if match:
+            gap_of[c.id] = match.group(1)
+    problems = []
+    for b in scores:
+        where = f"scores.md:{b.lineno}: {b.id}"
+        obviousness = b.fields.get("Obviousness")
+        if obviousness == "unscored" and b.fields.get("Closest derivation") != "NONE":
+            problems.append(f"{where} is unscored, so **Closest derivation:** must be NONE")
+        gap = gap_of.get(b.id)
+        if gap and not derived.get(gap) and obviousness and obviousness != "unscored":
+            problems.append(f"{where} attacks {gap}, which has no derivations, so **Obviousness:** must be unscored")
+        closest = b.fields.get("Closest derivation")
+        if gap and closest not in (None, "", "NONE") and closest not in derived.get(gap, []):
+            problems.append(f"{where} names {closest}, which is not a derivation of {gap}")
+        if gap and derived.get(gap) and obviousness == "unscored":
+            problems.append(f"{where} is unscored, but {gap} has derivations to compare against: "
+                            f"{', '.join(derived[gap])}")
+    return problems
 
 
 def check_proposal(text):
@@ -221,7 +255,7 @@ def check(run_dir):
     problems += check_citations(run_dir, texts, problem_cutoff(run_dir))
     for name, spec in SPECS.items():
         problems += check_blocks(name, texts[name], spec, parsed)
-    problems += check_scores(parsed["scores.md"])
+    problems += check_scores(parsed["scores.md"], parsed["candidates.md"], texts["derivations.md"])
     problems += check_proposal(texts["proposal.md"])
     return problems
 
