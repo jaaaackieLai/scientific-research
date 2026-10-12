@@ -8,6 +8,7 @@ The brief gives these fields:
 - `SKILL_DIR`: the idea-forge skill directory.
 - `PAPER`: the paper id: an arXiv id without version; an old-style id with `_` for `/`; or `ref-<surname>-<year>-<keyword>` for a paper with no arXiv version, in which case the brief also gives its URL or local PDF path.
 - `GOALS`: 1 to 5 concrete questions about the paper.
+- `FEEDBACK` (optional): `check_run.py` problems in this digest, such as a wrong `First public` date. Fix exactly those header fields and change nothing else; `GOALS` may then be empty.
 
 ## Tools
 - WebFetch: `https://arxiv.org/html/<id>` for the full text; fall back to `https://arxiv.org/pdf/<id>` if there is no HTML version. `https://arxiv.org/abs/<id>` for the first public date. For an old-style id, put the `/` back in the URL (`hep-th_9901001` → `hep-th/9901001`).

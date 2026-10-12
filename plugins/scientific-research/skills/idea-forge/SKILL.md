@@ -26,6 +26,9 @@ Each role has a plugin agent `scientific-research:idea-<role>`. Brief it with th
 
 If those agent types are not available (the skill was copied without the plugin, or the host has no such agents), spawn a general-purpose sub-agent whose brief starts with `Follow <SKILL_DIR>/roles/<role>.md.` and then the fields. If the host cannot spawn sub-agents at all (for example Codex unless the user asks for sub-agents), play each role yourself, one at a time, reading its role file first; tell the user that isolation is weaker this way, because full paper text and other roles' files then pass through one context.
 
+## Check after every role
+After each sub-agent returns, run `python <SKILL_DIR>/scripts/check_run.py docs/ideas/<slug>` before deciding the next move. Files not written yet are not checked, so this works on a partial run. For each problem in a file, spawn the role that owns it again with the problems quoted as `FEEDBACK`; never fix another role's file yourself. Catching a bad citation or a missing field here is cheaper than after three more roles have built on it.
+
 ## Workflow
 
 ### 1. Set up the run
@@ -73,7 +76,7 @@ The loop is a graph, not a line. Other legitimate moves: gap-finder again when a
 - If the writer replies `blocked — <reason>`, go back to step 4 (innovator with `BUILD_ON`) or step 2, as the reason says.
 
 ### 7. Gate
-Run `python <SKILL_DIR>/scripts/check_run.py docs/ideas/<slug>`. For each problem, spawn the role that owns the file with the problem as feedback; never fix another role's file yourself. Re-run until it prints `OK`. State `done`.
+Run the check once more on the finished run and repeat the fix loop below until it prints `OK`. State `done`.
 
 ### 8. Report
 In chat, give only:

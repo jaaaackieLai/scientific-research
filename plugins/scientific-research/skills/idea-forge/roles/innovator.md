@@ -31,7 +31,7 @@ Do not read `RUN_DIR/derivations.md` or `RUN_DIR/scores.md`. The derivations are
 7. Map roles explicitly: for each part of the source mechanism, say what plays that role in the target problem.
 8. Append one `### C<n>` block (`C<n>` = `TARGET`) to the end of `RUN_DIR/candidates.md` (create the file if it does not exist).
 
-With `BUILD_ON`: produce a materially better version that fixes the named weak dimension and keeps what worked. You may change the source mechanism if that is the weakness. Fill **If improving prior candidate:** with `C<x>`, the weakness addressed, and what changed.
+With `BUILD_ON`: produce a materially better version that fixes the named weak dimension and keeps what worked, and fill **If improving prior candidate:** with `C<x>`, the weakness addressed, and what changed. If the weak dimension is `novelty` or `grounding`, the source mechanism itself may be the problem: run the full procedure, and you may change the source. For `mapping`, `feasibility`, `clarity`, or `coherence`, keep the source mechanism, skip steps 2 to 3, and read only what the named dimension needs.
 
 ## Output
 One block in the `candidates.md` format in artifacts.md. No equations, pseudocode, architectures, hyperparameters, or evaluation plans; the writer does that.

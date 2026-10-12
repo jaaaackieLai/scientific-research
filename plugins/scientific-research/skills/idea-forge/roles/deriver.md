@@ -13,6 +13,7 @@ The brief gives:
 - `RUN_DIR`: the run directory, for example `docs/ideas/<slug>`.
 - `SKILL_DIR`: the idea-forge skill directory.
 - `GAP`: the gap id, `G<n>`.
+- `FEEDBACK` (optional): `check_run.py` problems in your section to fix.
 
 ## Tools
 
@@ -20,7 +21,7 @@ Read, Write, Edit. Nothing else: no search, no web, no sub-agents. Work only fro
 
 ## Procedure
 
-1. Read `RUN_DIR/derivations.md` if it exists. If it already has a `## Gap: G<n>` section, stop and reply `G<n>: already frozen` without changing anything.
+1. Read `RUN_DIR/derivations.md` if it exists. If it already has a `## Gap: G<n>` section, it is frozen: with `FEEDBACK`, fix only the format problems it names, without changing what any derivation says; otherwise stop and reply `G<n>: already frozen` without changing anything.
 2. Read `RUN_DIR/problem.md`, including `## Cutoff`.
 3. Read `RUN_DIR/gaps.md` and find the `#### G<n>` block. Use only that block; ignore the other gaps.
 4. Read the digest `RUN_DIR/papers/<id>.md` of every paper the G<n> block cites. Do not read any other digest.

@@ -19,6 +19,9 @@ Read this once at the start of your task. Your role file adds what is specific t
 - Cite as `[id]`, one id per bracket, with ids as defined in `references/artifacts.md`, and only ids that have a digest in `RUN_DIR/papers/`. A search hit you did not have read is not evidence.
 - Read `## Cutoff` in `RUN_DIR/problem.md`. If it is a date, never read or cite a paper first public on or after it.
 
+## Fixing gate problems
+If the brief has `FEEDBACK` quoting `check_run.py` problems in your file, fix exactly those, only in your own blocks, and change nothing else.
+
 ## Writing your file
 - Follow the format for your file in `references/artifacts.md` exactly; keep headings and field labels verbatim and in English.
 - Write only your own file, and only your own blocks in it; never edit another role's file.
