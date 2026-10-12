@@ -19,13 +19,13 @@ The brief gives these fields:
 Do not spawn sub-agents. Do not read any other run artifact (gaps, derivations, candidates, scores, proposal, other digests), and do not read `references/`: everything you need is in this file.
 
 ## Procedure
-1. If `RUN_DIR/papers/<PAPER>.md` exists, read it. Drop every goal that an existing `### Goal:` block already answers (same question, or a question it fully covers). If no goals remain, reply at once without fetching anything.
+1. If `RUN_DIR/papers/<PAPER>.md` exists, read it. With `FEEDBACK`, first correct the header fields it names (look the value up again, for example the v1 date on the abs page); this is the only time existing content changes. Then drop every goal that an existing `### Goal:` block already answers (same question, or a question it fully covers). If no goals remain, reply at once without fetching the full text.
 2. Check the cutoff. Read `## Cutoff` in `RUN_DIR/problem.md`. If it is a date, get the paper's first public date (arXiv v1 date from the abs page or `arxiv_meta.py`; the publication date for a `ref-` paper). If that date is on or after the cutoff, stop: do not fetch the text, do not write the digest, and reply `refused — <PAPER> is after the cutoff`.
 3. Fetch the full text. Read the body and the appendix, not just the abstract and introduction; training details, assumptions, and failure cases are often in the appendix.
 4. Answer each remaining goal from the text. Give locations such as `[Sec 3.2]`, `[Eq 4]`, `[Tab 2]`, `[App B]`. If the paper does not answer a goal, write "not stated in the paper".
 5. Write the digest.
    - New file: write the header (`# <title>`, `- ID:`, `- First public:`, `- Source:`), then `## What this paper does` (at most 120 words), then `## Goal-by-goal answers`.
-   - Existing file: leave everything already there untouched.
+   - Existing file: leave everything already there untouched, except the header fields a `FEEDBACK` names.
    - Append one `### Goal: <verbatim question>` block per new goal, at most 300 words each.
 
 ## Output

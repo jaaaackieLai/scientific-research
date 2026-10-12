@@ -76,7 +76,7 @@ The loop is a graph, not a line. Other legitimate moves: gap-finder again when a
 - If the writer replies `blocked — <reason>`, go back to step 4 (innovator with `BUILD_ON`) or step 2, as the reason says.
 
 ### 7. Gate
-Run the check once more on the finished run and repeat the fix loop below until it prints `OK`. State `done`.
+Run `python <SKILL_DIR>/scripts/check_run.py docs/ideas/<slug> --final` (with `--final` a missing or empty `proposal.md` is a problem too) and repeat the fix loop from "Check after every role" until it prints `OK`. State `done`.
 
 ### 8. Report
 In chat, give only:

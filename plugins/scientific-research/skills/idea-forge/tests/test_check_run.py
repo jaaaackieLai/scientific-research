@@ -124,6 +124,14 @@ def test_first_public_date_must_match_arxiv_id_month(tmp_path):
     assert any("2403.19647" in p and "2024-03" in p for p in problems)
 
 
+def test_malformed_citations_are_reported(tmp_path):
+    problems = problems_for(tmp_path, {
+        "gaps.md": "A [2501.00001, 2502.00002], B [ref-Smith-2020-x], C [arXiv:2503.00003].\n"})
+
+    for bad in ("2501.00001, 2502.00002", "ref-Smith-2020-x", "arXiv:2503.00003"):
+        assert any("gaps.md:1" in p and bad in p for p in problems), bad
+
+
 # gaps.md and derivations.md
 
 
@@ -170,6 +178,33 @@ def test_unknown_deficiency_kind_is_reported(tmp_path):
     assert any("gaps.md" in p and "G1" in p and "bad vibes" in p for p in problems)
 
 
+def test_duplicate_sections_and_block_ids_are_reported(tmp_path):
+    valid_run(tmp_path)
+    derivations = (tmp_path / "derivations.md").read_text(encoding="utf-8") + "\n## Gap: G1\n\nNo concrete derivation: x.\n"
+    candidates = (tmp_path / "candidates.md").read_text(encoding="utf-8")
+
+    problems = problems_for(tmp_path, {"derivations.md": derivations, "candidates.md": candidates + "\n" + candidates})
+
+    assert any("derivations.md" in p and "G1" in p and "more than once" in p for p in problems)
+    assert any("candidates.md" in p and "C1" in p and "more than once" in p for p in problems)
+
+
+def test_en_dash_in_block_heading_is_accepted(tmp_path):
+    valid_run(tmp_path)
+    derivations = (tmp_path / "derivations.md").read_text(encoding="utf-8").replace("D1.1 — ", "D1.1 – ")
+
+    assert problems_for(tmp_path, {"derivations.md": derivations}) == []
+
+
+def test_malformed_block_heading_is_reported(tmp_path):
+    valid_run(tmp_path)
+    candidates = (tmp_path / "candidates.md").read_text(encoding="utf-8") + "\n### C2: another idea\n"
+
+    problems = problems_for(tmp_path, {"candidates.md": candidates})
+
+    assert any("candidates.md" in p and "C2" in p and "heading" in p for p in problems)
+
+
 # candidates.md
 
 
@@ -187,6 +222,16 @@ def test_candidate_attacking_unknown_gap_is_reported(tmp_path):
     })
 
     assert any("candidates.md:1" in p and "G9" in p for p in problems)
+
+
+def test_gap_reference_not_starting_with_an_id_is_reported(tmp_path):
+    valid_run(tmp_path)
+    candidates = (tmp_path / "candidates.md").read_text(encoding="utf-8").replace(
+        "**Gap it attacks:** G1", "**Gap it attacks:** the gap G1")
+
+    problems = problems_for(tmp_path, {"candidates.md": candidates})
+
+    assert any("candidates.md:1" in p and "Gap it attacks" in p and "G<n>" in p for p in problems)
 
 
 # scores.md
@@ -241,6 +286,30 @@ def test_closest_derivation_from_another_gap_is_reported(tmp_path):
     assert any("scores.md:1" in p and "D2.1" in p and "G1" in p for p in problems)
 
 
+def test_unindented_bullets_under_a_field_count_as_its_value(tmp_path):
+    problems = problems_for(tmp_path, {"scores.md": score_block(Evidence="\n- point one\n- point two")})
+
+    assert not any("Evidence" in p for p in problems)
+
+
+def test_survive_with_obvious_mechanism_is_reported(tmp_path):
+    valid_run(tmp_path)
+
+    problems = problems_for(tmp_path, {"scores.md": score_block(Obviousness="routine_extension")})
+
+    assert any("scores.md:1" in p and "survive" in p and "routine_extension" in p for p in problems)
+
+
+def test_review_before_derivations_exist_is_reported(tmp_path):
+    valid_run(tmp_path)
+    (tmp_path / "derivations.md").unlink()
+
+    problems = check_run.check(tmp_path)
+
+    assert any("scores.md:1" in p and "G1" in p and "deriver" in p for p in problems)
+    assert not any("must be unscored" in p for p in problems)
+
+
 # proposal.md
 
 
@@ -272,6 +341,15 @@ def test_proposal_todo_placeholder_is_reported(tmp_path):
     assert any("proposal.md:6" in p and "TODO" in p for p in problems)
 
 
+def test_section_heading_must_match_exactly(tmp_path):
+    valid_run(tmp_path)
+    proposal = (tmp_path / "proposal.md").read_text(encoding="utf-8").replace("## Method\n", "## Methodology notes\n")
+
+    problems = problems_for(tmp_path, {"proposal.md": proposal})
+
+    assert any("## Method`" in p and "missing" in p for p in problems)
+
+
 # Whole run and CLI
 
 
@@ -298,6 +376,18 @@ def test_cli_rejects_directory_without_problem_file(tmp_path):
 
     assert result.returncode == 1
     assert "problem.md" in result.stdout
+
+
+def test_final_check_requires_a_proposal(tmp_path):
+    valid_run(tmp_path)
+    (tmp_path / "proposal.md").unlink()
+
+    partial = run_cli(tmp_path)
+    final = run_cli(tmp_path, "--final")
+
+    assert partial.returncode == 0, partial.stdout
+    assert final.returncode == 1
+    assert "proposal.md" in final.stdout
 
 
 def test_cli_without_arguments_prints_usage():
