@@ -9,42 +9,67 @@ prints `OK: no problems found` and exits 0 otherwise.
 """
 import re
 import sys
+from collections import namedtuple
 from pathlib import Path
 
-ARTIFACTS = ("gaps.md", "candidates.md", "derivations.md", "scores.md", "proposal.md")
 CITATION_RE = re.compile(r"\[(\d{4}\.\d{4,5}|[a-z-]+(?:\.[A-Z]{2})?_\d{7}|ref-[a-z0-9-]+)\]")
-ARXIV_MONTH_RE = re.compile(r"^(\d{2})(\d{2})\.\d{4,5}$")
 VERSIONED_RE = re.compile(r"\[(\d{4}\.\d{4,5}v\d+)\]")
+ARXIV_MONTH_RE = re.compile(r"^(\d{2})(\d{2})\.\d{4,5}$")
 DATE_RE = re.compile(r"\d{4}-\d{2}-\d{2}")
 FIRST_PUBLIC_RE = re.compile(r"^- First public:\s*(\d{4}-\d{2}-\d{2})", re.M)
 FIELD_RE = re.compile(r"^- \*\*(.+?):\*\*\s*(.*)$")
-AXIS_RE = re.compile(r"^## (Axis: .+?)\s*$")
-GAP_RE = re.compile(r"^#### (G\d+)\s+[—-]\s+\S")
-GAP_FIELDS = ("Gap", "Near-miss methods", "Methodological deficiency", "Why it matters", "Evidence route")
-GAP_ID_RE = re.compile(r"^(G\d+)\b")
-DERIVATION_GAP_RE = re.compile(r"^## Gap: (G\d+)\s*$")
-DERIVATION_RE = re.compile(r"^### (D\d+\.\d+)\s+[—-]\s+\S")
-DERIVATION_FIELDS = ("Central mechanism", "Derivation steps", "References used", "Key assumption")
-CANDIDATE_RE = re.compile(r"^### (C\d+)\s+[—-]\s+\S")
-CANDIDATE_FIELDS = (
-    "Intuition", "Gap it attacks", "Source inspiration", "How it maps to this problem",
-    "Why it could work", "Novelty vs. closest in-domain work", "Main risk",
-)
-SCORE_RE = re.compile(r"^### (C\d+) verdict\s*$")
-SCORE_FIELDS = ("Verdict", "Closest derivation", "Obviousness", "Source credibility", "Evidence", "Strongest objection")
-SCORE_VALUES = {
-    "Verdict": re.compile(
-        r"^(survive|revise\(focus=(novelty|grounding|mapping|feasibility|clarity|coherence)\)|reject\(reason=.+\))$"),
-    "Closest derivation": re.compile(r"^(D\d+\.\d+|NONE)$"),
-    "Obviousness": re.compile(r"^(trivial_combination|routine_extension|non_obvious_step|surprising|unscored)$"),
-}
-NOTICE = "以下研究構想為 AI 生成，新穎性與可行性未經實驗驗證；引用、主張與是否已有人做過，請自行查證後再使用。"
+BLOCK_ID_RE = re.compile(r"^([CDG]\d+(?:\.\d+)?)\b")
 
+# One entry per block-structured artifact, mirroring references/artifacts.md.
+#   heading: regex of a block heading, group 1 is the block id
+#   fields:  required `- **Label:**` fields
+#   parent:  (regex of a parent section, most blocks allowed under it)
+#   values:  {label: regex the value must match}
+#   refs:    {label: artifact whose block ids the value must start with}
+#   id_in:   artifact whose block ids this block's own id must be one of
+Spec = namedtuple("Spec", "heading fields parent values refs id_in", defaults=(None, {}, {}, None))
+SPECS = {
+    "gaps.md": Spec(
+        heading=re.compile(r"^#### (G\d+)\s+[—-]\s+\S"),
+        fields=("Gap", "Near-miss methods", "Methodological deficiency", "Why it matters", "Evidence route"),
+        parent=(re.compile(r"^## (Axis: .+?)\s*$"), 2),
+    ),
+    "derivations.md": Spec(
+        heading=re.compile(r"^### (D\d+\.\d+)\s+[—-]\s+\S"),
+        fields=("Central mechanism", "Derivation steps", "References used", "Key assumption"),
+        parent=(re.compile(r"^## Gap: (G\d+)\s*$"), 3),
+    ),
+    "candidates.md": Spec(
+        heading=re.compile(r"^### (C\d+)\s+[—-]\s+\S"),
+        fields=(
+            "Intuition", "Gap it attacks", "Source inspiration", "How it maps to this problem",
+            "Why it could work", "Novelty vs. closest in-domain work", "Main risk",
+        ),
+        refs={"Gap it attacks": "gaps.md"},
+    ),
+    "scores.md": Spec(
+        heading=re.compile(r"^### (C\d+) verdict\s*$"),
+        fields=("Verdict", "Closest derivation", "Obviousness", "Source credibility", "Evidence",
+                "Strongest objection"),
+        values={
+            "Verdict": re.compile(
+                r"^(survive|revise\(focus=(novelty|grounding|mapping|feasibility|clarity|coherence)\)"
+                r"|reject\(reason=.+\))$"),
+            "Closest derivation": re.compile(r"^(D\d+\.\d+|NONE)$"),
+            "Obviousness": re.compile(r"^(trivial_combination|routine_extension|non_obvious_step|surprising|unscored)$"),
+        },
+        id_in="candidates.md",
+    ),
+}
+ARTIFACTS = (*SPECS, "proposal.md")
+NOTICE = "以下研究構想為 AI 生成，新穎性與可行性未經實驗驗證；引用、主張與是否已有人做過，請自行查證後再使用。"
 PROPOSAL_SECTIONS = (
     "One-sentence thesis", "Core problem", "Key novelty", "Problem definition", "Key terms", "Related work",
     "Method", "Model and training", "Comparison to prior work", "Proposed evaluation", "Falsifiable predictions",
     "Limitations", "Provenance",
 )
+
+Block = namedtuple("Block", "lineno id fields")
 
 
 def read(path):
@@ -52,26 +77,28 @@ def read(path):
 
 
 def section(text, heading):
-    """Body of the section under the exact `heading` line, up to the next heading of the same or a higher level."""
+    """Body of the section under the exact `heading` line, up to the next heading of the same or a higher level.
+
+    None when the heading is absent."""
     level = len(heading) - len(heading.lstrip("#"))
-    match = re.search(rf"^{re.escape(heading)}[ \t]*\n(.*?)(?=^#{{1,{level}}} |\Z)", text, re.M | re.S)
-    return match.group(1).strip() if match else ""
+    match = re.search(rf"^{re.escape(heading)}[ \t]*\n?(.*?)(?=^#{{1,{level}}} |\Z)", text, re.M | re.S)
+    return match.group(1).strip() if match else None
 
 
 def problem_cutoff(run_dir):
-    match = DATE_RE.search(section(read(run_dir / "problem.md"), "## Cutoff"))
+    match = DATE_RE.search(section(read(run_dir / "problem.md"), "## Cutoff") or "")
     return match.group(0) if match else None
 
 
 def blocks(text, heading_re):
-    """(line number, id, {field label: value}) for each block whose heading matches; a block ends at the next heading.
+    """Each block whose heading matches; a block ends at the next heading.
 
     A field's value is the text after its label plus any indented lines below it."""
     found, current, label = [], None, None
     for lineno, line in enumerate(text.splitlines(), 1):
-        heading = heading_re.match(line)
-        if heading or line.startswith("#"):
-            current, label = ((lineno, heading.group(1), {}) if heading else None), None
+        if line.startswith("#"):
+            heading = heading_re.match(line)
+            current, label = (Block(lineno, heading.group(1), {}) if heading else None), None
             if current:
                 found.append(current)
             continue
@@ -80,52 +107,54 @@ def blocks(text, heading_re):
         field = FIELD_RE.match(line)
         if field:
             label = field.group(1)
-            current[2][label] = field.group(2).strip()
+            current.fields[label] = field.group(2).strip()
         elif label and line[:1].isspace() and line.strip():
-            current[2][label] = f"{current[2][label]} {line.strip()}".strip()
+            current.fields[label] = f"{current.fields[label]} {line.strip()}".strip()
     return found
 
 
-def missing_fields(name, found, required):
-    return [
-        f"{name}:{lineno}: {block_id} is missing **{label}:**"
-        for lineno, block_id, fields in found
-        for label in required
-        if not fields.get(label)
-    ]
-
-
-def too_many(name, text, parent_re, child_re, limit, kind):
-    """Each parent section (e.g. an axis) may hold at most `limit` child blocks (e.g. gaps)."""
+def too_many(name, text, parent, heading_re):
+    """Each parent section (e.g. an axis) may hold at most `limit` blocks (e.g. gaps)."""
+    parent_re, limit = parent
     sections = []
     for lineno, line in enumerate(text.splitlines(), 1):
-        parent = parent_re.match(line)
-        if parent:
-            sections.append([lineno, parent.group(1), 0])
-        elif sections and child_re.match(line):
+        match = parent_re.match(line)
+        if match:
+            sections.append([lineno, match.group(1), 0])
+        elif sections and heading_re.match(line):
             sections[-1][2] += 1
     return [
-        f"{name}:{lineno}: {label} has {count} {kind}, at most {limit} allowed"
+        f"{name}:{lineno}: {label} has {count} {Path(name).stem}, at most {limit} allowed"
         for lineno, label, count in sections
         if count > limit
     ]
 
 
-def unknown_references(name, found, label, id_re, known, kind):
-    problems = []
-    for lineno, block_id, fields in found:
-        match = id_re.match(fields.get(label, ""))
-        if match and match.group(1) not in known:
-            problems.append(f"{name}:{lineno}: {block_id} refers to {match.group(1)}, which is not a {kind}")
+def check_blocks(name, text, spec, parsed):
+    problems = too_many(name, text, spec.parent, spec.heading) if spec.parent else []
+    ids = {artifact: {b.id for b in found} for artifact, found in parsed.items()}
+    for block in parsed[name]:
+        where = f"{name}:{block.lineno}: {block.id}"
+        for label in spec.fields:
+            value = block.fields.get(label)
+            if not value:
+                problems.append(f"{where} is missing **{label}:**")
+            elif label in spec.values and not spec.values[label].match(value):
+                problems.append(f"{where} has **{label}:** `{value}`, which is not an allowed value")
+            elif label in spec.refs:
+                match = BLOCK_ID_RE.match(value)
+                if match and match.group(1) not in ids[spec.refs[label]]:
+                    problems.append(f"{where} refers to {match.group(1)}, which is not in {spec.refs[label]}")
+        if spec.id_in and block.id not in ids[spec.id_in]:
+            problems.append(f"{where} has no matching block in {spec.id_in}")
     return problems
 
 
-def invalid_values(name, found, patterns):
+def check_scores(scores):
     return [
-        f"{name}:{lineno}: {block_id} has **{label}:** `{fields[label]}`, which is not an allowed value"
-        for lineno, block_id, fields in found
-        for label, pattern in patterns.items()
-        if fields.get(label) and not pattern.match(fields[label])
+        f"scores.md:{b.lineno}: {b.id} is unscored, so **Closest derivation:** must be NONE"
+        for b in scores
+        if b.fields.get("Obviousness") == "unscored" and b.fields.get("Closest derivation") != "NONE"
     ]
 
 
@@ -136,11 +165,11 @@ def check_proposal(text):
     if text.splitlines()[0].strip() != NOTICE:
         problems.append("proposal.md:1: the first line must be the AI-generation notice from references/artifacts.md")
     for name in PROPOSAL_SECTIONS:
-        heading = f"## {name}"
-        if not re.search(rf"^{re.escape(heading)}[ \t]*$", text, re.M):
-            problems.append(f"proposal.md: section `{heading}` is missing")
-        elif not section(text, heading):
-            problems.append(f"proposal.md: section `{heading}` is empty")
+        body = section(text, f"## {name}")
+        if body is None:
+            problems.append(f"proposal.md: section `## {name}` is missing")
+        elif not body:
+            problems.append(f"proposal.md: section `## {name}` is empty")
     problems += [
         f"proposal.md:{lineno}: TODO placeholder"
         for lineno, line in enumerate(text.splitlines(), 1)
@@ -168,59 +197,32 @@ def check_citation(run_dir, paper_id, cutoff):
     return None
 
 
-def check_citations(run_dir, cutoff):
-    problems = []
-    for name in ARTIFACTS:
-        for lineno, line in enumerate(read(run_dir / name).splitlines(), 1):
+def check_citations(run_dir, texts, cutoff):
+    problems, verdicts = [], {}
+    for name, text in texts.items():
+        for lineno, line in enumerate(text.splitlines(), 1):
             for paper_id in CITATION_RE.findall(line):
-                problem = check_citation(run_dir, paper_id, cutoff)
-                if problem:
-                    problems.append(f"{name}:{lineno}: {problem}")
+                if paper_id not in verdicts:
+                    verdicts[paper_id] = check_citation(run_dir, paper_id, cutoff)
+                if verdicts[paper_id]:
+                    problems.append(f"{name}:{lineno}: {verdicts[paper_id]}")
             for versioned in VERSIONED_RE.findall(line):
                 problems.append(f"{name}:{lineno}: [{versioned}] cite the id without its version")
     return problems
 
 
-def check_scores(scores, candidates):
-    problems = missing_fields("scores.md", scores, SCORE_FIELDS)
-    problems += invalid_values("scores.md", scores, SCORE_VALUES)
-    problems += [
-        f"scores.md:{lineno}: {block_id} is unscored, so **Closest derivation:** must be NONE"
-        for lineno, block_id, fields in scores
-        if fields.get("Obviousness") == "unscored" and fields.get("Closest derivation") != "NONE"
-    ]
-    known_candidates = {c[1] for c in candidates}
-    problems += [
-        f"scores.md:{lineno}: {block_id} verdict has no matching candidate in candidates.md"
-        for lineno, block_id, _ in scores
-        if block_id not in known_candidates
-    ]
-    return problems
-
-
 def check(run_dir):
     run_dir = Path(run_dir)
+    texts = {name: read(run_dir / name) for name in ARTIFACTS}
+    parsed = {name: blocks(texts[name], spec.heading) for name, spec in SPECS.items()}
     problems = []
     if not (run_dir / "problem.md").is_file():
         problems.append("problem.md: missing; is this an idea-forge run directory?")
-    problems += check_citations(run_dir, problem_cutoff(run_dir))
-
-    gaps_text = read(run_dir / "gaps.md")
-    gaps = blocks(gaps_text, GAP_RE)
-    problems += too_many("gaps.md", gaps_text, AXIS_RE, GAP_RE, 2, "gaps")
-    problems += missing_fields("gaps.md", gaps, GAP_FIELDS)
-
-    derivations_text = read(run_dir / "derivations.md")
-    problems += too_many("derivations.md", derivations_text, DERIVATION_GAP_RE, DERIVATION_RE, 3, "derivations")
-    problems += missing_fields("derivations.md", blocks(derivations_text, DERIVATION_RE), DERIVATION_FIELDS)
-
-    candidates = blocks(read(run_dir / "candidates.md"), CANDIDATE_RE)
-    problems += missing_fields("candidates.md", candidates, CANDIDATE_FIELDS)
-    problems += unknown_references(
-        "candidates.md", candidates, "Gap it attacks", GAP_ID_RE, {g[1] for g in gaps}, "gap in gaps.md")
-
-    problems += check_scores(blocks(read(run_dir / "scores.md"), SCORE_RE), candidates)
-    problems += check_proposal(read(run_dir / "proposal.md"))
+    problems += check_citations(run_dir, texts, problem_cutoff(run_dir))
+    for name, spec in SPECS.items():
+        problems += check_blocks(name, texts[name], spec, parsed)
+    problems += check_scores(parsed["scores.md"])
+    problems += check_proposal(texts["proposal.md"])
     return problems
 
 
