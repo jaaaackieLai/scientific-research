@@ -5,9 +5,10 @@ Read this once at the start of your task. Your role file adds what is specific t
 ## Reading a paper
 - Only paper-reader reads a paper's full text. Never fetch arXiv HTML or PDF yourself.
 - Before asking for a read, look in `RUN_DIR/papers/`: an existing digest may already answer your question. Ask only goals it does not cover.
-- Spawn paper-reader with the Agent tool, subagent_type `scientific-research:idea-paper-reader`. If that type is unavailable, spawn a general-purpose sub-agent whose brief starts with `Follow SKILL_DIR/roles/paper-reader.md.`
+- Spawn paper-reader with the Agent tool, subagent_type `scientific-research:idea-paper-reader`. If that type is unavailable, spawn a general-purpose sub-agent with model `sonnet` and effort `medium`, whose brief starts with `Follow SKILL_DIR/roles/paper-reader.md.`
 - Brief fields: `RUN_DIR`, `SKILL_DIR`, `PAPER` (the id), `GOALS` (1 to 5 concrete questions). For a `ref-` paper, also give its URL or local PDF path.
-- Launch independent reads in parallel in one turn. At most 12 reads per task.
+- Launch independent reads in parallel in one turn, in the foreground (never `run_in_background`). At most 12 reads per task.
+- Wait until every read has replied before you write your file or reply. A digest that has not arrived cannot back a claim, and you cannot be resumed to finish later.
 - Replies: `done` → read `RUN_DIR/papers/<id>.md`. `refused` (after the cutoff) or `failed` → drop that paper and do not cite it.
 
 ## Metadata lookup

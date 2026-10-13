@@ -247,15 +247,19 @@ def check_citation(run_dir, paper_id, cutoff):
     match = FIRST_PUBLIC_RE.search(digest_text)
     first_public = match.group(1) if match else None
     id_month = ARXIV_MONTH_RE.match(paper_id)
-    if first_public and id_month:
-        expected = f"20{id_month.group(1)}-{id_month.group(2)}"
-        if not first_public.startswith(expected):
-            return (f"[{paper_id}] First public {first_public} does not match the id's submission month "
-                    f"{expected}; use the v1 date")
+    id_ym = f"20{id_month.group(1)}-{id_month.group(2)}" if id_month else None
+    if first_public and id_ym:
+        # v1 may predate the id month (month-end deadline, moderation hold) but never follow it.
+        if first_public[:7] > id_ym:
+            return (f"[{paper_id}] First public {first_public} is after the id's month "
+                    f"{id_ym}; use the v1 date")
     if cutoff and not first_public:
         return f"[{paper_id}] digest has no First public date to compare with the cutoff {cutoff}"
     if cutoff and first_public >= cutoff:
         return f"[{paper_id}] first public {first_public} is not before the cutoff {cutoff}"
+    # arXiv makes a paper public in its id month, so an id month on or after the cutoff is too late.
+    if cutoff and id_ym and f"{id_ym}-01" >= cutoff:
+        return f"[{paper_id}] arXiv made it public in {id_ym}, not before the cutoff {cutoff}"
     return None
 
 

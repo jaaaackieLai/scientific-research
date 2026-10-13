@@ -105,6 +105,19 @@ def test_cited_paper_after_problem_cutoff_is_reported(tmp_path):
     assert not any("2403.19647" in p for p in problems)
 
 
+def test_paper_submitted_before_cutoff_but_made_public_after_is_reported(tmp_path):
+    # v1 sent on 2025-12-28, but the 2601 id means arXiv made it public in January 2026.
+    problems = problems_for(tmp_path, {
+        "problem.md": "# P\n\n## Challenge\nC\n\n## Problem definition\nD\n\n## Cutoff\n2026-01-01\n",
+        "papers/2601.00002.md": digest("2601.00002", "2025-12-28"),
+        "papers/2512.00003.md": digest("2512.00003", "2025-12-20"),
+        "gaps.md": "A [2601.00002] and B [2512.00003].\n",
+    })
+
+    assert any("2601.00002" in p and "cutoff" in p for p in problems)
+    assert not any("2512.00003" in p for p in problems)
+
+
 def test_cited_paper_without_date_under_cutoff_is_reported(tmp_path):
     problems = problems_for(tmp_path, {
         "problem.md": "# P\n\n## Cutoff\n2026-01-01\n",
@@ -115,13 +128,24 @@ def test_cited_paper_without_date_under_cutoff_is_reported(tmp_path):
     assert any("2403.19647" in p and "First public" in p for p in problems)
 
 
-def test_first_public_date_must_match_arxiv_id_month(tmp_path):
+def test_first_public_after_arxiv_id_month_is_reported(tmp_path):
     problems = problems_for(tmp_path, {
         "papers/2403.19647.md": digest("2403.19647", "2026-03-01"),
         "gaps.md": "A [2403.19647].\n",
     })
 
     assert any("2403.19647" in p and "2024-03" in p for p in problems)
+
+
+def test_first_public_before_arxiv_id_month_is_accepted(tmp_path):
+    # Submitted after the month-end deadline, or held in moderation: the id comes from a later month.
+    problems = problems_for(tmp_path, {
+        "papers/2508.00210.md": digest("2508.00210", "2025-07-31"),
+        "papers/2609.00003.md": digest("2609.00003", "2026-06-24"),
+        "gaps.md": "A [2508.00210] and B [2609.00003].\n",
+    })
+
+    assert not any("2508.00210" in p or "2609.00003" in p for p in problems)
 
 
 def test_malformed_citations_are_reported(tmp_path):

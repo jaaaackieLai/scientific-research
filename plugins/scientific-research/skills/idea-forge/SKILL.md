@@ -24,10 +24,20 @@ The method adapts IdeaScientist (Liu et al., 2026, arXiv:2610.04074), rewritten 
 ## Spawning a role
 Each role has a plugin agent `scientific-research:idea-<role>`. Brief it with the named fields its role file lists under `## Input`, always including `RUN_DIR` and `SKILL_DIR` (the absolute path of this skill's directory).
 
-If those agent types are not available (the skill was copied without the plugin, or the host has no such agents), spawn a general-purpose sub-agent whose brief starts with `Follow <SKILL_DIR>/roles/<role>.md.` and then the fields. If the host cannot spawn sub-agents at all (for example Codex unless the user asks for sub-agents), play each role yourself, one at a time, reading its role file first; tell the user that isolation is weaker this way, because full paper text and other roles' files then pass through one context.
+If those agent types are not available (the skill was copied without the plugin, or the host has no such agents), spawn a general-purpose sub-agent whose brief starts with `Follow <SKILL_DIR>/roles/<role>.md.` and then the fields, and pass the model and effort from the table below in the Agent call (the plugin agents already set them).
+
+| Role | Model | Effort |
+| --- | --- | --- |
+| paper-reader | sonnet | medium |
+| paper-reader with only `FEEDBACK` (fix a header date, no goals) | haiku | low |
+| writer | sonnet | high |
+| gap-finder, deriver, reviewer | inherit | high |
+| innovator | inherit | xhigh |
+
+paper-reader and writer extract and assemble; the other roles judge and invent, so they keep the session's model. If the host cannot spawn sub-agents at all (for example Codex unless the user asks for sub-agents), play each role yourself, one at a time, reading its role file first; tell the user that isolation is weaker this way, because full paper text and other roles' files then pass through one context.
 
 ## Check after every role
-After each sub-agent returns, run `python <SKILL_DIR>/scripts/check_run.py docs/ideas/<slug>` before deciding the next move. Files not written yet are not checked, so this works on a partial run. For each problem in a file, spawn the role that owns it again with the problems quoted as `FEEDBACK`; never fix another role's file yourself. Catching a bad citation or a missing field here is cheaper than after three more roles have built on it.
+After each sub-agent returns, run `python <SKILL_DIR>/scripts/check_run.py docs/ideas/<slug>` before deciding the next move. Files not written yet are not checked, so this works on a partial run. For each problem in a file, spawn the role that owns it again with the problems quoted as `FEEDBACK`; never fix another role's file yourself. A paper-reader call that only fixes a digest header gets model `haiku` and effort `low`, even with the plugin agent. Catching a bad citation or a missing field here is cheaper than after three more roles have built on it.
 
 ## Workflow
 
@@ -64,7 +74,7 @@ Summarize the gaps (id, one-line gap, deficiency kind, how many near misses were
 ### 5. Review and act on the verdict
 Spawn the reviewer on the candidate; state `under_review`. Then:
 - `survive` → state `survived`, go to step 6.
-- `revise(focus=<dim>)` → spawn the innovator again with a new `TARGET`, the same `GAP`, and `BUILD_ON` (the candidate, the dimension, the verdict quoted). Review the new candidate. After two revise rounds on the same lineage without `survive`, treat it as reject.
+- `revise(focus=<dim>)` → spawn the innovator again with a new `TARGET`, the same `GAP`, and `BUILD_ON` (the candidate, the dimension, the verdict quoted). Review the new candidate. A lineage gets at most two improved versions (for example C1 → C2 → C3). If the second improved version is not `survive`, treat the lineage as reject.
 - `reject(...)` → the direction is dead (`dead`, then `forming`). Go back to step 3 with another gap, or to step 2 for a new axis if no gap is left.
 
 The loop is a graph, not a line. Other legitimate moves: gap-finder again when a gap turns out thin; a new axis when every gap is dead; innovator again when the writer replies `blocked`. Let the files, not the step numbers, decide.

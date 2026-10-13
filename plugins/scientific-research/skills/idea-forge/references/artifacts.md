@@ -16,7 +16,7 @@ docs/ideas/<slug>/
 
 ## Cutoff
 
-When `problem.md` gives a cutoff date, a paper whose first public date is **on or after** that date must not be read or cited.
+When `problem.md` gives a cutoff date, a paper whose first public date is **on or after** that date must not be read or cited. For a new-style arXiv id, the paper also counts as after the cutoff when the first day of its id month is on or after the cutoff: arXiv makes a paper public in its id month, even when v1 was sent earlier (`2601.00002` with v1 `2025-12-28` is after a `2026-01-01` cutoff).
 
 ## Paper ids and citations
 
@@ -43,7 +43,7 @@ When `problem.md` gives a cutoff date, a paper whose first public date is **on o
 <answer, at most 300 words, with locations such as [Sec 3.2] or [Eq 4]; "not stated in the paper" when it is not>
 ```
 
-`First public` is the date of arXiv v1 (or the publication date for a `ref-` paper), as `YYYY-MM-DD`. Later calls append new `### Goal:` blocks; they never rewrite earlier ones.
+`First public` is the date of arXiv v1 (or the publication date for a `ref-` paper), as `YYYY-MM-DD`. It can fall before the id month (a month-end submission or a moderation hold) but never after it. Later calls append new `### Goal:` blocks; they never rewrite earlier ones.
 
 ## `problem.md` (orchestrator)
 
