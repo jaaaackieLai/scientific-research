@@ -44,6 +44,10 @@ Regular line width is 5 pt and markers are 10 pt. Gradient lines from `fade_line
 
 ## Layout
 
+- Arrangement serves the comparison:
+  - Put the comparison the claim is about on the axis of variation within one panel: bars or lines side by side are easier to compare than the same quantity in separate panels. When the claim compares conditions at the end of training, grouped bars beat training curves.
+  - In a multi-panel figure, order panels by the explanation the reader should follow (what changed, then where, then what it implies), not by the order the experiments were run or by which result is the application.
+  - Use spacing to group: smaller gaps inside a group than between groups. If each row is one model under several conditions, keep row gaps larger than column gaps so readers compare across a row. `save()` runs `tight_layout`, which overrides `subplots_adjust`; make the extra gap with an empty spacer row or column in the grid instead, e.g. `fig.add_gridspec(3, 2, height_ratios=[1, 0.25, 1])` and plot in rows 0 and 2.
 - y axis:
   - Bar charts comparing methods: when the claim is about ranking or gaps, use `tight_ylim()` to tighten to the data range and note in the caption that the y axis does not start at 0; fix it to 0 to 1 only when the claim is about absolute probabilities or proportions.
   - When two or more subplots are meant for readers to compare trends or levels, the y axes use the same range; split into subplots only when a single figure would be too cluttered. When each subplot's claim is compared only within that subplot, each uses its own range.
