@@ -1,0 +1,421 @@
+"""Behavior tests for check_run.py: the deterministic gate an idea-forge run must pass."""
+import importlib.util
+import subprocess
+import sys
+from pathlib import Path
+
+SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "check_run.py"
+spec = importlib.util.spec_from_file_location("check_run", SCRIPT)
+check_run = importlib.util.module_from_spec(spec)
+spec.loader.exec_module(check_run)
+
+SCORE_DEFAULTS = {
+    "Verdict": "survive", "Closest derivation": "D1.1", "Obviousness": "non_obvious_step",
+    "Source credibility": "x", "Evidence": "x", "Strongest objection": "x",
+}
+
+
+def write(run, rel, text):
+    path = run / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(text, encoding="utf-8")
+
+
+def problems_for(run, files):
+    """Write `{relative path: text}` into the run directory and return the checker's problems."""
+    for rel, text in files.items():
+        write(run, rel, text)
+    return check_run.check(run)
+
+
+def digest(paper_id, first_public="2024-03-28"):
+    return f"# Title\n\n- ID: {paper_id}\n- First public: {first_public}\n- Source: x\n\n## What this paper does\nX.\n"
+
+
+def score_block(candidate="C1", **fields):
+    """A `### C<n> verdict` block; keyword arguments override fields (underscores for spaces), None drops one."""
+    values = {**SCORE_DEFAULTS, **{k.replace("_", " "): v for k, v in fields.items()}}
+    lines = "".join(f"- **{label}:** {value}\n" for label, value in values.items() if value is not None)
+    return f"### {candidate} verdict\n{lines}"
+
+
+def run_cli(*args):
+    return subprocess.run([sys.executable, str(SCRIPT), *map(str, args)], capture_output=True, text=True)
+
+
+def valid_run(run):
+    write(run, "problem.md", "# P\n\n## Challenge\nC.\n\n## Problem definition\nD.\n\n## Cutoff\n2026-01-01\n")
+    for paper_id, date in (("2403.19647", "2024-03-28"), ("2309.08600", "2023-09-15"),
+                           ("ref-silver-2017-alphazero", "2017-12-05")):
+        write(run, f"papers/{paper_id}.md", digest(paper_id, date))
+    write(run, "gaps.md",
+          "## Axis: credit assignment\n\n### What has been done\nA [2403.19647].\n\n### Open gaps on this axis\n\n"
+          "#### G1 — late failure\n- **Gap:** X via Y leaves Z.\n"
+          "- **Near-miss methods:** [2403.19647] — close; [2309.08600] — close.\n"
+          "- **Methodological deficiency:** credit-assignment flaw — reason.\n"
+          "- **Why it matters:** unlocks W.\n- **Evidence route:** compare V.\n")
+    write(run, "derivations.md",
+          "## Gap: G1\n\n### D1.1 — reweight steps\n- **Central mechanism:** reweight.\n"
+          "- **Derivation steps:** 1) a 2) b\n- **References used:** [2403.19647] — weights\n"
+          "- **Key assumption:** stable.\n")
+    write(run, "candidates.md",
+          "### C1 — value backup\n- **Intuition:** back up value.\n- **Gap it attacks:** G1 — late failure.\n"
+          "- **Source inspiration:** [ref-silver-2017-alphazero] — tree backup. "
+          "Novelty type: recombination of distant concepts.\n"
+          "- **How it maps to this problem:** states are partial programs.\n- **Why it could work:** evaluable states.\n"
+          "- **Novelty vs. closest in-domain work:** [2403.19647] — differs.\n- **Main risk:** noisy values.\n")
+    write(run, "scores.md", score_block(
+        Source_credibility="[ref-silver-2017-alphazero] venue=pass",
+        Evidence="\n  - [2309.08600] does not back up value."))
+    sections = "".join(f"## {name}\nText [2403.19647].\n\n" for name in check_run.PROPOSAL_SECTIONS)
+    write(run, "proposal.md", f"{check_run.NOTICE}\n\n# Title\n\n{sections}")
+
+
+# Citations
+
+
+def test_citation_without_digest_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {"gaps.md": "Prior work [2403.19647] uses X.\n"})
+
+    assert any("gaps.md:1" in p and "2403.19647" in p for p in problems)
+
+
+def test_ref_and_old_style_ids_are_checked(tmp_path):
+    problems = problems_for(tmp_path, {"gaps.md": "See [ref-vaswani-2017-attention] and [hep-th_9901001].\n"})
+
+    assert any("ref-vaswani-2017-attention" in p for p in problems)
+    assert any("hep-th_9901001" in p for p in problems)
+
+
+def test_versioned_citation_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {"gaps.md": "See [2403.19647v2].\n"})
+
+    assert any("gaps.md:1" in p and "2403.19647v2" in p and "version" in p for p in problems)
+
+
+def test_cited_paper_after_problem_cutoff_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {
+        "problem.md": "# P\n\n## Challenge\nC\n\n## Problem definition\nD\n\n## Cutoff\n2026-01-01\n",
+        "papers/2601.00001.md": digest("2601.00001", "2026-01-05"),
+        "papers/2403.19647.md": digest("2403.19647", "2024-03-28"),
+        "gaps.md": "A [2601.00001] and B [2403.19647].\n",
+    })
+
+    assert any("2601.00001" in p and "cutoff" in p for p in problems)
+    assert not any("2403.19647" in p for p in problems)
+
+
+def test_paper_submitted_before_cutoff_but_made_public_after_is_reported(tmp_path):
+    # v1 sent on 2025-12-28, but the 2601 id means arXiv made it public in January 2026.
+    problems = problems_for(tmp_path, {
+        "problem.md": "# P\n\n## Challenge\nC\n\n## Problem definition\nD\n\n## Cutoff\n2026-01-01\n",
+        "papers/2601.00002.md": digest("2601.00002", "2025-12-28"),
+        "papers/2512.00003.md": digest("2512.00003", "2025-12-20"),
+        "gaps.md": "A [2601.00002] and B [2512.00003].\n",
+    })
+
+    assert any("2601.00002" in p and "cutoff" in p for p in problems)
+    assert not any("2512.00003" in p for p in problems)
+
+
+def test_cited_paper_without_date_under_cutoff_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {
+        "problem.md": "# P\n\n## Cutoff\n2026-01-01\n",
+        "papers/2403.19647.md": "# Title\n\n- ID: 2403.19647\n",
+        "gaps.md": "A [2403.19647].\n",
+    })
+
+    assert any("2403.19647" in p and "First public" in p for p in problems)
+
+
+def test_first_public_after_arxiv_id_month_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {
+        "papers/2403.19647.md": digest("2403.19647", "2026-03-01"),
+        "gaps.md": "A [2403.19647].\n",
+    })
+
+    assert any("2403.19647" in p and "2024-03" in p for p in problems)
+
+
+def test_first_public_before_arxiv_id_month_is_accepted(tmp_path):
+    # Submitted after the month-end deadline, or held in moderation: the id comes from a later month.
+    problems = problems_for(tmp_path, {
+        "papers/2508.00210.md": digest("2508.00210", "2025-07-31"),
+        "papers/2609.00003.md": digest("2609.00003", "2026-06-24"),
+        "gaps.md": "A [2508.00210] and B [2609.00003].\n",
+    })
+
+    assert not any("2508.00210" in p or "2609.00003" in p for p in problems)
+
+
+def test_malformed_citations_are_reported(tmp_path):
+    problems = problems_for(tmp_path, {
+        "gaps.md": "A [2501.00001, 2502.00002], B [ref-Smith-2020-x], C [arXiv:2503.00003].\n"})
+
+    for bad in ("2501.00001, 2502.00002", "ref-Smith-2020-x", "arXiv:2503.00003"):
+        assert any("gaps.md:1" in p and bad in p for p in problems), bad
+
+
+# gaps.md and derivations.md
+
+
+def test_gap_missing_required_field_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {"gaps.md": "## Axis: a\n\n#### G1 — g\n- **Gap:** x\n"})
+
+    assert any("gaps.md:3" in p and "G1" in p and "Evidence route" in p for p in problems)
+
+
+def test_axis_with_more_than_two_gaps_is_reported(tmp_path):
+    gaps = "".join(f"#### G{n} — g\n- **Gap:** x\n\n" for n in range(1, 4))
+    problems = problems_for(tmp_path, {"gaps.md": f"## Axis: a\n\n### Open gaps on this axis\n\n{gaps}"})
+
+    assert any("gaps.md:1" in p and "Axis" in p and "3 gaps" in p for p in problems)
+
+
+def test_gap_with_more_than_three_derivations_is_reported(tmp_path):
+    body = "".join(f"### D1.{k} — m\n" for k in range(1, 5))
+    problems = problems_for(tmp_path, {"derivations.md": f"## Gap: G1\n\n{body}"})
+
+    assert any("derivations.md:1" in p and "4 derivations" in p for p in problems)
+
+
+def test_derivation_missing_field_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {"derivations.md": "## Gap: G1\n\n### D1.1 — m\n- **Central mechanism:** x\n"})
+
+    assert any("derivations.md:3" in p and "D1.1" in p and "Key assumption" in p for p in problems)
+
+
+def test_derivations_for_unknown_gap_are_reported(tmp_path):
+    valid_run(tmp_path)
+
+    problems = problems_for(tmp_path, {"derivations.md": "## Gap: G7\n\nNo concrete derivation: x.\n"})
+
+    assert any("derivations.md:1" in p and "G7" in p and "gaps.md" in p for p in problems)
+
+
+def test_unknown_deficiency_kind_is_reported(tmp_path):
+    valid_run(tmp_path)
+    gaps = (tmp_path / "gaps.md").read_text(encoding="utf-8").replace("credit-assignment flaw", "bad vibes")
+
+    problems = problems_for(tmp_path, {"gaps.md": gaps})
+
+    assert any("gaps.md" in p and "G1" in p and "bad vibes" in p for p in problems)
+
+
+def test_duplicate_sections_and_block_ids_are_reported(tmp_path):
+    valid_run(tmp_path)
+    derivations = (tmp_path / "derivations.md").read_text(encoding="utf-8") + "\n## Gap: G1\n\nNo concrete derivation: x.\n"
+    candidates = (tmp_path / "candidates.md").read_text(encoding="utf-8")
+
+    problems = problems_for(tmp_path, {"derivations.md": derivations, "candidates.md": candidates + "\n" + candidates})
+
+    assert any("derivations.md" in p and "G1" in p and "more than once" in p for p in problems)
+    assert any("candidates.md" in p and "C1" in p and "more than once" in p for p in problems)
+
+
+def test_en_dash_in_block_heading_is_accepted(tmp_path):
+    valid_run(tmp_path)
+    derivations = (tmp_path / "derivations.md").read_text(encoding="utf-8").replace("D1.1 — ", "D1.1 – ")
+
+    assert problems_for(tmp_path, {"derivations.md": derivations}) == []
+
+
+def test_malformed_block_heading_is_reported(tmp_path):
+    valid_run(tmp_path)
+    candidates = (tmp_path / "candidates.md").read_text(encoding="utf-8") + "\n### C2: another idea\n"
+
+    problems = problems_for(tmp_path, {"candidates.md": candidates})
+
+    assert any("candidates.md" in p and "C2" in p and "heading" in p for p in problems)
+
+
+# candidates.md
+
+
+def test_candidate_missing_required_field_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {
+        "candidates.md": "### C1 — idea\n- **Intuition:** do X.\n- **Gap it attacks:** G1 — fails.\n"})
+
+    assert any("candidates.md:1" in p and "C1" in p and "Main risk" in p for p in problems)
+
+
+def test_candidate_attacking_unknown_gap_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {
+        "gaps.md": "## Axis: a\n\n### Open gaps on this axis\n\n#### G1 — g\n- **Gap:** x\n",
+        "candidates.md": "### C1 — idea\n- **Gap it attacks:** G9 — fails.\n",
+    })
+
+    assert any("candidates.md:1" in p and "G9" in p for p in problems)
+
+
+def test_gap_reference_not_starting_with_an_id_is_reported(tmp_path):
+    valid_run(tmp_path)
+    candidates = (tmp_path / "candidates.md").read_text(encoding="utf-8").replace(
+        "**Gap it attacks:** G1", "**Gap it attacks:** the gap G1")
+
+    problems = problems_for(tmp_path, {"candidates.md": candidates})
+
+    assert any("candidates.md:1" in p and "Gap it attacks" in p and "G<n>" in p for p in problems)
+
+
+# scores.md
+
+
+def test_invalid_verdict_and_obviousness_are_reported(tmp_path):
+    problems = problems_for(tmp_path, {"scores.md": score_block(Verdict="accept", Obviousness="novel")})
+
+    assert any("scores.md:1" in p and "Verdict" in p and "accept" in p for p in problems)
+    assert any("scores.md:1" in p and "Obviousness" in p and "novel" in p for p in problems)
+
+
+def test_field_value_on_following_lines_counts_as_filled(tmp_path):
+    problems = problems_for(tmp_path, {"scores.md": score_block(Evidence="\n  - point one\n  - point two")})
+
+    assert not any("Evidence" in p for p in problems)
+
+
+def test_verdict_for_unknown_candidate_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {"scores.md": score_block("C9")})
+
+    assert any("scores.md:1" in p and "C9" in p and "candidates.md" in p for p in problems)
+
+
+def test_unscored_needs_closest_derivation_none(tmp_path):
+    problems = problems_for(tmp_path, {"scores.md": score_block(Obviousness="unscored")})
+
+    assert any("scores.md:1" in p and "unscored" in p and "NONE" in p for p in problems)
+
+
+def test_scored_verdict_on_gap_without_derivations_is_reported(tmp_path):
+    valid_run(tmp_path)
+
+    problems = problems_for(tmp_path, {"derivations.md": "## Gap: G1\n\nNo concrete derivation: too vague.\n"})
+
+    assert any("scores.md:1" in p and "C1" in p and "G1" in p and "unscored" in p for p in problems)
+
+
+def test_unscored_verdict_on_gap_with_derivations_is_reported(tmp_path):
+    valid_run(tmp_path)
+
+    problems = problems_for(tmp_path, {"scores.md": score_block(Closest_derivation="NONE", Obviousness="unscored")})
+
+    assert any("scores.md:1" in p and "C1" in p and "D1.1" in p for p in problems)
+
+
+def test_closest_derivation_from_another_gap_is_reported(tmp_path):
+    valid_run(tmp_path)
+
+    problems = problems_for(tmp_path, {"scores.md": score_block(Closest_derivation="D2.1")})
+
+    assert any("scores.md:1" in p and "D2.1" in p and "G1" in p for p in problems)
+
+
+def test_unindented_bullets_under_a_field_count_as_its_value(tmp_path):
+    problems = problems_for(tmp_path, {"scores.md": score_block(Evidence="\n- point one\n- point two")})
+
+    assert not any("Evidence" in p for p in problems)
+
+
+def test_survive_with_obvious_mechanism_is_reported(tmp_path):
+    valid_run(tmp_path)
+
+    problems = problems_for(tmp_path, {"scores.md": score_block(Obviousness="routine_extension")})
+
+    assert any("scores.md:1" in p and "survive" in p and "routine_extension" in p for p in problems)
+
+
+def test_review_before_derivations_exist_is_reported(tmp_path):
+    valid_run(tmp_path)
+    (tmp_path / "derivations.md").unlink()
+
+    problems = check_run.check(tmp_path)
+
+    assert any("scores.md:1" in p and "G1" in p and "deriver" in p for p in problems)
+    assert not any("must be unscored" in p for p in problems)
+
+
+# proposal.md
+
+
+def test_proposal_without_notice_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {"proposal.md": "# Title\n\n## One-sentence thesis\nX.\n"})
+
+    assert any("proposal.md:1" in p and "notice" in p for p in problems)
+
+
+def test_proposal_missing_or_empty_section_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {
+        "proposal.md": f"{check_run.NOTICE}\n\n# Title\n\n## One-sentence thesis\n\n## Method\nX.\n"})
+
+    assert any("One-sentence thesis" in p and "empty" in p for p in problems)
+    assert any("Falsifiable predictions" in p and "missing" in p for p in problems)
+    assert not any("## Method" in p for p in problems)
+
+
+def test_proposal_section_with_only_subheadings_is_not_empty(tmp_path):
+    problems = problems_for(tmp_path, {
+        "proposal.md": f"{check_run.NOTICE}\n\n# Title\n\n## Method\n### Flow\nA -> B.\n"})
+
+    assert not any("## Method" in p for p in problems)
+
+
+def test_proposal_todo_placeholder_is_reported(tmp_path):
+    problems = problems_for(tmp_path, {"proposal.md": f"{check_run.NOTICE}\n\n# Title\n\n## Method\n[TODO: fill]\n"})
+
+    assert any("proposal.md:6" in p and "TODO" in p for p in problems)
+
+
+def test_section_heading_must_match_exactly(tmp_path):
+    valid_run(tmp_path)
+    proposal = (tmp_path / "proposal.md").read_text(encoding="utf-8").replace("## Method\n", "## Methodology notes\n")
+
+    problems = problems_for(tmp_path, {"proposal.md": proposal})
+
+    assert any("## Method`" in p and "missing" in p for p in problems)
+
+
+# Whole run and CLI
+
+
+def test_valid_run_has_no_problems(tmp_path):
+    valid_run(tmp_path)
+
+    assert check_run.check(tmp_path) == []
+
+
+def test_cli_exit_codes(tmp_path):
+    valid_run(tmp_path)
+    ok = run_cli(tmp_path)
+    (tmp_path / "papers" / "2309.08600.md").unlink()
+    bad = run_cli(tmp_path)
+
+    assert ok.returncode == 0, ok.stdout
+    assert ok.stdout.startswith("OK")
+    assert bad.returncode == 1
+    assert "2309.08600" in bad.stdout
+
+
+def test_cli_rejects_directory_without_problem_file(tmp_path):
+    result = run_cli(tmp_path)
+
+    assert result.returncode == 1
+    assert "problem.md" in result.stdout
+
+
+def test_final_check_requires_a_proposal(tmp_path):
+    valid_run(tmp_path)
+    (tmp_path / "proposal.md").unlink()
+
+    partial = run_cli(tmp_path)
+    final = run_cli(tmp_path, "--final")
+
+    assert partial.returncode == 0, partial.stdout
+    assert final.returncode == 1
+    assert "proposal.md" in final.stdout
+
+
+def test_cli_without_arguments_prints_usage():
+    result = run_cli()
+
+    assert result.returncode == 2
+    assert "usage" in result.stderr.lower()
