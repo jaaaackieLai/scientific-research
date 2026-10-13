@@ -29,6 +29,7 @@ Regular line width is 5 pt and markers are 10 pt. Gradient lines from `fade_line
 | Unrelated baseline methods | Take one color each from `PASTELS` in order |
 | A group of baseline methods ranked by performance | `ranked(n)`: one hue from dark to light |
 | Category to emphasize when there is no proposed method | `BLUES[2]`; the rest use `GRAY` |
+| Several conditions, each with its own meaning, and no proposed method (analysis or phenomenon papers) | See "Condition palette" below |
 | Reference baseline line | `REFERENCE` (black dashed line at 30% opacity) |
 | Error band of a mean curve | Same-color `fill_between`, ±1 standard deviation, `BAND_ALPHA` |
 | Area chart | `AREA_BLUE`, `AREA_RED`, `AREA_GREEN`: light fill with a dark outline; when drawn as lines, follow the method colors above |
@@ -39,11 +40,19 @@ Regular line width is 5 pt and markers are 10 pt. Gradient lines from `fade_line
 - When a family has more than 5 members, use `ranked(n, dark=darkest color of the family, light=lightest color of the family)` to generate n steps of the same hue, dark to light like the arrays.
 - Within the same paper, the same method uses the same color in every figure.
 - When several lines from the same family appear together, use different markers (`o`, `s`, `^`) and line styles (solid, dashed, dash-dot) in addition to color; do not rely on color shades alone.
+- Condition palette (no proposed method, several meaningful conditions such as no intervention / intervention A / intervention B):
+  - The control or no-intervention condition is `GRAY` (outline: black at 30% opacity, as `REFERENCE`); every other condition gets its own family, so hues differ widely and conditions stay apart at a glance.
+  - Comparable elements use the same shade level in every family: fills `family[2]`, outlines and lines `family[0]` (e.g. `YELLOWS[2]` with a `YELLOWS[0]` outline). With no proposed method in the paper, red is free to use: fill `REDS[0]`, outline `OURS`.
+  - Define the mapping once (e.g. `CONDITION_COLORS` in `figures/src/colors.py`) and import it in every figure script, so a condition keeps its color across the whole paper.
 - Hatching and text on dark fills are white (`is_dark()`).
 - Heatmaps use `Reds` (positive values only) or `RdBu` (both positive and negative), with white lines between cells and a value in each cell; cells of a different nature (e.g. the diagonal of a confusion matrix) use `GRAY`.
 
 ## Layout
 
+- Arrangement serves the comparison:
+  - Put the comparison the claim is about on the axis of variation within one panel: bars or lines side by side are easier to compare than the same quantity in separate panels. When the claim compares conditions at the end of training, grouped bars beat training curves.
+  - In a multi-panel figure, order panels by the explanation the reader should follow (what changed, then where, then what it implies), not by the order the experiments were run or by which result is the application.
+  - Use spacing to group: smaller gaps inside a group than between groups. If each row is one model under several conditions, keep row gaps larger than column gaps so readers compare across a row. `save()` runs `tight_layout`, which overrides `subplots_adjust`; make the extra gap with an empty spacer row or column in the grid instead, e.g. `fig.add_gridspec(3, 2, height_ratios=[1, 0.25, 1])` and plot in rows 0 and 2.
 - y axis:
   - Bar charts comparing methods: when the claim is about ranking or gaps, use `tight_ylim()` to tighten to the data range and note in the caption that the y axis does not start at 0; fix it to 0 to 1 only when the claim is about absolute probabilities or proportions.
   - When two or more subplots are meant for readers to compare trends or levels, the y axes use the same range; split into subplots only when a single figure would be too cluttered. When each subplot's claim is compared only within that subplot, each uses its own range.
@@ -67,6 +76,6 @@ Regular line width is 5 pt and markers are 10 pt. Gradient lines from `fade_line
 
 ## Output
 
-- `save(fig, path)` outputs PNG only (300 dpi), not PDF.
+- `save(fig, path)` writes a vector PDF for the paper and a 300 dpi PNG preview to open and check. The PDF embeds fonts as TrueType (`pdf.fonttype` 42), so text stays selectable and sharp when zoomed; put the PDF in the paper, not the PNG. When compressing the paper's PDF later, keep vectors and fonts rather than downsampling them to images.
 - Figures are saved to the project's `figures/`, and the code that produces them goes in `figures/src/`.
 - When running in an environment without a display, call `matplotlib.use("Agg")` before importing `pyplot` (the templates already do this).

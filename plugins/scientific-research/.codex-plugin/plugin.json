@@ -1,6 +1,6 @@
 {
   "name": "scientific-research",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "description": "Skills for deep learning research: paper search, paper reading, research ideation, draft review, matplotlib figures, LaTeX tables, talk slides and scripts, Astro docs site, and Lean-verified derivation audits.",
   "author": {
     "name": "jacky"
