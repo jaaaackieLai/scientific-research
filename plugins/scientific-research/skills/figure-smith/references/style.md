@@ -29,6 +29,7 @@ Regular line width is 5 pt and markers are 10 pt. Gradient lines from `fade_line
 | Unrelated baseline methods | Take one color each from `PASTELS` in order |
 | A group of baseline methods ranked by performance | `ranked(n)`: one hue from dark to light |
 | Category to emphasize when there is no proposed method | `BLUES[2]`; the rest use `GRAY` |
+| Several conditions, each with its own meaning, and no proposed method (analysis or phenomenon papers) | See "Condition palette" below |
 | Reference baseline line | `REFERENCE` (black dashed line at 30% opacity) |
 | Error band of a mean curve | Same-color `fill_between`, ±1 standard deviation, `BAND_ALPHA` |
 | Area chart | `AREA_BLUE`, `AREA_RED`, `AREA_GREEN`: light fill with a dark outline; when drawn as lines, follow the method colors above |
@@ -39,6 +40,10 @@ Regular line width is 5 pt and markers are 10 pt. Gradient lines from `fade_line
 - When a family has more than 5 members, use `ranked(n, dark=darkest color of the family, light=lightest color of the family)` to generate n steps of the same hue, dark to light like the arrays.
 - Within the same paper, the same method uses the same color in every figure.
 - When several lines from the same family appear together, use different markers (`o`, `s`, `^`) and line styles (solid, dashed, dash-dot) in addition to color; do not rely on color shades alone.
+- Condition palette (no proposed method, several meaningful conditions such as no intervention / intervention A / intervention B):
+  - The control or no-intervention condition is `GRAY` (outline: black at 30% opacity, as `REFERENCE`); every other condition gets its own family, so hues differ widely and conditions stay apart at a glance.
+  - Comparable elements use the same shade level in every family: fills `family[2]`, outlines and lines `family[0]` (e.g. `YELLOWS[2]` with a `YELLOWS[0]` outline). With no proposed method in the paper, red is free to use: fill `REDS[0]`, outline `OURS`.
+  - Define the mapping once (e.g. `CONDITION_COLORS` in `figures/src/colors.py`) and import it in every figure script, so a condition keeps its color across the whole paper.
 - Hatching and text on dark fills are white (`is_dark()`).
 - Heatmaps use `Reds` (positive values only) or `RdBu` (both positive and negative), with white lines between cells and a value in each cell; cells of a different nature (e.g. the diagonal of a confusion matrix) use `GRAY`.
 

@@ -13,7 +13,7 @@ One figure supports only one claim. First write down the conclusion the reader s
 If anything is missing, ask first; when there is no one to ask, decide yourself and list what you decided when delivering:
 - Which claim this figure supports
 - Whether there are standard deviations from multiple runs; whether each metric is higher-is-better or lower-is-better
-- Which is the proposed method, and which baseline methods belong to the same family
+- Which is the proposed method, and which baseline methods belong to the same family; if there is no proposed method, which conditions the figures compare and which one is the control
 
 ## Templates
 
