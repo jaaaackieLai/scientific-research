@@ -4,7 +4,7 @@ Goal: decide, claim by claim, whether the experiments support what the paper say
 
 ## 1. Claim-to-evidence table
 
-List the paper's claims (abstract, contribution list, conclusion), then:
+List the paper's claims (abstract, contribution list, conclusion, and the Introduction's claims that the problem is important and hard), then:
 
 | Claim | Evidence (Table / Fig / Sec) | Verdict | Reason |
 |---|---|---|---|
@@ -19,6 +19,7 @@ Leakage, test-set reuse, and seeds are covered in setup-checklist Section 3; als
 
 | Problem | What to look for |
 |---|---|
+| Naive baseline missing | The paper says the problem is hard because the naive approach fails, but never runs that approach; the difficulty claim is then "none" |
 | Unfair baseline | Baselines copied from older papers with different budgets, data, or tuning; only the proposed method was tuned |
 | Ablation does not match the claim | The component credited for the gain is never removed alone; several changes are ablated together |
 | Confounded comparison | More parameters, compute, data, or training steps than the baselines, not controlled |
