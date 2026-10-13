@@ -23,11 +23,14 @@ Purpose: the reader learns something useful and interesting from the paper: how 
 - Do not ask the user about purpose or depth before starting. Read first.
 
 ### 2. Understand before writing
-Answer these for yourself first; the note is built from them. Cite the section, equation, table, or figure for each.
-1. What did people believe or do before, and what specifically fails? (Define every mechanism you mention.)
-2. What is the one idea that changes the picture? Why is it surprising or worth knowing?
-3. For each component of the method: what problem does it address, is it borrowed (from which paper) or new, and why was it designed this way?
-4. Why does the whole thing work? Which links are backed by experiments, which only by the authors' argument, and which are your inference?
+Answer these for yourself first; the note is built from them, but the answers are not listed as a separate section. Cite the section, equation, table, or figure for each. Questions 1 to 5 follow the Stanford InfoLab five-question structure for an Introduction. Answer them from the whole paper, not only the Introduction, and note when the Introduction itself leaves a question unanswered; that is a finding.
+1. What is the problem? State it in one sentence: input, desired output, and what counts as success. (Note §2, end)
+2. Why is it interesting and important? Give the authors' reason, tagged as below; importance is the claim most often asserted without evidence. (Note §1, §2)
+3. Why is it hard? Why does the naive approach fail? Say whether the paper shows this with an experiment or only asserts it. "Hard" and "not done before" are different: a problem nobody tried is not thereby hard. (Note §2)
+4. Why has it not been solved before? What did people believe or do, and what specifically fails in existing methods? (Define every mechanism you mention.) (Note §2)
+5. What are the key components and results, and what are the limitations? For each component: what problem it addresses, whether it is borrowed (from which paper) or new, and why it was designed this way. (Note §3, §7, §9)
+6. What is the one idea that changes the picture? Why is it surprising or worth knowing? (Note §1)
+7. Why does the whole thing work? Which links are backed by experiments, which only by the authors' argument, and which are your inference? (Note §4)
 
 Tag statements about mechanism as **[paper]** (the authors say so), **[evidence]** (an experiment shows it), or **[inference]** (your own reasoning). If the paper never explains why the method works, say so; do not invent a mechanism and attribute it to the authors.
 

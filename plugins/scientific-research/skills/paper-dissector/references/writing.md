@@ -14,7 +14,13 @@ The reader should finish the note understanding the idea well enough to explain 
 - Plain words, three to five sentences. No equations, no method names as a substitute for the idea.
 - End with the takeaway that transfers beyond this paper (a lesson the reader can reuse).
 
-## 3. Method: how and why, borrowed vs new
+## 3. Background: important, hard, unsolved
+Answer three separate questions; do not let one stand in for another.
+- **Why it matters**: the authors' reason. Tag it [paper] unless they back it with data (usage, cost, a failure in practice); an asserted importance stays asserted.
+- **Why it is hard**: what the naive approach is and why it fails. Say whether the paper runs the naive approach or only claims it fails.
+- **Why it was not solved before**: what existing methods do and where each breaks. A problem nobody tried is not thereby hard; if the paper's case for difficulty is only "no prior work", say so.
+
+## 4. Method: how and why, borrowed vs new
 For each component, in the order a reader needs them:
 1. The problem it solves (link back to the problem section).
 2. What it does, with the equation if there is one.
@@ -23,12 +29,12 @@ For each component, in the order a reader needs them:
 
 Do not list components as bullets of facts. Each component is a short paragraph that answers these four.
 
-## 4. Why it works: lead the reader's thinking
+## 5. Why it works: lead the reader's thinking
 - Start from the question a careful reader would ask (e.g. "if every position looks at every other position, why did nobody do this before?"), then walk through the answer step by step.
 - After the reasoning, say how strong the support is: which step an experiment shows, which only the authors argue, which is your inference.
 - End with the honest answer to "what really made it better", even if it differs from the authors' story.
 
-## 5. Format
+## 6. Format
 - Prose for explanations. Tables only for look-up content: notation, setup checklist, baselines, claims, code comparison.
 - Every factual statement cites its location (Sec., Eq., Table, Fig.).
 - Short paragraphs. No emoji, no star ratings.

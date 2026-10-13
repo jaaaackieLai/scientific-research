@@ -17,7 +17,7 @@ Note every place where this note renames a symbol the paper uses for two things.
 Three to five sentences a colleague would find interesting: what everyone assumed, what this paper did instead, why it matters, and the lesson that transfers.
 
 ## 2. Background and the problem
-How existing methods work (each mechanism defined), what specifically fails, and what evidence the authors give that it fails (experiment / complexity argument / assertion only). End with the goal the authors set.
+Why the problem matters (the authors' reason, with its support), why it is hard (why the naive approach fails), then how existing methods work (each mechanism defined), what specifically fails, and what evidence the authors give for each failure (experiment / complexity argument / assertion only). Keep "hard" and "not solved before" apart. End with the problem stated in one sentence: the goal the authors set.
 
 ## 3. Method
 A short overview of the whole pipeline (input to output), then one paragraph per component:
