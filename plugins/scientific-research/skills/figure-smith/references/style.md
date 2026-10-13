@@ -67,6 +67,6 @@ Regular line width is 5 pt and markers are 10 pt. Gradient lines from `fade_line
 
 ## Output
 
-- `save(fig, path)` outputs PNG only (300 dpi), not PDF.
+- `save(fig, path)` writes a vector PDF for the paper and a 300 dpi PNG preview to open and check. The PDF embeds fonts as TrueType (`pdf.fonttype` 42), so text stays selectable and sharp when zoomed; put the PDF in the paper, not the PNG. When compressing the paper's PDF later, keep vectors and fonts rather than downsampling them to images.
 - Figures are saved to the project's `figures/`, and the code that produces them goes in `figures/src/`.
 - When running in an environment without a display, call `matplotlib.use("Agg")` before importing `pyplot` (the templates already do this).

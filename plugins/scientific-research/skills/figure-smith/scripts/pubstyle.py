@@ -63,6 +63,7 @@ def apply_style():
         "lines.linewidth": 5,
         "lines.markersize": 10,
         "hatch.linewidth": 1.5,
+        "pdf.fonttype": 42,  # embed TrueType so PDF text stays selectable text
     })
 
 
@@ -184,8 +185,11 @@ def pad_ylim(ax, top=0.0, bottom=0.0):
         ax.set_ylim(lo - bottom * span, hi + top * span)
 
 
-def save(fig, path, formats=("png",), dpi=300):
-    """tight_layout, then save one file per format; returns the written paths."""
+def save(fig, path, formats=("pdf", "png"), dpi=300):
+    """tight_layout, then save one file per format; returns the written paths.
+
+    The PDF is the vector file for the paper; the PNG is the preview to open and check.
+    """
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
     fig.tight_layout(pad=2)
