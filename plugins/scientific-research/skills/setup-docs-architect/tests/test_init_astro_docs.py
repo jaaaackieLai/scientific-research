@@ -1,4 +1,5 @@
 """Behavior tests for init_astro_docs.py: run the script in a temporary project directory and check the generated files."""
+import os
 import subprocess
 import sys
 from pathlib import Path
@@ -22,12 +23,18 @@ CORE_FILES = [
 ]
 
 
-def run(root, *extra):
+def run_script(*args):
+    # Pin the pipe encoding on both ends: the script prints non-ASCII (「」), and on Windows the
+    # child's encoding (PYTHONIOENCODING or the locale) can differ from the locale the parent decodes with.
     return subprocess.run(
-        [sys.executable, str(SCRIPT), "--root", str(root),
-         "--title", "My Docs", "--subtitle", "demo subtitle", *extra],
-        capture_output=True, text=True,
+        [sys.executable, str(SCRIPT), *args],
+        capture_output=True, encoding="utf-8",
+        env={**os.environ, "PYTHONIOENCODING": "utf-8"},
     )
+
+
+def run(root, *extra):
+    return run_script("--root", str(root), "--title", "My Docs", "--subtitle", "demo subtitle", *extra)
 
 
 def test_creates_core_files_with_placeholders_filled(tmp_path):
@@ -125,10 +132,7 @@ def test_custom_docs_dir(tmp_path):
 
 
 def test_refuses_double_quote_in_title(tmp_path):
-    result = subprocess.run(
-        [sys.executable, str(SCRIPT), "--root", str(tmp_path), "--title", 'Say "hi"'],
-        capture_output=True, text=True,
-    )
+    result = run_script("--root", str(tmp_path), "--title", 'Say "hi"')
 
     assert result.returncode != 0
     assert "double quote" in result.stderr
@@ -182,10 +186,7 @@ def test_domain_only_adds_rules_to_existing_astro_docs(tmp_path):
     (docs / "astro.config.mjs").write_text("// existing", encoding="utf-8")
     (docs / "AGENTS.md").write_text("# docs\n", encoding="utf-8")
 
-    result = subprocess.run(
-        [sys.executable, str(SCRIPT), "--root", str(tmp_path), "--domain-only"],
-        capture_output=True, text=True,
-    )
+    result = run_script("--root", str(tmp_path), "--domain-only")
 
     assert result.returncode == 0, result.stderr
     assert not (docs / "package.json").exists()
@@ -205,10 +206,7 @@ def test_domain_marker_matches_whole_heading_only(tmp_path):
 
 
 def test_domain_only_refuses_without_astro_docs(tmp_path):
-    result = subprocess.run(
-        [sys.executable, str(SCRIPT), "--root", str(tmp_path), "--domain-only", "--docs-dir", "docs2"],
-        capture_output=True, text=True,
-    )
+    result = run_script("--root", str(tmp_path), "--domain-only", "--docs-dir", "docs2")
 
     assert result.returncode != 0
     assert "not an Astro" in result.stderr
@@ -217,10 +215,7 @@ def test_domain_only_refuses_without_astro_docs(tmp_path):
 
 
 def test_domain_only_rejects_title(tmp_path):
-    result = subprocess.run(
-        [sys.executable, str(SCRIPT), "--root", str(tmp_path), "--domain-only", "--title", "T"],
-        capture_output=True, text=True,
-    )
+    result = run_script("--root", str(tmp_path), "--domain-only", "--title", "T")
 
     assert result.returncode != 0
     assert "--domain-only" in result.stderr
