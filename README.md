@@ -12,6 +12,7 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 | --- | --- |
 | paper-search | Search and filter papers by fixed quality criteria; outputs a list of qualifying papers with the reason for each decision |
 | paper-dissector | Deep-read one paper (insight, motivation, problem, method, why it works), always check it against the official code, and write a note into the project's `docs/papers/` |
+| idea-forge | Turn a research problem into one grounded proposal: isolated sub-agents map method-level gaps, freeze the obvious solutions, transfer a mechanism from another field, review it adversarially against those obvious solutions, and write it up; every cited paper must have been read. Adapted from IdeaScientist (arXiv:2610.04074) |
 | article-advice | Review, rewrite, or draft paper sections from your own material, plus cross-section consistency checks; AI-written text always carries an academic-ethics notice |
 | figure-smith | Make or review paper data figures with matplotlib |
 | table-smith | Make or review paper tables with LaTeX (booktabs) |
@@ -71,3 +72,4 @@ cp -rf "scientific-research/plugins/scientific-research/skills/"* ".agents/skill
 Notes:
 - This copies the current version. After the skills here are updated, copy them again to sync.
 - With this method, skill names have no prefix.
+- idea-forge's sub-agents ship as plugin agents (`plugins/scientific-research/agents/`), which only load with Option 1. A copied idea-forge falls back to general-purpose sub-agents that follow its `roles/` files.
