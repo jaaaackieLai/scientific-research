@@ -13,13 +13,13 @@ One figure supports only one claim. First write down the conclusion the reader s
 If anything is missing, ask first; when there is no one to ask, decide yourself and list what you decided when delivering:
 - Which claim this figure supports
 - Whether there are standard deviations from multiple runs; whether each metric is higher-is-better or lower-is-better
-- Which is the proposed method, and which baseline methods belong to the same family
+- Which is the proposed method, and which baseline methods belong to the same family; if there is no proposed method, which conditions the figures compare and which one is the control
 
 ## Templates
 
 Every file in `examples/` runs as is, with demo data written at the top of the file. Copy the closest template into the user's folder and then modify it:
 - Read data from the raw files; do not copy values by hand
-- Put plotting code in the project's `figures/src/` and output figures in `figures/` (e.g. `figures/src/bar_grid.py` produces `figures/bar_grid.png`)
+- Put plotting code in the project's `figures/src/` and output figures in `figures/` (e.g. `figures/src/bar_grid.py` produces `figures/bar_grid.pdf` for the paper and `figures/bar_grid.png` to preview)
 - Change `SCRIPTS` at the top of the file to the absolute path of this skill's `scripts/`; derive the path for `save()` from the script's own location (`Path(__file__).resolve().parent.parent / "name"`), without depending on the working directory at run time
 
 | To show | Template |
