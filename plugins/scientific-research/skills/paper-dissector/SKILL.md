@@ -51,7 +51,7 @@ Only when the user asks. Load the theory-auditor skill and audit the derivation 
 - If the project has `GLOSSARY.md` at its root, keep the paper's own terms but map each one that names a glossary concept to the glossary term once (paper "teacher" = project "reference model"). If the paper's setup differs from a project ADR (in the folder the root `AGENTS.md` names under `## Domain docs`, `docs/adr/` by default), such as the evaluation split or a metric definition, say so in the note.
 - Path: `docs/papers/<first-author-surname>-<year>-<keyword>.md` under the current project's root; create the folder if it does not exist. If the project root is unclear, ask the user.
 - Before writing, show the user the full draft and the target path, and write only after they confirm. If the file already exists, show what changes.
-- At most 200 lines. Cut restated results and secondary details before cutting the explanations in the Insight through Why it works sections or the code mismatches.
+- Length: each section follows its own length rule in `references/note-template.md`; the note has no total line limit. When trimming, cut restated results and secondary details first, and the explanations in the Insight through Why it works sections and the code mismatches last.
 
 ### 8. Reply
 In chat, give only: the note path, the insight in one or two sentences, the paper-vs-code mismatches, and claims marked as weak or unsupported.

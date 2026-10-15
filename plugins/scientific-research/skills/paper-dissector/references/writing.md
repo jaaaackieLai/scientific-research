@@ -11,7 +11,7 @@ The reader should finish the note understanding the idea well enough to explain 
 
 ## 2. Insight: make the reader want to know more
 - Write it like telling a colleague the interesting part: what everyone assumed, what the paper did instead, and why that is surprising or useful.
-- Plain words, three to five sentences. No equations, no method names as a substitute for the idea.
+- Plain words. No equations, no method names as a substitute for the idea.
 - End with the takeaway that transfers beyond this paper (a lesson the reader can reuse).
 
 ## 3. Background: important, hard, unsolved
@@ -36,6 +36,7 @@ Do not list components as bullets of facts. Each component is a short paragraph 
 
 ## 6. Format
 - Prose for explanations. Tables only for look-up content: notation, setup checklist, baselines, claims, code comparison.
+- Numbers live in tables. Prose around a table says what the numbers mean and leaves the numbers in the table.
 - Short paragraphs. No emoji, no star ratings.
 - Keep the source's certainty. If the paper says "we suspect", write that the authors suspect; do not turn a guess into a fact or an estimate into a measurement.
 - No hollow modifiers: no stacked hedges ("may potentially help to some extent") and no quality words ("powerful", "significant") without a number behind them.
