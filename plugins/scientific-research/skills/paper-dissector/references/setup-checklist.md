@@ -1,6 +1,6 @@
 # Setup checklist
 
-Every note answers all items. Give the location in the paper (or code), or write "not stated in the paper". An unanswered item is a finding, not a gap to fill with a guess.
+Every note answers all items, citing the paper (or code) as `writing.md` "Citing the paper" says, or writes "not stated in the paper". An unanswered item is a finding, not a gap to fill with a guess.
 
 ## 1. Data loading and processing
 | # | Question | Notes |

@@ -11,7 +11,7 @@ The reader should finish the note understanding the idea well enough to explain 
 
 ## 2. Insight: make the reader want to know more
 - Write it like telling a colleague the interesting part: what everyone assumed, what the paper did instead, and why that is surprising or useful.
-- Plain words, three to five sentences. No equations, no method names as a substitute for the idea.
+- Plain words. No equations, no method names as a substitute for the idea.
 - End with the takeaway that transfers beyond this paper (a lesson the reader can reuse).
 
 ## 3. Background: important, hard, unsolved
@@ -36,7 +36,13 @@ Do not list components as bullets of facts. Each component is a short paragraph 
 
 ## 6. Format
 - Prose for explanations. Tables only for look-up content: notation, setup checklist, baselines, claims, code comparison.
-- Every factual statement cites its location (Sec., Eq., Table, Fig.).
+- Numbers live in tables. Prose around a table says what the numbers mean and leaves the numbers in the table.
 - Short paragraphs. No emoji, no star ratings.
 - Keep the source's certainty. If the paper says "we suspect", write that the authors suspect; do not turn a guess into a fact or an estimate into a measurement.
 - No hollow modifiers: no stacked hedges ("may potentially help to some extent") and no quality words ("powerful", "significant") without a number behind them.
+
+## 7. Citing the paper
+This is the one rule for pointing back to the paper; the other files refer here.
+- **Default**: each factual statement about the paper names its location in parentheses: "(Sec. 3.2)", "(Eq. 4)", "(Table 2)", "(Fig. 1)". Table columns named Evidence or Paper hold the same citations.
+- **Citable units**: the paper's own numbered sections, equations, tables, figures, algorithms, and appendices. Page and line numbers differ between the HTML and PDF versions, so cite the numbered unit instead.
+- **When the host or caller turns location citations off**: leave out location words everywhere, table columns included, and write the content itself: the equation, or the number with what it measures and under which setting ("28.4 BLEU on WMT 2014 English-German"). A reader can then check the statement without opening the paper. The [paper] / [evidence] / [inference] tags stay.

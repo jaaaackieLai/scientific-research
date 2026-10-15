@@ -74,7 +74,7 @@ Below the table:
 
 A failed proof does not mean the derivation is wrong. Say which: a counterexample was found, or the proof was not completed.
 
-When called from paper-dissector, also put the table and the assumption list into Section 10 of its note.
+When called from paper-dissector, also put the table and the assumption list into the Lean verification section of its note.
 
 ## Do not
 - Do not install elan, Lean, Mathlib, or PhysLib without the user's agreement.

@@ -3,13 +3,18 @@
 Always done. Goal: confirm the code runs the architecture the paper describes, with the values the paper states. Only two kinds of mismatch are reported.
 
 ## 1. Find the official code
-- Look in this order: the paper (abstract, footnotes, end of intro), the arXiv Comments field, the project page.
+- If the caller gives a local path to the code, use it and skip the search and clone below. Record its commit hash and date (`git -C <path> log -1 --format='%H %cs'`). Pick the commit closest to the paper as below when the history allows, reading older files with `git show <commit>:<file>` so the caller's checkout stays as it is; otherwise write in the note that the code checked may be newer than the paper.
+- Otherwise look in this order: the paper (abstract, footnotes, end of intro), the arXiv Comments field, the project page.
 - Official means the repo belongs to an author or the authors' lab or organization. A third-party reimplementation does not count; if only that exists, record "no official code" and name the third-party repo separately.
 - Clone into a scratch directory with full history (`git clone --filter=blob:none <repo>`); the code may have changed a lot since the paper.
 - Pick the commit closest to the paper: a tag or branch named for the paper first, otherwise the earliest tag or commit after the paper's first arXiv version. Record its hash and date.
 - When an item does not match, check whether a later version near the camera-ready date fixes it; record which versions were checked.
 
-## 2. What to compare
+## 2. Locate the model and configs
+- Search the whole repo recursively for the paper's component names, class names, and config keys, e.g. `grep -rn "MultiHeadAttention" <repo>` and `find <repo> -name "*.yaml" -o -name "*.json" -o -name "*config*"`. Model definitions often sit several directories deep.
+- Write "not found in the code" only after the recursive search finds nothing, and name the terms searched.
+
+## 3. What to compare
 1. **Architecture**: the model structure the paper describes (components and their order, normalization position, attention or layer computation, key equations, loss). Compare against the model definition.
 2. **Stated values**: every number or setting the paper explicitly states (dimensions, layer counts, dropout, learning rate schedule, optimizer...). Compare against the configs that produce the paper's results (the ones the README names for reproduction), not only code defaults.
 
@@ -22,12 +27,13 @@ Evaluation details the paper omits (e.g. how the metric is computed) belong to s
 
 Before marking a value as a mismatch, trace it to where it is finally used. Constants are often split across files (e.g. a learning rate multiplied in one place and divided inside the optimizer); compute the effective value.
 
-## 3. Report
+## 4. Report
 
-| Item | Type | Paper (location) | Code (file:line) | Impact |
+| Item | Type | Paper | Code (file:line) | Impact |
 |---|---|---|---|---|
 | ... | architecture / stated value | ... | ... | which result it could change, or "equivalent, no effect" with the reason |
 
+- The Paper column cites the paper as `writing.md` "Citing the paper" says.
 - If nothing mismatches, write "No mismatches in architecture or stated values" and the commit checked.
 - Reproduction notes (optional): at most a few lines, e.g. "later versions changed X; use config Y".
 - If the code cannot be found or will not open, record why. Do not claim a match without having seen the code.
