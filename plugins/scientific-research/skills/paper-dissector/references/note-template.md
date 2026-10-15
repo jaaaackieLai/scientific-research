@@ -45,7 +45,14 @@ Mismatch table from code-check.md (architecture and stated values only), then op
 - Stated by the authors: ...
 - Not stated, but follow from the assumptions in Why it works: ...
 
-## 10. Lean verification
+## 10. Derivation check (not verified by Lean)
+The main derivation in numbered steps, after the list of its assumptions.
+| Step | Verdict | Reason or counterexample | Support |
+|---|---|---|---|
+| (1) → (2) | holds / holds only if <condition> / fails | ... | [paper] / [evidence] / [inference] |
+End with the conditions the result needs and which of them the paper states.
+
+## 11. Lean verification
 (Only when requested; filled by the theory-auditor skill.)
 
 ## Sources

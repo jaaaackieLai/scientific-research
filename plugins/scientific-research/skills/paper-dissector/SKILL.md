@@ -44,8 +44,17 @@ Follow `references/experiment-check.md`. Done when every claim in the claim-to-e
 ### 5. Compare against the official code (always)
 Follow `references/code-check.md`. Every mismatch goes into the note and is reported to the user. If there is no official code, say so in the note header and in the reply; the reading is then marked unverified against code. Done when the note has the commit hash and the mismatch table (or "No mismatches in architecture or stated values"), or says why the code was not checked.
 
-### 6. Lean verification (only on request)
-Only when the user asks. Load the theory-auditor skill and audit the derivation the user picks; it fills the Lean verification section of the note.
+### 6. Check the main derivation
+Always, without Lean. It fills the Derivation check section of the note, whose heading says it was not verified by Lean.
+- Pick the main derivation: the equations the method's central claim rests on. In a paper without one, take the chain of argument from the key design choice to the main result.
+- List its assumptions, including the ones the paper leaves implicit.
+- Check each step against the previous one and the assumptions.
+- Look for counterexamples, and state the conditions the result needs.
+- Tag each step's support as [paper], [evidence], or [inference].
+
+Done when every step has a verdict.
+
+When the user asks for Lean, also load the theory-auditor skill and audit the derivation the user picks; it fills the Lean verification section of the note.
 
 ### 7. Write the note
 - Follow `references/note-template.md` and `references/writing.md`. Write in the user's language; keep equations, code identifiers, and paper terms in their original form.
