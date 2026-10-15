@@ -1,6 +1,6 @@
 ---
 name: paper-dissector
-description: "Deep-read one deep learning paper and write a note into the current project's `docs/papers/`. The note teaches the reader the paper's idea (how and why, not only what): the insight, the problem with existing methods, which parts of the method are borrowed and which are new and why, why it works, the datasets and baselines, and the experimental setup checklist; it checks every claim against the experiments and always compares the paper against its official code, flagging every mismatch. Lean verification of derivations only when the user asks. Use when the user says \"read this paper\", \"help me understand this paper\", \"deep dive into\", \"take notes on this paper\", or gives an arXiv link / PDF and wants it analyzed."
+description: "Deep-read one deep learning paper, check its claims against its experiments and official code, and write a teaching note into the project's `docs/papers/`. Use when the user says \"read this paper\" or \"take notes on this paper\", gives an arXiv link or PDF to analyze, or another agent asks for a paper note."
 ---
 
 # paper-dissector
@@ -59,12 +59,12 @@ When the user asks for Lean, also load the theory-auditor skill and audit the de
 ### 7. Write the note
 - Follow `references/note-template.md` and `references/writing.md`. Write in the user's language; keep equations, code identifiers, and paper terms in their original form.
 - If the project has `GLOSSARY.md` at its root, keep the paper's own terms but map each one that names a glossary concept to the glossary term once (paper "teacher" = project "reference model"). If the paper's setup differs from a project ADR (in the folder the root `AGENTS.md` names under `## Domain docs`, `docs/adr/` by default), such as the evaluation split or a metric definition, say so in the note.
-- Path: `docs/papers/<first-author-surname>-<year>-<keyword>.md` under the current project's root; create the folder if it does not exist. If the project root is unclear, ask the user.
-- Before writing, show the user the full draft and the target path, and write only after they confirm. If the file already exists, show what changes.
+- Path: the one the caller names; otherwise `docs/papers/<first-author-surname>-<year>-<keyword>.md` under the current project's root. Create the folder if it does not exist. If the project root is unclear, ask the user or the calling agent.
+- Before writing, show the full draft and the target path to the user, or to the calling agent when another agent invoked this skill, and write only after they confirm (a caller can confirm in advance in its request). If the file already exists, show what changes.
 - Length: each section follows its own length rule in `references/note-template.md`; the note has no total line limit. When trimming, cut restated results and secondary details first, and the explanations in the Insight through Why it works sections and the code mismatches last.
 
 ### 8. Reply
-In chat, give only: the note path, the insight in one or two sentences, the paper-vs-code mismatches, and claims marked as weak or unsupported.
+Use the format the caller names, if any. Otherwise, in chat, give only: the note path, the insight in one or two sentences, the paper-vs-code mismatches, and claims marked as weak or unsupported.
 
 ## Do not
 - Do not judge the paper by venue, authors, or citation count (that is paper-search's job).
