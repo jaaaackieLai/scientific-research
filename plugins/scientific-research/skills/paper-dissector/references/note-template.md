@@ -2,6 +2,8 @@
 
 Sections in this order. How to write each one is in `writing.md`. If a section has nothing, write "None" rather than deleting it (except Lean verification, which appears only when Lean was requested). The numbers give reading order only; other files refer to a section by its heading name.
 
+Translate the headings into the user's language, use the same translation in every note, and keep the order. If the notes folder already has a note, copy its headings.
+
 ```markdown
 # <Paper title>
 
