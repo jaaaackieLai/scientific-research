@@ -8,11 +8,12 @@ description: "Deep-read one deep learning paper and write a note into the curren
 Purpose: the reader learns something useful and interesting from the paper: how and why, not only what. The note must work for a person reading it once (a grad student new to the topic) and for an AI using it later. The output is a note file, not a chat reply.
 
 ## Related files
-- `references/note-template.md`: note structure and what each section must do (always follow it)
-- `references/writing.md`: how to write the note so a person can learn from it (always follow it)
-- `references/setup-checklist.md`: data, training, evaluation, and baseline questions every note answers
-- `references/experiment-check.md`: whether the experiments support the claims
-- `references/code-check.md`: comparing the paper against the official code (always done)
+Each file is required reading at the step named.
+- `references/writing.md`: how to write the note so a person can learn from it, and how to cite the paper (steps 2 and 7)
+- `references/setup-checklist.md`: data, training, evaluation, and baseline questions every note answers (step 3)
+- `references/experiment-check.md`: whether the experiments support the claims (step 4)
+- `references/code-check.md`: comparing the paper against the official code (step 5)
+- `references/note-template.md`: note structure and what each section must do (step 7)
 
 ## Workflow
 
@@ -35,13 +36,13 @@ Answer these for yourself first; the note is built from them, but the answers ar
 Tag statements about mechanism as **[paper]** (the authors say so), **[evidence]** (an experiment shows it), or **[inference]** (your own reasoning). If the paper never explains why the method works, say so; do not invent a mechanism and attribute it to the authors.
 
 ### 3. Fill the setup checklist
-Follow `references/setup-checklist.md`. Every item gets an answer, or "not stated in the paper".
+Follow `references/setup-checklist.md`. Done when every item from 1.1 to 4.3 has an answer or "not stated in the paper".
 
 ### 4. Check the experiments
-Follow `references/experiment-check.md`.
+Follow `references/experiment-check.md`. Done when every claim in the claim-to-evidence table has a verdict.
 
 ### 5. Compare against the official code (always)
-Follow `references/code-check.md`. Every mismatch goes into the note and is reported to the user. If there is no official code, say so in the note header and in the reply; the reading is then marked unverified against code.
+Follow `references/code-check.md`. Every mismatch goes into the note and is reported to the user. If there is no official code, say so in the note header and in the reply; the reading is then marked unverified against code. Done when the note has the commit hash and the mismatch table (or "No mismatches in architecture or stated values"), or says why the code was not checked.
 
 ### 6. Lean verification (only on request)
 Only when the user asks. Load the theory-auditor skill and audit the derivation the user picks; it fills the Lean verification section of the note.
