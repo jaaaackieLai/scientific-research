@@ -11,11 +11,11 @@ List the paper's claims (abstract, contribution list, conclusion, and the Introd
 | ... | ... | supported / weak / none | ... |
 
 - **supported**: a fair comparison or ablation directly tests the claim, over multiple seeds or folds.
-- **weak**: evidence exists but has one of the problems in Section 2, or rests on a single seed (setup-checklist 3.4).
+- **weak**: evidence exists but has one of the problems under "Problems to check", or rests on a single seed (setup-checklist 3.4).
 - **none**: no experiment tests it (often "efficient", "general", "interpretable").
 
 ## 2. Problems to check
-Leakage, test-set reuse, and seeds are covered in setup-checklist Section 3; also check:
+Leakage, test-set reuse, and seeds are covered in setup-checklist 3.1 and 3.4; also check:
 
 | Problem | What to look for |
 |---|---|

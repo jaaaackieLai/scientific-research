@@ -1,6 +1,6 @@
 # Note template
 
-Sections in this order. How to write each one is in `writing.md`. If a section has nothing, write "None" rather than deleting it (except Section 10, which appears only when Lean was requested).
+Sections in this order. How to write each one is in `writing.md`. If a section has nothing, write "None" rather than deleting it (except Lean verification, which appears only when Lean was requested). The numbers give reading order only; other files refer to a section by its heading name.
 
 ```markdown
 # <Paper title>
@@ -27,7 +27,7 @@ problem it solves → what it does (equation) → borrowed (from where) or new (
 Start from a question the reader would ask, reason through it, then state the support for each step ([paper] / [evidence] / [inference]). End with the assumptions the mechanism rests on and an honest answer to "what really made it better".
 
 ## 5. Data, training, and evaluation setup
-The answers to setup-checklist.md Sections 1 to 3 (table per section). Introduce each dataset in prose first.
+The answers to the data, training, and evaluation questions of setup-checklist.md (one table each). Introduce each dataset in prose first.
 
 ## 6. Baselines
 | Baseline | Source | How it works (one sentence) | Numbers rerun or copied | Same setting? |
@@ -41,7 +41,7 @@ Mismatch table from code-check.md (architecture and stated values only), then op
 
 ## 9. Limitations and failure conditions
 - Stated by the authors: ...
-- Not stated, but follow from the assumptions in Section 4: ...
+- Not stated, but follow from the assumptions in Why it works: ...
 
 ## 10. Lean verification
 (Only when requested; filled by the theory-auditor skill.)
