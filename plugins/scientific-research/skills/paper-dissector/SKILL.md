@@ -23,7 +23,7 @@ Purpose: the reader learns something useful and interesting from the paper: how 
 - Do not ask the user about purpose or depth before starting. Read first.
 
 ### 2. Understand before writing
-Answer these for yourself first; the note is built from them, but the answers are not listed as a separate section. Cite the section, equation, table, or figure for each. Questions 1 to 5 follow the Stanford InfoLab five-question structure for an Introduction. Answer them from the whole paper, not only the Introduction, and note when the Introduction itself leaves a question unanswered; that is a finding.
+Answer these for yourself first; the note is built from them, but the answers are not listed as a separate section. Cite the paper for each answer as `references/writing.md` "Citing the paper" says. Questions 1 to 5 follow the Stanford InfoLab five-question structure for an Introduction. Answer them from the whole paper, not only the Introduction, and note when the Introduction itself leaves a question unanswered; that is a finding.
 1. What is the problem? State it in one sentence: input, desired output, and what counts as success. (Note: Background and the problem, last sentence)
 2. Why is it interesting and important? Give the authors' reason, tagged as below; importance is the claim most often asserted without evidence. (Note: Insight; Background and the problem)
 3. Why is it hard? Why does the naive approach fail? Say whether the paper shows this with an experiment or only asserts it. "Hard" and "not done before" are different: a problem nobody tried is not thereby hard. (Note: Background and the problem)
@@ -35,7 +35,7 @@ Answer these for yourself first; the note is built from them, but the answers ar
 Tag statements about mechanism as **[paper]** (the authors say so), **[evidence]** (an experiment shows it), or **[inference]** (your own reasoning). If the paper never explains why the method works, say so; do not invent a mechanism and attribute it to the authors.
 
 ### 3. Fill the setup checklist
-Follow `references/setup-checklist.md`. Every item gets an answer with its location in the paper, or "not stated in the paper".
+Follow `references/setup-checklist.md`. Every item gets an answer, or "not stated in the paper".
 
 ### 4. Check the experiments
 Follow `references/experiment-check.md`.
@@ -49,7 +49,7 @@ Only when the user asks. Load the theory-auditor skill and audit the derivation 
 ### 7. Write the note
 - Follow `references/note-template.md` and `references/writing.md`. Write in the user's language; keep equations, code identifiers, and paper terms in their original form.
 - If the project has `GLOSSARY.md` at its root, keep the paper's own terms but map each one that names a glossary concept to the glossary term once (paper "teacher" = project "reference model"). If the paper's setup differs from a project ADR (in the folder the root `AGENTS.md` names under `## Domain docs`, `docs/adr/` by default), such as the evaluation split or a metric definition, say so in the note.
-- Location: `docs/papers/<first-author-surname>-<year>-<keyword>.md` under the current project's root; create the folder if it does not exist. If the project root is unclear, ask the user.
+- Path: `docs/papers/<first-author-surname>-<year>-<keyword>.md` under the current project's root; create the folder if it does not exist. If the project root is unclear, ask the user.
 - Before writing, show the user the full draft and the target path, and write only after they confirm. If the file already exists, show what changes.
 - At most 200 lines. Cut restated results and secondary details before cutting the explanations in the Insight through Why it works sections or the code mismatches.
 

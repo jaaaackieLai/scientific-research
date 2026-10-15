@@ -4,9 +4,9 @@ Goal: decide, claim by claim, whether the experiments support what the paper say
 
 ## 1. Claim-to-evidence table
 
-List the paper's claims (abstract, contribution list, conclusion, and the Introduction's claims that the problem is important and hard), then:
+List the paper's claims (abstract, contribution list, conclusion, and the Introduction's claims that the problem is important and hard), then fill the table, citing the evidence as `writing.md` "Citing the paper" says:
 
-| Claim | Evidence (Table / Fig / Sec) | Verdict | Reason |
+| Claim | Evidence | Verdict | Reason |
 |---|---|---|---|
 | ... | ... | supported / weak / none | ... |
 

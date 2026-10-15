@@ -24,10 +24,11 @@ Before marking a value as a mismatch, trace it to where it is finally used. Cons
 
 ## 3. Report
 
-| Item | Type | Paper (location) | Code (file:line) | Impact |
+| Item | Type | Paper | Code (file:line) | Impact |
 |---|---|---|---|---|
 | ... | architecture / stated value | ... | ... | which result it could change, or "equivalent, no effect" with the reason |
 
+- The Paper column cites the paper as `writing.md` "Citing the paper" says.
 - If nothing mismatches, write "No mismatches in architecture or stated values" and the commit checked.
 - Reproduction notes (optional): at most a few lines, e.g. "later versions changed X; use config Y".
 - If the code cannot be found or will not open, record why. Do not claim a match without having seen the code.
