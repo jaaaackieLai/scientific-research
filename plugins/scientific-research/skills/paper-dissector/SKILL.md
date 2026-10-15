@@ -52,7 +52,7 @@ Always, without Lean. It fills the Derivation check section of the note, whose h
 - Look for counterexamples, and state the conditions the result needs.
 - Tag each step's support as [paper], [evidence], or [inference].
 
-Done when every step has a verdict.
+Done when every step of the derivation has a verdict.
 
 When the user asks for Lean, also load the theory-auditor skill and audit the derivation the user picks; it fills the Lean verification section of the note.
 
