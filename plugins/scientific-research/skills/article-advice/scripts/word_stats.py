@@ -30,11 +30,20 @@ TERMS = {
     "comprehensive": r"\bcomprehensive\w*",
     "SOTA": r"state-of-the-art|\bSoTA\b",
     "wisely": r"\bwisely\b",
+    "optimal": r"\boptimal\w*",
+    "powerful/innovative": r"\b(powerful|innovative|groundbreaking|wonderful|incontrovertible)\b",
+    "effectively": r"\beffectively\b",
+    "seamless": r"\bseamless\w*",
+    "plug-and-play": r"\bplug-and-play\b",
     # C. intensifiers
     "significant(ly)": r"\bsignificant(ly)?\b",
     "statistically significant": r"\bstatistically significant\b",
     "seriously": r"\bseriously\b",
     "very": r"\bvery\b",
+    "marginal/negligible": r"\b(marginal\w*|negligibl\w*)",
+    # C2. urgency words
+    "crucial": r"\bcrucial\b",
+    "pressing/urgent": r"\b(pressing|urgent\w*|imperative)\b",
     # D. result verbs, strong to weak
     "prove": r"\bprov(e|es|ed|en)\b",
     "show": r"\bshow(s|ed|n)?\b",
@@ -53,6 +62,9 @@ TERMS = {
     "specifically": r"\bspecifically\b",
     "however": r"\bhowever\b",
     "in contrast": r"\bin contrast\b",
+    # G. phrasings common among native Chinese-speaking authors
+    "besides": r"\bbesides\b",
+    "it can be seen": r"\bit (can|could) be (seen|observed)\b|\bas we can see\b",
 }
 
 REF_HEADING = re.compile(r"^\s*(\d+\s+)?(References|REFERENCES|Bibliography)\s*$", re.M)
