@@ -20,9 +20,7 @@ One paragraph per group: topic sentence → summarize representative methods →
 - [ ] Closely related methods that are not compared are named, with the reason stated as a difference in goal or setting (detection vs. traceability; optimization-based vs. training-free), not omitted silently
 - [ ] When the field has an established taxonomy (e.g., post-hoc / fine-tuning / inversion-based), state which family this paper belongs to and which shared limitation it inherits
 
-## Rewrite points
+## Rewrite example
 
-- When the user's material does not say what a prior paper did, ask for its abstract or original text.
-- Example (the user has explained the approach and assumptions of [1-3]):
-  - Original: Many methods [1-5] have been proposed for domain adaptation, but they have limitations.
-  - Rewrite: Feature-alignment methods [1-3] reduce the distribution gap by matching source and target statistics, but they assume the label distribution is shared across domains. In contrast, our method [to be provided by the user].
+- Original (the user has explained the approach and assumptions of [1-3]): Many methods [1-5] have been proposed for domain adaptation, but they have limitations.
+- Rewrite: Feature-alignment methods [1-3] reduce the distribution gap by matching source and target statistics, but they assume the label distribution is shared across domains. In contrast, our method [to be provided by the user].

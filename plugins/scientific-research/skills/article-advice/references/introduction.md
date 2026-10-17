@@ -25,12 +25,10 @@ When explaining why existing methods fail, walk through the causal chain: existi
 - [ ] The i-th limitation → i-th challenge → i-th module correspond; when the counts do not match, there is an explanation. Short labels reused across sections make this visible (writing-patterns.md 1.6)
 - [ ] Contributions say which components are borrowed and what is new (writing-patterns.md 1.4)
 - [ ] Challenges are derived from the problem, not reasons invented for the modules
-- [ ] Contributions contain no vague items like extensive experiments, and nothing the paper did not actually do
+- [ ] Contributions contain nothing the paper did not actually do; an experimental contribution (when the venue norm lists one) names the claim, benchmarks and headline number instead of "Extensive experiments demonstrate the superiority"
 - [ ] Detailed descriptions of other people's methods go in related work
-- [ ] Negative results that would weaken the claims are not omitted (reorganizing the paper around the final results is fine)
 - [ ] Figure 1, when present, carries the main claim: from it and its caption alone, a reader can say what the paper shows (e.g., the prior view and this paper's view side by side)
 - [ ] No contribution predicts adoption (will see broader application); move such sentences to the impact statement and hedge them
-- [ ] If the venue norm is to list an experimental contribution, make it checkable: name the claim, benchmarks and headline number instead of "Extensive experiments demonstrate the superiority"
 - [ ] A concrete scenario used for motivation has a matching experiment, and the introduction gives its section number
 
 ## Rewrite example
