@@ -5,18 +5,15 @@ description: Use when the user wants to review or rewrite a deep learning paper 
 
 # article-advice
 
-Review, rewrite, or draft from the user's own material. Every piece of AI-written paper text carries an academic-ethics notice.
-
 ## Ethical boundaries
 
 1. **AI-generation notice**: every output that contains paper text written by AI (a draft or a rewrite) puts this line immediately above that text, verbatim: `以下為 AI 生成，不可直接作為論文內容，特此告知。` Suggestion mode that only quotes the user's text and explains issues does not need it. On the first output of the conversation, also remind the user to check the submission venue's disclosure rules for AI-assisted writing.
-2. **Draft only from the user's material**: the content (motivation, hypotheses, method details, results, prior work) must come from what the user provides. When key information is missing, first ask: Why do this? What hypothesis are you testing? What are the results and their significance? Which hypotheses hold or are overturned? Anything still missing goes into the draft as a placeholder `[TODO: ...]`, never a guess.
-3. **Do not change meaning**: technical content, strength of claims, and direction of conclusions stay the same.
-4. **Do not fabricate**: in rewrites and drafts alike, do not add numbers, experiments, citations, mechanisms, or descriptions of prior work.
-   - Information only the author knows (motivation, meaning of undefined names) → list as a content gap.
+2. **Content comes only from the user**: in rewrites and drafts alike, do not add numbers, experiments, citations, mechanisms, or descriptions of prior work.
    - Information already present elsewhere in the paper (tables, figures, other sections) → may be written directly into the body text.
-   - A table where the proposed method loses, or the gap is smaller than the standard deviation, but the body text does not mention it → must be written into the body text when rewriting (writing-patterns.md 4.4).
-5. **Do not strengthen claims**: when the original is too strong, suggest weakening it; in drafts, match claim strength to the evidence the user gave (principles.md Section 2).
+   - Information only the author knows (motivation, hypotheses, meaning of undefined names) → a content gap, never a guess. Before drafting, ask about the gaps that block the main line: Why do this? What hypothesis are you testing? What are the results and their significance? Which hypotheses hold or are overturned? Gaps that remain go into the draft as `[TODO: ...]`.
+3. **Do not change meaning**: technical content, term meanings, and direction of conclusions stay the same.
+4. **Do not strengthen claims**: when the original is too strong, suggest weakening it; in drafts, match claim strength to the evidence the user gave (principles.md Section 2).
+5. **Do not hide unfavorable results**: every place in a table or figure where the proposed method does not win, the gap is smaller than the standard deviation, or the result holds only in some settings is mentioned in the body text; when rewriting, write the missing ones in (writing-patterns.md 4.3).
 6. **Do not rewrite text that appears copied from another paper**: suggest adding quotation marks and a citation, or understanding it and rewriting it yourself.
 
 ## Files to read
@@ -30,28 +27,21 @@ Review, rewrite, or draft from the user's own material. Every piece of AI-writte
 | Rewriting, or the problem is word choice | `word-bank.md` |
 | The problem is how things are explained (missing research question, contrast, plain-language explanation, unfavorable results) | `writing-patterns.md`, and cite the technique number |
 
-`scripts/word_stats.py`: counts word usage across a batch of PDFs, used to update the word bank.
-
 ## Workflow
 
 **Decide**: whether the user wants suggestions, a rewrite, or a draft (default to suggestions if there is a draft and nothing is stated); which section it is (ask if you cannot tell).
 
-**Suggestion mode**: first judge whether the passage as a whole achieves the purpose of its section, then go through the checklist item by item. Every issue must quote the original text, explain why, mark a level (must fix / should fix / could fix), and give a concrete fix.
+**Suggestion mode**: first judge whether the passage as a whole achieves the purpose of its section, then go through the checklist item by item.
 
 **Rewrite mode**:
-1. Check the main line first, then fix sentences: whether the introduction's chain of reasoning is complete, whether the method name and core terms are explained in the body text, whether related work is argumentative rather than a list, whether each experiment subsection ends with a one-sentence interpretation. Breaks are listed as must fix, with the specific questions to ask the author. You may reorder, merge, or split content already in the original; you may not supply reasons on the author's behalf.
+1. Check the main line before fixing sentences: the chain of argument in the section file (and consistency.md Section 1 for two or more sections). Breaks are listed as must fix, with the specific questions to ask the author. You may reorder, merge, or split content already in the original.
 2. Only change sentences that have problems; when replacing words, name the corresponding category in word-bank.md.
-3. After rewriting, actually check each item:
-   - Numbers match the original; no new claims, comparisons, or citations; claims are not stronger; term meanings unchanged
-   - Every cell in every table where the proposed method does not win, or wins by a small margin, is mentioned in the body text
-   - The same key term refers to the same thing in every section
-   - The same paragraph-opening sentence pattern appears no more than twice in the whole paper
-   - Summary sentences do not restate the conclusion of the previous sentence, paragraph, or section
+3. After rewriting, actually check the result against ethical boundaries 2 to 5 and principles.md Sections 4 and 5.
 
 **Draft mode** (the user has no text for this section):
-1. Collect material: list what the section needs (from its section file's "Common structure") and map each item to the user's material; ask about the gaps that block the main line.
-2. Write following the section file's structure and writing-patterns.md; every number, citation, and comparison traces to the user's material.
-3. Run the same checks as rewrite mode step 3, plus: every `[TODO]` is listed under content gaps.
+1. Collect material: list what the section needs (from its section file's "Common structure") and map each item to the user's material.
+2. Write following the section file's structure and writing-patterns.md.
+3. Run the same checks as rewrite mode step 3.
 
 ## Output format
 

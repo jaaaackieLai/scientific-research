@@ -1,7 +1,5 @@
 # Shared principles
 
-Apply to all sections; read before reviewing.
-
 ## 0. A paper tests hypotheses
 
 - The reader should be able to say: what hypothesis this paper tests, and which one each experiment tests.
@@ -26,17 +24,17 @@ Apply to all sections; read before reviewing.
 
 ## 3. Exaggerated wording
 
-Mark on sight and replace with numbers or mechanisms:
-- Novelty: novel (without saying what is new), innovative, pioneering, revolutionary, paradigm shift
-- Performance: superior, remarkable, unprecedented, significantly (without a test), state-of-the-art (without saying which benchmark)
+Mark on sight and replace with numbers or mechanisms (alternatives in word-bank.md B and C):
+- Novelty: novel (without saying what is new), innovative, pioneering, revolutionary, paradigm shift, we are the first (must be verified)
+- Performance: superior, remarkable, powerful, promising, unprecedented, significantly (without a test), state-of-the-art (without saying which benchmark)
 - Empty phrases: pave the way for, highlight the potential of, extensive experiments, comprehensive analysis
-- We are the first to: must be verified. We solve X: usually only an improvement; write improve and the magnitude.
+- We solve X: usually only an improvement; write improve and the magnitude.
 
-Mark notably, underscore, and reveal only when repeated many times or when they carry no substance. See word-bank.md for alternatives.
+Mark notably, underscore, and reveal only when repeated many times or when they carry no substance.
 
 ## 4. Consistent terminology
 
-- One thing has one name throughout the paper (modules, methods, datasets, metrics, adjectives all count). Example: the abstract calls it lift and the method calls it map; readers will think they are two different things.
+- One thing has one name throughout the paper (modules, methods, datasets, metrics, adjectives, and the verbs of the core mechanism all count). Example: the abstract calls it lift and the method calls it map; readers will think they are two different things.
 - One symbol or one noun denotes only one thing; not even within the same paragraph may a word have two meanings (source referring to both the data source and the source model). If a distinction is needed, give it another name.
 - Define abbreviations and symbols on first appearance.
 
@@ -50,7 +48,7 @@ Mark notably, underscore, and reveal only when repeated many times or when they 
 
 ## 6. Sentences
 
-- Verbs state the operation: when utilize, leverage, adopt, or consider is the main verb, replace it with something like encode, project, weight, mask, sample.
+- Verbs state the operation (encode, project, weight, mask, sample), not utilize, leverage, or consider (word-bank.md A).
 - Replace adjectives with measurable properties: high efficiency → reduces inference time by 40%.
 - The claim must survive after the metaphor is removed.
 - Do not start every sentence with we: use we for design decisions, the method name for capabilities, the module name for mechanisms.

@@ -2,7 +2,7 @@
 
 Basis: word usage statistics and reading of the main text of 35 example papers (list in "Sources" of writing-patterns.md).
 
-Criterion: most of these words are not banned; rather, they carry no information when they appear alone. If replacing them with numbers or mechanisms makes the sentence concrete, suggest the change; if not, leave it. Good papers use these words too, but immediately followed by numbers, comparison targets, or mechanisms.
+Criterion: these words are not banned; they carry no information when they appear alone. Good papers use them too, immediately followed by numbers, comparison targets, or mechanisms. Suggest a change only when replacing them with numbers or mechanisms makes the sentence concrete.
 
 ## A. Vague verbs
 
@@ -22,7 +22,6 @@ Criterion: most of these words are not banned; rather, they carry no information
 |---|---|
 | novel | Delete and state the difference: unlike X, our method ... (novel tasks / domains means "unseen" and is fine) |
 | demonstrate the effectiveness | Change to which metric and by how much: reduces inference time by 65% at no loss in accuracy |
-| superior / remarkable / powerful / promising | Delete when describing your own results and replace with numbers |
 | extensive / comprehensive experiments | List datasets, models, settings: across five vision benchmarks and a sentence-embedding task |
 | state-of-the-art | State the benchmark and comparison targets |
 | wisely / cleverly / elegantly | Delete and state the rule itself |
@@ -50,12 +49,9 @@ Criterion: most of these words are not banned; rather, they carry no information
 | Weak | suggest, indicate, is consistent with | Inferred but not directly verified explanations |
 | Weakest | may, likely, tend to, might | Possible causes, general tendencies |
 
-A good pattern is asserting the number first and hedging the cause in the same sentence: Gains are modest under the red-anchor shift, likely because the model relies on color to separate the anchor from the block. Common errors are the reverse (demonstrate for the cause, may for the number), or adding may to every conclusion (see principles.md Section 2).
-
 ## E. Connectives
 
-- If the same connective appears more than three times in a section, check whether each use means what it says (what follows Specifically is actually more detailed, Typically is actually about the general case).
-- However often pairs with a concession in the previous sentence: Given X, doing Y is reasonable. However, ...
+- If the same connective appears more than three times in a section, check whether each use means what it says (principles.md Section 5; Typically introduces the general case).
 - In contrast is followed by a difference in mechanism, not "works better".
 
 ## E2. Sentences without information
@@ -64,7 +60,6 @@ A good pattern is asserting the number first and hedging the cause in the same s
 |---|---|
 | In this section, we first present ... We then ... | State the flow and main points directly; if a roadmap is needed, each preview carries a piece of substantive information |
 | In summary / Overall, these results show that X is effective. | State the property the results represent or the claim they support |
-| We hope this work draws attention to ... | State the significance or a concrete next step |
 | Meanwhile / Beyond X, ... | Replace with a connective that expresses the actual relation (because, in contrast, as a result), or split the paragraph |
 
 ## F. Vague quantifiers
@@ -75,7 +70,7 @@ A good pattern is asserting the number first and hedging the cause in the same s
 | large / small | Add a comparison target: two orders of magnitude fewer than MLLMs |
 | fast / efficient | Give time or complexity: +0.67% end-to-end overhead, O(MN) |
 | improves performance | State the metric and the change: from 43.7% to 96.0% |
-| up to N× / N% | Also give the typical value or the condition where the maximum occurs, and say whether it is relative or absolute |
+| up to N× / N% | Also give the typical value or the condition where the maximum occurs |
 
 ## G. Common usage by native Chinese-speaking authors
 
@@ -94,13 +89,8 @@ A good pattern is asserting the number first and hedging the cause in the same s
 |---|---|
 | Trade-off | trade X for Y / without sacrificing Y |
 | Comparison with baselines | matches or outperforms X / falls short of X by N points / comparable to X |
-| Subsuming an old method | recovers X as a special case (e.g., when λ = 0) |
 | Scope of applicability | is agnostic to X / a drop-in replacement for X |
-| Naming a phenomenon | We refer to this phenomenon as X. |
-| Plain-language restatement | Equivalently, ... / In essence, ... / At a high level, Theorem 1 says that ... |
 | Delimiting scope | is beyond the scope of this paper / we leave X to future work |
-| Limits of a claim | This does not imply that ... / should be read conditionally |
-| What the goal is not | Our aim is not to X, but rather to Y. |
 | Difference in mechanism | does X rather than Y / enters only through X, not through Y (rather than: 100 uses in 23 of 25 papers) |
 | Correlation, not cause | We do not claim that X causes Y, only that X is correlated with Y. |
 
