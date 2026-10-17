@@ -6,8 +6,8 @@ For each issue, mark the two locations involved (e.g., abstract sentence 5 vs. T
 
 | Check | What a break looks like |
 |---|---|
-| Limitation → key idea | The limitation is about scalability, but the idea only addresses accuracy |
-| Key idea → challenge | The challenge is borrowed from another paper, not one encountered when implementing this paper's idea |
+| Limitation → challenge | The challenge is a difficulty of this paper's own method, not of the problem the limitation exposes |
+| Challenge → key idea | The challenge is about scalability, but the key idea only addresses accuracy |
 | Challenge ↔ module | A module with no challenge, or a challenge with no module |
 | Module → contribution | The contributions mention theoretical analysis, but the paper has no theory subsection |
 | Contribution → experiment | A contribution claims better efficiency, but the experiments do not measure time |
