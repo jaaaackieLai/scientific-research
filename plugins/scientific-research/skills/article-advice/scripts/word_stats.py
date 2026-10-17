@@ -5,6 +5,8 @@ Usage:
 
 The main body is the text before the first line that reads "References"
 (or "Bibliography"); appendices after the references are ignored.
+In two-column PDFs the extracted text can place "References" before the end
+of the main text (e.g., before an Impact Statement), which shortens the body.
 Requires PyMuPDF (pip install pymupdf).
 """
 import collections
