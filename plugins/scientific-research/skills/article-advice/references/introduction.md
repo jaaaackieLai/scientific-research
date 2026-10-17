@@ -30,6 +30,9 @@ When explaining why existing methods fail, walk through the causal chain: existi
 - [ ] Numbers in the contributions can be found in the experiments section
 - [ ] Detailed descriptions of other people's methods go in related work
 - [ ] Negative results that would weaken the claims are not omitted (reorganizing the paper around the final results is fine)
+- [ ] No contribution predicts adoption (will see broader application); move such sentences to the impact statement and hedge them
+- [ ] If the venue norm is to list an experimental contribution, make it checkable: name the claim, benchmarks and headline number instead of "Extensive experiments demonstrate the superiority"
+- [ ] A concrete scenario used for motivation has a matching experiment, and the introduction gives its section number
 
 ## Rewrite example
 

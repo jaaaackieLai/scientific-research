@@ -1,6 +1,6 @@
 # Word bank
 
-Basis: word usage statistics and reading of the main text of 35 example papers (list in "Sources" of writing-patterns.md).
+Basis: word usage statistics and reading of the main text of 39 example papers (list in "Sources" of writing-patterns.md).
 
 Criterion: most of these words are not banned; rather, they carry no information when they appear alone. If replacing them with numbers or mechanisms makes the sentence concrete, suggest the change; if not, leave it. Good papers use these words too, but immediately followed by numbers, comparison targets, or mechanisms.
 
@@ -27,6 +27,8 @@ Criterion: most of these words are not banned; rather, they carry no information
 | state-of-the-art | State the benchmark and comparison targets |
 | wisely / cleverly / elegantly | Delete and state the rule itself |
 | the first | Add To the best of our knowledge, and narrow the scope |
+| optimal / optimally (balance, trade-off) | Only with a proof or a defined optimization; otherwise "the best balance among the compared methods" with one number per axis |
+| powerful / innovative / groundbreaking / wonderful / incontrovertible | Delete when describing your own method or results; state the capability or number |
 
 ## C. Intensity adverbs
 
@@ -36,9 +38,16 @@ Criterion: most of these words are not banned; rather, they carry no information
 | consistently / across all / dominates / on all benchmarks | Check every cell of the table; the most common false sentence in good papers (contradicted by the paper's own table in 5 of 25). Rewrite as a count (lowest on two of four datasets, second on the other two) or name the exceptions |
 | greatly / dramatically / seriously / very | Replace with numbers or ratios: two orders of magnitude fewer parameters |
 | clearly / obviously | Delete |
+| marginal / negligible / slightly / just behind | Give the ratio or gap (4.6x; 9.2 points); keep the word only if the gap is within noise |
 
 - Weak: Our approach significantly outperforms the strongest baseline by clear margins.
 - Strong: Under the most heterogeneous split (α = 0.3), our method exceeds the strongest baseline, [baseline], by [a] to [b] points on all four datasets. (Fill the brackets with numbers from the user's tables; do not estimate them yourself)
+
+## C2. Urgency words
+
+| Word | Suggestion |
+|---|---|
+| crucial / pressing / imperative / urgent(ly) | At most one per introduction, followed by a concrete consequence or event (a documented misuse case with a citation); otherwise delete |
 
 ## D. Strength of result verbs
 
@@ -87,6 +96,16 @@ A good pattern is asserting the number first and hedging the cause in the same s
 | is seriously limited by | is limited by / cannot ... because ... |
 | In recent years | Delete, or give a concrete time |
 | make the model learn | encourage / force / allow the model to ... |
+| Besides, ... also ... (sentence-initial) | In addition, ... or merge into the previous sentence; Besides plus also repeats the meaning |
+| It can be seen that / As we can see / It is clear to see that | Start with the finding: In Table 2, X reaches ... |
+| Such results indicate the great/strong X of the proposed method | State which property the result shows and by how much |
+| the proposed method (repeated as the subject) | Use the method's name |
+| As the increase of X, ... | As X increases, ... |
+| targetedly / be consisted of / an corresponding | selectively / consist of / a corresponding |
+| shall (in descriptive text) | is / should / must |
+| We summarize the reason as that ... | We attribute this to ... |
+| well-trained / well-fine-tuned | trained / fine-tuned / pretrained |
+| a common sense operation / In high level sense / testing frame | common practice / At a high level / test time |
 
 ## H. Precise phrasings worth borrowing
 

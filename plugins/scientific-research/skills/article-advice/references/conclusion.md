@@ -32,6 +32,8 @@ When the submission venue requires a separate Limitations section (e.g., NeurIPS
 - [ ] Future directions are concrete (not We will explore more applications); if the original has none, list it as a content gap, do not make one up
 - [ ] The last sentence states significance or a concrete next step, not a soft ending like we hope this work draws attention to
 - [ ] Tense is present perfect (we have shown) or present
+- [ ] Every weakness stated in the experiments or appendix (vulnerable, fails, drops; e.g., 9 points below the best baseline on one distortion family) also appears in the Limitations section or conclusion
+- [ ] The Limitations section neither opens nor closes with praise (Despite its wonderful performance ...; our work represents a significant advancement)
 
 ## Rewrite example
 

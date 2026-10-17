@@ -37,12 +37,16 @@ Mark "supported" only when a concrete number or result is found; every "needs ev
 - The same name does not refer to different settings (e.g., Ours in one table is the full version, in another the simplified version).
 - List all key terms (method and variants, categories, model roles, metrics) and confirm what each refers to section by section. The ones most likely to silently change meaning are generic words: target, source, baseline, original.
 - If the project has `GLOSSARY.md`, start that list from its terms and `## Notation` table.
+- The method name in the title is used in the body and tables (not replaced by "the lightweight model"); an acronym name is expanded once in the body, and if the letters are not obvious, they are marked at first mention (a **syn**chronization **tag**).
+- When several components are listed (e.g., DO then PH), they appear in the same order in the abstract, contributions, method subsections, tables and conclusion.
+- Symbols in tables, figures and text match (a strength called f in the table is not s in the text).
 
 ## 5. Unfavorable results
 
 - In every table and figure, places where the proposed method does not win, the gap is smaller than the standard deviation, or it holds only in some settings, are all mentioned in the body text.
 - When the body text says "leads across the board", check against the tables.
 - This information is already in the tables; write it directly into the body text when rewriting. It does not count as a content gap.
+- When the method has the best average but not the best value in any single column, the text says so explicitly and explains why the average wins (writing-patterns.md 4.7).
 
 ## 6. Consistent statements
 
@@ -52,3 +56,9 @@ Mark "supported" only when a concrete number or result is found; every "needs ev
 - The conclusion claims no capability that was not measured (e.g., data efficiency with no data-scaling experiment).
 - The same method on the same task with different numbers in two tables: the setting difference is explained.
 - A concrete example from the introduction reads better if it reappears in the method or experiments; you may suggest this, but it is not an error.
+
+## 7. References
+
+- Each citation supports the sentence it is attached to: spot-check the cited title against the claim (a "transformer for classification" citation that is about electrical power transformers; Attention Is All You Need cited for ViT; Torch7 cited for PyTorch).
+- Names in "X et al." are surnames, not given names.
+- Errors copied from a shared lab .bib propagate across papers; check every reused entry.
