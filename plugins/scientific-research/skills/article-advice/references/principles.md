@@ -47,6 +47,7 @@ Mark notably, underscore, and reveal only when repeated many times or when they 
 - Connectives mean what they say: However introduces a contrast, Consequently a result, Specifically a detail.
 - The same paragraph opening (To test whether, To evaluate, In this section) appears no more than twice in the whole paper.
 - A summary sentence draws a conclusion only once: it does not restate the previous sentence in the same paragraph, and the end of a subsection does not restate conclusions each paragraph already drew (common: every paragraph has Overall ..., and the subsection adds In summary ...).
+- A headline number is stated in the abstract, introduction, conclusion, and the results paragraph that reports it; elsewhere, refer to its figure or table instead of restating it.
 
 ## 6. Sentences
 
@@ -57,6 +58,7 @@ Mark notably, underscore, and reveal only when repeated many times or when they 
 - Follow this with a noun: This misalignment leads to ...
 - Comparisons state the target: higher accuracy than X.
 - When three or more nouns are stacked, break them up with prepositions.
+- One parenthesis holds one piece of information. In any section, a paragraph with more than five numbers is split or moved into a table (results paragraphs: experiments.md).
 
 ## 7. Common English errors
 
@@ -66,6 +68,8 @@ Mark notably, underscore, and reveal only when repeated many times or when they 
 - A comma cannot join two independent clauses.
 - One main idea per sentence.
 - Use active voice for important sentences.
+- Verb + preposition pairs: consist of (not consist in), allow X to do (not allow to do), on average (not in average).
+- Spell-check the title, the method name, and the terms in the abstract; a typo in the method's own name is the first thing reviewers see.
 
 ## 8. Issue severity levels
 

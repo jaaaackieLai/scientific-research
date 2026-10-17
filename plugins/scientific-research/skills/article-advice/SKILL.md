@@ -28,7 +28,7 @@ Review, rewrite, or draft from the user's own material. Every piece of AI-writte
 | Two or more sections | `consistency.md` |
 | The project has `GLOSSARY.md` at its root | Read it: a term or symbol that differs from it, or one of its _Avoid_ synonyms, is an issue |
 | Rewriting, or the problem is word choice | `word-bank.md` |
-| The problem is how things are explained (missing research question, contrast, plain-language explanation, unfavorable results) | `writing-patterns.md`, and cite the technique number |
+| The problem is how things are explained (missing research question, framing, contrast, plain-language explanation, mechanism tests, unfavorable results) | `writing-patterns.md`, and cite the technique number |
 
 `scripts/word_stats.py`: counts word usage across a batch of PDFs, used to update the word bank.
 

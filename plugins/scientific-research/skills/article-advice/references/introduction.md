@@ -30,6 +30,7 @@ When explaining why existing methods fail, walk through the causal chain: existi
 - [ ] Numbers in the contributions can be found in the experiments section
 - [ ] Detailed descriptions of other people's methods go in related work
 - [ ] Negative results that would weaken the claims are not omitted (reorganizing the paper around the final results is fine)
+- [ ] Figure 1, when present, carries the main claim: from it and its caption alone, a reader can say what the paper shows (e.g., the prior view and this paper's view side by side)
 
 ## Rewrite example
 

@@ -20,7 +20,7 @@ Two key points of D (progressively narrowing the reader level, and saying "what 
 - [ ] The challenge is a challenge of the problem itself, not "the difficulty our method has to overcome"
 - [ ] It is clear why this contribution solves this challenge (e.g., the challenge is about efficiency but the contribution is about accuracy: they do not match)
 - [ ] The main result is clearly marked (Here we show, We find that)
-- [ ] Says what changed compared with prior understanding, not just "it works better"
+- [ ] Says what changed compared with prior understanding (writing-patterns.md 1.8 when the finding reframes a known phenomenon), not just "it works better"
 - [ ] Results have concrete numbers and comparison targets, at most one to two headline numbers, all of which can be found in the experiments section
 - [ ] No implementation details (backbone, how the loss is attached)
 - [ ] The last sentence summarizes the contribution of the whole paper, not stopping at the last experimental result
