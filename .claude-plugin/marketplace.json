@@ -8,7 +8,7 @@
     {
       "name": "scientific-research",
       "version": "0.15.0",
-      "description": "Skills for deep learning research: paper search, paper reading, research ideation, draft review, matplotlib figures, LaTeX tables, talk slides and scripts, Astro docs site, and Lean-verified derivation audits.",
+      "description": "Skills for deep learning research: paper search, paper reading, research ideation, draft review, matplotlib figures, LaTeX tables, talk slides and scripts, and Lean-verified derivation audits.",
       "category": "productivity",
       "source": "./plugins/scientific-research"
     }
