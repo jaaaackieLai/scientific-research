@@ -42,6 +42,10 @@ Experimental setup (datasets, metrics and the reason for choosing them, baseline
 - [ ] Release final hyperparameters (optimizer, learning rate schedule, batch size, steps) and compute resources (GPU model, count, GPU hours)
 - [ ] Seeds and data splits are decided in advance; the test set is not used for tuning or model selection
 - [ ] Figures have error bars or shading, and the caption states what they represent and how many runs
+- [ ] Claims of no degradation (distortion-free, lossless, same level as) rest on an equivalence test (TOST), a confidence interval with a pre-set margin, or an effect size; a non-significant t-test alone means "no difference detected", and a lower t-value is not stronger support for H0
+- [ ] Very low false-positive rates (e.g., FPR = 1e-6) state how the threshold was derived (analytic, or from N negatives); an empirical check on N negatives supports rates down to about 1/N only. With search-based decoding, state how the threshold accounts for multiple candidates
+- [ ] The number of test samples is stated next to each main table (rates from 50 images move in steps of 0.02)
+- [ ] When training is expensive and only one seed is run, the reported variance comes from the deployment-time randomness instead (keys, messages, prompts, images), and the text says so
 
 ## Other checks
 
@@ -53,12 +57,17 @@ Experimental setup (datasets, metrics and the reason for choosing them, baseline
 - [ ] Evaluation on a subset: the subset was chosen in advance and checked to be representative; missing baselines or settings are explained
 - [ ] Failed runs (divergence, NaN) and design choices that did not help are reported, at least in the appendix
 - [ ] When a knob trades two metrics, compare whole curves or compare at a matched value of one metric, not single points
+- [ ] A hyperparameter chosen in the paper that is not the best in its own sweep table is justified in the same paragraph, with evidence
+- [ ] "Same level of visual quality / same budget" statements match the table; otherwise state the actual range
 
 ## Figures and tables
 
 - Captions: define every method name, variant, abbreviation, and subscript in them, plus what bold, underline, and colors mean. Readers should understand from the figure and caption alone.
 - Architecture figure captions explain the pipeline, not just Overview of the model; the first sentence of a results figure caption states the point to be read from it. For trade-off plots, say which direction is better (lower-right is better); state where each number comes from (reported vs. reproduced) and key settings.
 - Tables: caption goes above; headers mark the metric direction (Acc ↑, Error ↓) and units; decimal places are consistent within a column; one point per table; highlight with bold or underline, not heavy coloring.
+- A teaser figure that places the method and baselines on the paper's two axes is effective when the claim is a trade-off; its caption states which direction is better and avoids words the data cannot prove (optimal). See writing-patterns.md 1.9.
+- Bold the best value in every column, including baseline wins, and define bold/underline in the caption. Bolding only the proposed method's row, or only the average column, hides losses.
+- Report overhead as a ratio and an absolute value (1.4 ms to 6.5 ms per image, 4.6x); do not call a several-fold increase marginal.
 
 ## Rewrite example
 

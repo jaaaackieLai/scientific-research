@@ -17,6 +17,8 @@ One paragraph per group: topic sentence → summarize representative methods →
 - [ ] Differences are described by mechanism, assumption, or failure case ("requires retuning for each scene"), not "works better"
 - [ ] No paragraphs like "A [1], B [2], C [3] studied X" that only list citations
 - [ ] Descriptions are fair (writing-patterns.md 1.3)
+- [ ] Closely related methods that are not compared are named, with the reason stated as a difference in goal or setting (detection vs. traceability; optimization-based vs. training-free), not omitted silently
+- [ ] When the field has an established taxonomy (e.g., post-hoc / fine-tuning / inversion-based), state which family this paper belongs to and which shared limitation it inherits
 
 ## Rewrite points
 

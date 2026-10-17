@@ -23,6 +23,8 @@ Reading only the abstract, the reader can say: what problem is solved, why exist
 - [ ] The last sentence summarizes the contribution of the whole paper, not stopping at the last experimental result
 - [ ] Terms are understandable without relying on definitions in the body text
 - [ ] Word count meets the limit (commonly 150 to 250 words); when over, cut implementation details and secondary numbers first, not the problem statement or mechanism sentences
+- [ ] For a trade-off or balance claim, give one number per axis with its comparison target, not "achieves an optimal balance"
+- [ ] A ratio claim (only 2.2% of the parameters) names the reference model
 
 ## Rewrite example
 

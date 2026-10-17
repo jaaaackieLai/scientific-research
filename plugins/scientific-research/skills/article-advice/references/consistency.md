@@ -22,6 +22,7 @@ List every claim in the abstract and introduction in the "Claims vs. evidence" f
 - Every number in the abstract, introduction, and conclusion is exactly the same as in the tables (including decimal places).
 - Common errors: the abstract says a 5% improvement but the table shows 3.8 percentage points; or the number comes from an old version of the experiments.
 - The same method on the same task with different numbers in two tables: the setting difference is explained.
+- When the method has the best average but not the best value in any single column, the text says so explicitly and explains why the average wins (writing-patterns.md 4.7).
 
 ## 4. Names
 
@@ -29,9 +30,18 @@ List every claim in the abstract and introduction in the "Claims vs. evidence" f
 - Keywords in the method name (Adaptive, Sparse) are explained in the body text as to what operation they denote.
 - List all key terms (method and variants, categories, model roles, metrics) and confirm what each refers to section by section (e.g., Ours is the full version in one table and the simplified version in another). The ones most likely to silently change meaning are generic words: target, source, baseline, original.
 - If the project has `GLOSSARY.md`, start that list from its terms and `## Notation` table.
+- The method name in the title is used in the body and tables (not replaced by "the lightweight model"); an acronym name is expanded once in the body, and if the letters are not obvious, they are marked at first mention (a **syn**chronization **tag**).
+- When several components are listed (e.g., DO then PH), they appear in the same order in the abstract, contributions, method subsections, tables and conclusion.
+- Symbols in tables, figures and text match (a strength called f in the table is not s in the text).
 
 ## 5. Consistent statements
 
 - Methods criticized in the introduction are described and criticized consistently in related work.
 - Limitations in the conclusion do not contradict claims in the introduction or experiments; future work does not contradict limitations (e.g., "should scale better" while limitations say more data did not help).
 - The same result keeps the same verb strength in the abstract, figure captions, and conclusion (not mitigates in a caption and overcomes in the conclusion).
+
+## 6. References
+
+- Each citation supports the sentence it is attached to: spot-check the cited title against the claim (a "transformer for classification" citation that is about electrical power transformers; Attention Is All You Need cited for ViT; Torch7 cited for PyTorch).
+- Names in "X et al." are surnames, not given names.
+- Errors copied from a shared lab .bib propagate across papers; check every reused entry.

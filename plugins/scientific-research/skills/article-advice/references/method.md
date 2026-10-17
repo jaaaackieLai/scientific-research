@@ -8,6 +8,8 @@
 
 ## Common structure
 
+**Threat model or application scenario** (security, watermarking, privacy, forensics papers): before the overview, name the parties (provider, legitimate user, adversary), what each can access, what the adversary may do, and the success criterion for each scenario as a formula (detection: S(s', s) >= tau at a fixed FPR; tracing: argmax_i S(s', s_i)). Avoid absolute wording for statistical decisions (incontrovertible proof).
+
 **Overview subsection**: task setting (input, output) → core contribution → point to the architecture figure (when the pipeline is new) → what each following subsection covers.
 
 **One subsection per module**, in data-flow order, each containing three elements:
@@ -30,6 +32,7 @@
 - [ ] Every numbered equation is referenced in the body text
 - [ ] Components with nothing new are covered briefly; "why not use other methods" goes in related work or ablation
 - [ ] Information is sufficient for reproduction; missing parts are listed
+- [ ] Security-style papers: every attack in the experiments maps to a capability in the threat model, and every listed capability is tested or explicitly out of scope
 
 ## Rewrite example
 
