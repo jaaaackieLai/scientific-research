@@ -4,7 +4,7 @@
 
 For a reader who has read the whole paper, explain: what this paper establishes, which piece of evidence is strongest, and what remains unsolved.
 
-The conclusion is not the abstract: it does not reintroduce background or restate experimental results, but adds a layer on top of the results: what these results mean together, which hypotheses were confirmed or overturned, and why it matters.
+The conclusion is not the abstract: it does not reintroduce background or restate experimental results.
 
 ## Common structure
 
@@ -23,13 +23,12 @@ When the submission venue requires a separate Limitations section (e.g., NeurIPS
 
 ## Checklist
 
-- [ ] The core method's name and verbs match the abstract and introduction
 - [ ] Evidence sentences have concrete numbers or datasets, but detailed conditions stay in the experiments section
 - [ ] Each limitation is classified and matches the experimental numbers
 - [ ] Says which hypotheses were confirmed or overturned, and what that means for the field
 - [ ] No sentences repeated verbatim from the abstract
-- [ ] No new claims unsupported by the body text
-- [ ] Future directions are concrete (not We will explore more applications); if the original has none, list it as a content gap, do not make one up
+- [ ] No claims unsupported by the body text (e.g., data efficiency with no data-scaling experiment)
+- [ ] Future directions are concrete (not We will explore more applications)
 - [ ] The last sentence states significance or a concrete next step, not a soft ending like we hope this work draws attention to
 - [ ] Tense is present perfect (we have shown) or present
 
@@ -37,4 +36,4 @@ When the submission venue requires a separate Limitations section (e.g., NeurIPS
 
 - Original: In the future, we will apply our method to more tasks.
 - Rewrite (the user's experiments only cover sequences up to 512): Our experiments are limited to sequences shorter than 512 tokens; extending the memory module to longer contexts is a natural next step.
-- Explanation: connects a vague future direction to a concrete scope limitation. The limitation content must come from the user's experimental setup.
+- Explanation: connects a vague future direction to a concrete scope limitation.

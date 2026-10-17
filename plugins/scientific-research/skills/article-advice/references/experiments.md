@@ -6,7 +6,7 @@ Results answer "is it better", analysis answers "why is it better, and where is 
 
 1. Under fair conditions, is it better than the latest and strongest baseline methods?
 2. Which design causes the improvement? (ablation)
-3. How does it do in harder, rarer, or noisier settings? Including failure cases.
+3. How does it do in harder, rarer, or noisier settings? Including failure cases (how to write them: writing-patterns.md 4.3).
 
 ## Common structure
 
@@ -15,7 +15,6 @@ Experimental setup (datasets, metrics and the reason for choosing them, baseline
 - Derive experiments from claims: one validation experiment per contribution, one ablation per module.
 - Use figures and tables as the skeleton: first check whether each figure or table can be understood on its own and conveys only one point, then look at the text.
 - Subsection titles state the finding: Larger Memory Helps Only on Long Sequences, not Effect of Memory Size.
-- Put the most important result first.
 
 ## Results paragraphs
 
@@ -33,14 +32,12 @@ Experimental setup (datasets, metrics and the reason for choosing them, baseline
 ## Ablation and analysis
 
 - For each ablation row, state clearly: what was removed, what replaced it (replace the learned fusion with simple concatenation), how the results changed, and what it means. An ablation that does not state the replacement cannot be judged.
-- Analysis: observation → concrete example (For instance, in Figure 5 ...) → attribution. Attributions without experimental verification use hedged language, or add experiments.
-- Report failure cases and unfavorable results (see writing-patterns.md 4.4 for how to write them).
+- Analysis: observation → concrete example (For instance, in Figure 5 ...) → attribution.
 
 ## Statistical rigor
 
 - [ ] Main results use at least 3 random seeds and report mean ± standard deviation; if run only once, explain why
 - [ ] When the gap to the strongest baseline is smaller than the standard deviation, there is a significance test or confidence interval; otherwise weaken the claim
-- [ ] Do not use significantly without a test
 - [ ] Baseline methods get the same tuning budget as the proposed method; state the search range, number of trials, and which split was used for selection
 - [ ] Release final hyperparameters (optimizer, learning rate schedule, batch size, steps) and compute resources (GPU model, count, GPU hours)
 - [ ] Seeds and data splits are decided in advance; the test set is not used for tuning or model selection
@@ -48,7 +45,6 @@ Experimental setup (datasets, metrics and the reason for choosing them, baseline
 
 ## Other checks
 
-- [ ] Baseline methods include the latest and strongest, not only weak ones
 - [ ] Baseline and proposed-method numbers come from the same source (do not use paper-reported numbers on one side and your own runs on the other); explain when they differ
 - [ ] Metrics are the standard metrics for this task
 - [ ] Custom measures have a name, are defined on first appearance, are placed in a table column, and are referred to by name afterward (do not write by this measure)
@@ -68,4 +64,4 @@ Experimental setup (datasets, metrics and the reason for choosing them, baseline
 
 - Original: As shown in Table 1, our method significantly outperforms other methods.
 - Rewrite (the user's numbers are 3.2% and 4.3%): In Table 1, our method achieves an error rate of 3.2%, compared with 4.3% for the strongest baseline.
-- Explanation: give the numbers first; remove significantly because there is no test. No numbers are changed, and no comparisons or conclusions are added.
+- Explanation: give the numbers first; remove significantly because there is no test.
