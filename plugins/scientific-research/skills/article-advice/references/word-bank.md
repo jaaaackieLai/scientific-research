@@ -42,28 +42,18 @@ Criterion: these words are not banned; they carry no information when they appea
 - Weak: Our approach significantly outperforms the strongest baseline by clear margins.
 - Strong: Under the most heterogeneous split (α = 0.3), our method exceeds the strongest baseline, [baseline], by [a] to [b] points on all four datasets. (Fill the brackets with numbers from the user's tables; do not estimate them yourself)
 
-## C2. Urgency words
+## D. Urgency words
 
 | Word | Suggestion |
 |---|---|
 | crucial / pressing / imperative / urgent(ly) | At most one per introduction, followed by a concrete consequence or event (a documented misuse case with a citation); otherwise delete |
-
-## D. Strength of result verbs
-
-| Strength | Verbs | Used for |
-|---|---|---|
-| Strongest | prove | Mathematical proofs only |
-| Strong | show, demonstrate, confirm, establish | Results measured directly by experiments |
-| Medium | find, observe | Observed phenomena, without explaining causes |
-| Weak | suggest, indicate, is consistent with | Inferred but not directly verified explanations |
-| Weakest | may, likely, tend to, might | Possible causes, general tendencies |
 
 ## E. Connectives
 
 - If the same connective appears more than three times in a section, check whether each use means what it says (principles.md Section 5; Typically introduces the general case).
 - In contrast is followed by a difference in mechanism, not "works better".
 
-## E2. Sentences without information
+## F. Sentences without information
 
 | Pattern | Suggestion |
 |---|---|
@@ -71,7 +61,7 @@ Criterion: these words are not banned; they carry no information when they appea
 | In summary / Overall, these results show that X is effective. | State the property the results represent or the claim they support |
 | Meanwhile / Beyond X, ... | Replace with a connective that expresses the actual relation (because, in contrast, as a result), or split the paragraph |
 
-## F. Vague quantifiers
+## G. Vague quantifiers
 
 | Word | Suggestion |
 |---|---|
@@ -81,7 +71,7 @@ Criterion: these words are not banned; they carry no information when they appea
 | improves performance | State the metric and the change: from 43.7% to 96.0% |
 | up to N× / N% | Also give the typical value or the condition where the maximum occurs |
 
-## G. Common usage by native Chinese-speaking authors
+## H. Common usage by native Chinese-speaking authors
 
 | Common phrasing | Suggestion |
 |---|---|
@@ -102,7 +92,7 @@ Criterion: these words are not banned; they carry no information when they appea
 | well-trained / well-fine-tuned | trained / fine-tuned / pretrained |
 | a common sense operation / In high level sense / testing frame | common practice / At a high level / test time |
 
-## H. Precise phrasings worth borrowing
+## I. Precise phrasings worth borrowing
 
 | Purpose | Pattern |
 |---|---|
@@ -115,4 +105,4 @@ Criterion: these words are not banned; they carry no information when they appea
 
 ## Updating the word bank
 
-`scripts/word_stats.py <paper folder>` counts, for each PDF's main text (excluding references and appendices), the occurrences of the words above and their frequency per ten thousand words. Rerun it when there are new example papers, and check whether the word bank needs adjusting.
+`scripts/word_stats.py <paper folder>` counts, for each PDF's main text (excluding references and appendices), the occurrences of the words above and of the result verbs in principles.md Section 2, and their frequency per ten thousand words. Rerun it when there are new example papers, and check whether the word bank needs adjusting.
