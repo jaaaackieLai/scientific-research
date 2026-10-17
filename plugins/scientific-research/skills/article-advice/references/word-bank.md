@@ -1,6 +1,6 @@
 # Word bank
 
-Basis: word usage statistics and reading of the main text of 35 example papers (list in "Sources" of writing-patterns.md).
+Basis: word usage statistics and reading of the main text of 35 example papers.
 
 Criterion: most of these words are not banned; rather, they carry no information when they appear alone. If replacing them with numbers or mechanisms makes the sentence concrete, suggest the change; if not, leave it. Good papers use these words too, but immediately followed by numbers, comparison targets, or mechanisms.
 
