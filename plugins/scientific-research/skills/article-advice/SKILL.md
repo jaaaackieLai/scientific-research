@@ -25,7 +25,7 @@ description: Use when the user wants to review or rewrite a deep learning paper 
 | Two or more sections | `consistency.md` |
 | The project has `GLOSSARY.md` at its root | Read it: a term or symbol that differs from it, or one of its _Avoid_ synonyms, is an issue |
 | Rewriting, or the problem is word choice | `word-bank.md` |
-| The problem is how things are explained (missing research question, contrast, plain-language explanation, unfavorable results) | `writing-patterns.md`, and cite the technique number |
+| The problem is how things are explained (missing research question, framing, contrast, plain-language explanation, mechanism tests, unfavorable results) | `writing-patterns.md`, and cite the technique number |
 
 ## Workflow
 

@@ -15,7 +15,7 @@ For each issue, mark the two locations involved (e.g., abstract sentence 5 vs. T
 
 ## 2. Claims and evidence
 
-List every claim in the abstract and introduction in the "Claims vs. evidence" format of SKILL.md, giving the section, table, and number as evidence. Mark "supported" only when a concrete number or result is found; every "needs evidence" is must fix.
+List every claim in the abstract and introduction in the "Claims vs. evidence" format of SKILL.md, giving the section, table, and number as evidence. Mark "supported" only when a concrete number or result is found; every "needs evidence" is must fix. Each claim needs at least one piece of its evidence in the main text; evidence found only in the appendix is should fix.
 
 ## 3. Numbers
 
