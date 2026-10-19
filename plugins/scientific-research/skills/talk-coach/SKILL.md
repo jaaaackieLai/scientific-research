@@ -11,6 +11,7 @@ References:
 - `references/puschel-guide.md`: layout and structure rules with page numbers into `references/puschel-small-guide-to-giving-presentations.pdf`.
 - `references/text-density.md`: how much text fits at 24 pt (measured from `references/font-size-24-layout.png`), length rules, correction log.
 - `references/spoken-chinese.md`: written-to-spoken word list, banned fillers, PhD tone.
+- `article-advice/references/principles.md` and `article-advice/references/word-bank.md`: word choice for the English slide text (see Slide rules, Wording).
 
 ## Confirm before starting
 
@@ -31,6 +32,7 @@ Ask if missing; if no one can answer, decide and list the decisions on delivery:
 - Template: section name in the top bar, title 44 pt bold, subtitle 24 pt bold underlined, body 24 pt, bullet spacing 12 pt (sub-bullet 6 pt), gray page number `n / N`.
 - Title fits one line (≤ ~50 characters). The subtitle, if used, states the slide's takeaway in one sentence.
 - Body: complete sentences, one idea each, one line preferred, two at most. Text-only slides 5–8 lines, never over 10.
+- Wording: slide English (title, subtitle, body, figure captions) follows `article-advice/references/principles.md` sections "Wording strength matches evidence strength", "Exaggerated wording", "Consistent terminology", "Sentences", and `article-advice/references/word-bank.md`. Terms and method names match the paper. When a word-bank fix (number plus mechanism) would push a sentence past its line budget, the budget wins: keep the number on the slide and move the mechanism into the script.
 - First slide and no two consecutive slides are text-only. Where a picture would explain better (problem setup, pipeline, method, results), specify the figure: what it shows, where it sits (half or full width), and which existing file it comes from, or mark it `TODO: make with figure-smith`.
 - Left-align everything. Sans-serif (Calibri). Emphasis in desaturated red text; boxes in pastel colors. Math in LaTeX.
 - Related work cited on the slide by name: `Author et al. [Venue Year]`. Borrowed figures carry a small gray source line.
@@ -61,6 +63,7 @@ Lines: 7 / 10
 - Every slide within its line budget; none under 4 lines without a figure
 - No text-only first slide, no two text-only slides in a row
 - All numbers and claims traceable to the source material
+- Slide English passes the article-advice wording rules: verb strength matches the evidence, no exaggerated or vague words, terms match the paper
 - Script: no written words from the table, no fillers or stage directions, plots explained as compared / x / y / direction / one point / conclusion
 - Co-authors named on the title slide and in the opening line of the script
 - If the user corrected text length, a line was added to the log in `text-density.md`
