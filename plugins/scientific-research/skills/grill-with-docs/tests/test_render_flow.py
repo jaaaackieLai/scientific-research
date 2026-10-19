@@ -140,3 +140,11 @@ def test_cli_reports_unreadable_json(tmp_path, capsys):
 
     assert render_flow.main([str(tmp_path)]) == 1
     assert capsys.readouterr().out.startswith("flow.json: not valid JSON")
+
+
+def test_cli_check_flag_only_checks(tmp_path, capsys):
+    run = session(tmp_path)
+
+    assert render_flow.main([str(run), "--check"]) == 0
+    assert capsys.readouterr().out == "OK: no problems found\n"
+    assert not (run / "flow.html").exists()

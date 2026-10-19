@@ -4,6 +4,7 @@
 Usage:
   python render_flow.py docs/grill/<slug>              # writes flow.html, a page to open locally
   python render_flow.py docs/grill/<slug> --artifact   # writes flow.artifact.html, a page to publish as an Artifact
+  python render_flow.py docs/grill/<slug> --check      # checks only, writes nothing
 
 Checks flow.json first (against plan.md's decisions when plan.md exists). On problems it prints one per
 line, writes nothing, and exits 1; otherwise it prints the path it wrote and exits 0.
@@ -156,6 +157,9 @@ def main(argv):
     if problems:
         print("\n".join(problems))
         return 1
+    if "--check" in argv[1:]:
+        print("OK: no problems found")
+        return 0
     out = run / ("flow.artifact.html" if artifact else "flow.html")
     out.write_text(render(data, decisions or {}, standalone=not artifact), encoding="utf-8")
     print(out)
