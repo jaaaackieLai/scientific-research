@@ -18,6 +18,7 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 | table-smith | Make or review paper tables with LaTeX (booktabs) |
 | talk-coach | Make scientific talk slides: English slide text sized for 24 pt, plus a spoken Chinese script for presenting to your professor |
 | theory-auditor | Audit a formula derivation step by step and verify it with Lean 4 + Mathlib (PhysLib for physics definitions); first checks whether this machine can run Lean, otherwise labels results as agent checks not verified by Lean |
+| grill-with-docs | Invoke with `/grill-with-docs`. Grills you round by round about a plan in the current repo (every question has a recommended answer), logs each decision to `docs/grill/<slug>/plan.md`, draws the current flow against the planned flow (an Artifact when the host supports it), and ends with an isolated reviewer agent that checks the plan against the code. Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT) |
 
 ## Usage
 ### Option 1: Install as a plugin (available in all projects)
@@ -71,4 +72,4 @@ cp -rf "scientific-research/plugins/scientific-research/skills/"* ".agents/skill
 Notes:
 - This copies the current version. After the skills here are updated, copy them again to sync.
 - With this method, skill names have no prefix.
-- idea-forge's sub-agents ship as plugin agents (`plugins/scientific-research/agents/`), which only load with Option 1. A copied idea-forge falls back to general-purpose sub-agents that follow its `roles/` files.
+- idea-forge's and grill-with-docs's sub-agents ship as plugin agents (`plugins/scientific-research/agents/`), which only load with Option 1. A copied skill falls back to general-purpose sub-agents that follow its `roles/` files.
