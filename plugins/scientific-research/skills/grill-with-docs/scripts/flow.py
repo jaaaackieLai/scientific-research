@@ -114,6 +114,6 @@ def check(data, decisions=None):
     return _trace_problems(diff(as_is, to_be)) + cites
 
 
-def decision_ids(plan_text):
-    """The `D<n>` ids plan.md defines, one per `### D<n>` heading."""
-    return set(re.findall(r"^### (D\d+)\b", plan_text, re.M))
+def decisions(plan_text):
+    """The decisions plan.md defines, `{"D<n>": title}`, one per `### D<n> - <title>` heading."""
+    return dict(re.findall(r"^### (D\d+)\b[ \t]*[-\u2013\u2014:]?[ \t]*(.*?)[ \t]*$", plan_text, re.M))

@@ -142,10 +142,10 @@ def test_structural_problems_skip_the_trace_check():
     assert flow.check(data) == ["as_is: step id 'submit' appears more than once"]
 
 
-def test_decision_ids_come_from_plan_headings():
+def test_decisions_come_from_plan_headings_with_their_titles():
     plan = "# Plan: Refunds\n\n## Decisions\n\n### D1 - Auto-approve small refunds\n- x\n\n### D12 - Notify by email\n\nSee D99 later.\n"
 
-    assert flow.decision_ids(plan) == {"D1", "D12"}
+    assert flow.decisions(plan) == {"D1": "Auto-approve small refunds", "D12": "Notify by email"}
 
 
 def test_missing_top_level_fields_are_problems_not_crashes():
