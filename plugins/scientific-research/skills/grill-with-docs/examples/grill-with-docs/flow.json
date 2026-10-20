@@ -1,0 +1,30 @@
+{
+  "title": "grill-with-docs session",
+  "as_is": {"steps": [
+    {"id": "invoke", "label": "User types /grill-with-docs", "actor": "User", "next": ["load-skills"]},
+    {"id": "load-skills", "label": "Load the grilling and domain-modeling skills", "actor": "Agent",
+     "next": ["explore"], "decision": "D1"},
+    {"id": "explore", "label": "Explore the codebase for facts", "actor": "Agent", "next": ["round"]},
+    {"id": "round", "label": "Ask a round of questions, each with a recommended answer", "actor": "Agent", "next": ["answer"]},
+    {"id": "answer", "label": "Answer the round", "actor": "User", "next": ["write-docs"]},
+    {"id": "write-docs", "label": "Write resolved terms to GLOSSARY.md and qualifying decisions as ADRs", "actor": "Agent",
+     "next": [{"to": "round", "when": "frontier not empty"}, {"to": "confirm", "when": "frontier empty"}]},
+    {"id": "confirm", "label": "Confirm the shared understanding", "actor": "User"}
+  ]},
+  "to_be": {"steps": [
+    {"id": "invoke", "label": "User types /grill-with-docs", "actor": "User", "next": ["explore"], "decision": "D1"},
+    {"id": "explore", "label": "Read glossary, ADRs and code; map the current flow from the code", "actor": "Agent",
+     "next": ["baseline"], "decision": "D2"},
+    {"id": "baseline", "label": "Show the current flow and confirm it", "actor": "Agent", "next": ["round"], "decision": "D2"},
+    {"id": "round", "label": "Ask a round of questions, each with a recommended answer", "actor": "Agent", "next": ["answer"]},
+    {"id": "answer", "label": "Answer the round", "actor": "User", "next": ["write-docs"]},
+    {"id": "write-docs", "label": "Log each decision in plan.md; write terms to GLOSSARY.md and qualifying decisions as ADRs",
+     "actor": "Agent", "next": ["redraw"], "decision": "D3"},
+    {"id": "redraw", "label": "Update the planned flow and republish the flow page", "actor": "Agent",
+     "next": [{"to": "round", "when": "frontier not empty"}, {"to": "confirm", "when": "frontier empty"}], "decision": "D2"},
+    {"id": "confirm", "label": "Confirm the shared understanding", "actor": "User", "next": ["review"], "decision": "D4"},
+    {"id": "review", "label": "Isolated reviewer checks plan.md, flow.json and the code", "actor": "Reviewer agent",
+     "next": [{"to": "round", "when": "blocking findings"}, {"to": "ready", "when": "verdict ready"}], "decision": "D4"},
+    {"id": "ready", "label": "Plan is ready to build", "actor": "User", "decision": "D4"}
+  ]}
+}

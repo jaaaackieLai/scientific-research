@@ -1,4 +1,4 @@
-"""Every plugin agent is valid and delegates to an idea-forge role file, and every role file has an agent."""
+"""Every plugin agent is valid and delegates to a skill's role file, and every role file has an agent."""
 import re
 from pathlib import Path
 
@@ -7,10 +7,10 @@ import pytest
 yaml = pytest.importorskip("yaml")
 
 PLUGIN_DIR = Path(__file__).resolve().parents[1]
-ROLES_DIR = PLUGIN_DIR / "skills" / "idea-forge" / "roles"
+SKILLS_DIR = PLUGIN_DIR / "skills"
 AGENTS = sorted((PLUGIN_DIR / "agents").glob("*.md"))
 FRONTMATTER = re.compile(r"\A---\n(.*?)\n---\n(.*)\Z", re.S)
-ROLE_REF = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}/skills/idea-forge/roles/([a-z-]+\.md)")
+ROLE_REF = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}/skills/([a-z-]+/roles/[a-z-]+\.md)")
 
 
 def parse(agent_md):
@@ -29,10 +29,10 @@ def test_agent_frontmatter_and_role_reference(agent_md):
     assert isinstance(meta["tools"], str) and meta["tools"]
     roles = ROLE_REF.findall(body)
     assert len(roles) == 1, "the body must point at exactly one role file"
-    assert (ROLES_DIR / roles[0]).is_file()
+    assert (SKILLS_DIR / roles[0]).is_file()
 
 
 def test_every_role_has_an_agent():
     referenced = {ROLE_REF.findall(parse(agent_md)[1])[0] for agent_md in AGENTS}
 
-    assert referenced == {role.name for role in ROLES_DIR.glob("*.md")}
+    assert referenced == {role.relative_to(SKILLS_DIR).as_posix() for role in SKILLS_DIR.glob("*/roles/*.md")}
