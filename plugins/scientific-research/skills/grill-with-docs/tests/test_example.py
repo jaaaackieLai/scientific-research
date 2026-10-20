@@ -14,4 +14,4 @@ def test_example_session_passes_the_flow_check():
     )
 
     assert result.returncode == 0, result.stdout
-    assert {"plan.md", "flow.json", "review-1.md"} <= {p.name for p in EXAMPLE.iterdir()}
+    assert {"plan.md", "flow.json", "flow.svg", "review-1.md"} <= {p.name for p in EXAMPLE.iterdir()}

@@ -82,10 +82,10 @@ code { font: .85em var(--mono); }
 .rev { display: inline-flex; align-items: center; gap: .3rem; font: 700 .8rem/1 var(--mono); color: var(--accent); }
 .rev::before { content: "\25B3"; font-size: .9rem; }
 .dtitle { display: block; margin-top: .3rem; font-size: .9rem; }
-.diagrams { display: grid; gap: 1rem; }
+/* flow.svg carries its own paper background (diagram-design), so it reads the same in both themes. */
 .diagram { margin: 0; min-width: 0; padding: 1rem; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; overflow-x: auto; }
 .diagram figcaption { font: 600 .72rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--muted); margin-bottom: .75rem; }
-.diagram pre { margin: 0; font: .8rem/1.4 var(--mono); white-space: pre; }
+.diagram svg { display: block; width: 100%; min-width: 760px; height: auto; border-radius: 4px; }
 @media (max-width: 700px) {
   .steps, .steps tbody, .steps tr, .steps td, .steps tbody th { display: block; width: auto; }
   .steps thead { display: none; }

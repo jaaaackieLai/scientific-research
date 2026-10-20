@@ -6,12 +6,15 @@ Usage:
   python render_flow.py docs/grill/<slug> --artifact   # writes flow.artifact.html, a page to publish as an Artifact
   python render_flow.py docs/grill/<slug> --check      # checks only, writes nothing
 
-Checks flow.json first (against plan.md's decisions when plan.md exists). On problems it prints one per
-line, writes nothing, and exits 1; otherwise it prints the path it wrote and exits 0.
+Checks flow.json first (against plan.md's decisions when plan.md exists), then checks that flow.svg, the
+diagram the agent draws with diagram-design, shows every step with the status the diff gives it. On problems
+it prints one per line, writes nothing, and exits 1; otherwise it prints the path it wrote and exits 0.
 """
 import json
+import re
 import sys
 from html import escape
+from xml.etree import ElementTree as ET
 from pathlib import Path
 
 from flow import check, decisions as plan_decisions, diff, edges
@@ -19,37 +22,60 @@ from flow import check, decisions as plan_decisions, diff, edges
 CSS = Path(__file__).with_name("flow_page.css")
 FONTS = (
     "https://fonts.googleapis.com/css2?family=Archivo:wght@600;700"
-    "&family=JetBrains+Mono:wght@400;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap"
+    "&family=JetBrains+Mono:wght@400;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400"
+    "&family=Geist:wght@400;500;600&family=Geist+Mono:wght@400;500;600&display=swap"  # Geist: flow.svg's fonts
 )
-MERMAID_JS = "https://cdn.jsdelivr.net/npm/mermaid@10.9.1/dist/mermaid.min.js"
 STATUS_LABEL = {"added": "Added", "removed": "Removed", "changed": "Changed", "unchanged": "Same"}
-MERMAID_ENTITIES = {"&": "#amp;", '"': "#quot;", "<": "#lt;", ">": "#gt;"}
-MERMAID_CLASSES = (
-    "classDef added fill:#dcf1e3,stroke:#1f7a4d,color:#10261a,stroke-width:2px",
-    "classDef removed fill:#fbe3df,stroke:#b3261e,color:#3a1210,stroke-dasharray:5 3",
-    "classDef changed fill:#fbedd2,stroke:#9a6200,color:#33240a,stroke-width:2px",
-)
+XML_DECLARATION = re.compile(r"\A\s*<\?xml[^>]*\?>\s*")
 
 
-def _mermaid_text(text):
-    return "".join(MERMAID_ENTITIES.get(c, c) for c in text)
+def _local(name):
+    return name.rsplit("}", 1)[-1]
 
 
-def _mermaid_link(source, target, when):
-    label = f'|"{_mermaid_text(when)}"|' if when else ""
-    return f"{source} -->{label} {target}"
+def _expected(rows):
+    """The `side:id` -> status pairs flow.svg must draw: each step on every side it appears on."""
+    return {
+        f"{side}:{row.id}": row.status
+        for row in rows
+        for side, s in (("as_is", row.before), ("to_be", row.after))
+        if s is not None
+    }
 
 
-def mermaid(steps, statuses):
-    """A Mermaid flowchart of one flow; `statuses` maps step ids to their diff status."""
-    node = {s["id"]: f"n{i}" for i, s in enumerate(steps)}
-    nodes = [
-        f'{node[s["id"]]}["{_mermaid_text(s["label"])}"]'
-        + (f':::{statuses[s["id"]]}' if statuses.get(s["id"], "unchanged") != "unchanged" else "")
-        for s in steps
+def _code_problems(elements):
+    script = ["flow.svg: <script> is not allowed"] if any(_local(e.tag) == "script" for e in elements) else []
+    return script + [
+        f"flow.svg: attribute {_local(name)!r} runs code"
+        for e in elements
+        for name, value in e.attrib.items()
+        if _local(name).lower().startswith("on") or value.strip().lower().startswith("javascript:")
     ]
-    links = [_mermaid_link(node[s["id"]], node[to], when) for s in steps for to, when in edges(s)]
-    return "\n".join(["flowchart TD", *nodes, *links, *MERMAID_CLASSES])
+
+
+def diagram_problems(svg, rows):
+    """Problems in flow.svg (None when the file is missing) against the diff rows of a valid flow.json."""
+    if svg is None:
+        return ["flow.svg: missing; draw it from flow.json (SKILL.md step 4)"]
+    try:
+        root = ET.fromstring(svg)
+    except ET.ParseError as error:
+        return [f"flow.svg: not valid XML ({error})"]
+    if _local(root.tag) != "svg":
+        return ["flow.svg: the root element must be <svg>"]
+    elements = list(root.iter())
+    drawn = {e.get("data-step"): e.get("data-status") for e in elements if e.get("data-step")}
+    expected = _expected(rows)
+    return (
+        _code_problems(elements)
+        + [f"flow.svg: no group for step {k!r} (data-step)" for k in expected if k not in drawn]
+        + [f"flow.svg: step {k!r} is not in flow.json" for k in drawn if k not in expected]
+        + [
+            f"flow.svg: step {k!r} has data-status {drawn[k]!r}, but flow.json makes it {status!r}"
+            for k, status in expected.items()
+            if k in drawn and drawn[k] != status
+        ]
+    )
 
 
 def _edge_list(s):
@@ -94,16 +120,11 @@ def _summary(rows):
     return f'<ul class="summary">{counts}</ul>'
 
 
-def _diagrams(data, rows):
-    statuses = {row.id: row.status for row in rows}
-    return "".join(
-        f'<figure class="diagram {side}"><figcaption>{caption}</figcaption>'
-        f'<pre class="mermaid">{escape(mermaid(data[side]["steps"], statuses))}</pre></figure>'
-        for side, caption in (("as_is", "Current"), ("to_be", "Planned"))
-    )
+def _diagram(svg):
+    return f'<figure class="diagram"><figcaption>Current &middot; Planned</figcaption>{svg}</figure>'
 
 
-def _content(data, decisions):
+def _content(data, decisions, svg):
     rows = diff(data["as_is"]["steps"], data["to_be"]["steps"])
     body = "".join(_row_html(i, row, decisions) for i, row in enumerate(rows, 1))
     return (
@@ -114,16 +135,16 @@ def _content(data, decisions):
         '<section aria-labelledby="steps-h"><h2 id="steps-h">Step by step</h2><div class="scroll">'
         '<table class="steps"><thead><tr><th scope="col">Step</th><th scope="col">Current</th>'
         f'<th scope="col">Planned</th><th scope="col">Decision</th></tr></thead><tbody>{body}</tbody></table>'
-        '</div></section><section aria-labelledby="diagrams-h"><h2 id="diagrams-h">Diagrams</h2>'
-        f'<div class="diagrams">{_diagrams(data, rows)}</div></section></main>'
+        '</div></section><section aria-labelledby="diagram-h"><h2 id="diagram-h">Diagram</h2>'
+        f"{_diagram(svg)}</section></main>"
     )
 
 
-def render(data, decisions, standalone=False):
+def render(data, decisions, svg, standalone=False):
     """The page for a valid flow.json; `decisions` maps decision ids to their titles in plan.md.
 
-    The default is an Artifact page body (the host adds the document skeleton and draws Mermaid);
-    `standalone=True` gives a full document that loads Mermaid itself, for opening the file locally.
+    `svg` is the checked flow.svg, inlined as is. The default is an Artifact page body (the host adds
+    the document skeleton); `standalone=True` gives a full document, for opening the file locally.
     """
     head = (
         f"<title>{escape(data['title'])}</title>"
@@ -131,15 +152,13 @@ def render(data, decisions, standalone=False):
         f'<link rel="stylesheet" href="{escape(FONTS)}">'
         f"<style>{CSS.read_text(encoding='utf-8')}</style>"
     )
-    content = _content(data, decisions)
+    content = _content(data, decisions, svg)
     if not standalone:
         return head + content
     return (
         '<!doctype html><html lang="en"><head><meta charset="utf-8">'
         f'<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">{head}</head>'
-        f'<body>{content}<script src="{MERMAID_JS}"></script>'
-        "<script>mermaid.initialize({startOnLoad: true, theme: "
-        "matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'default'});</script></body></html>"
+        f"<body>{content}</body></html>"
     )
 
 
@@ -153,7 +172,9 @@ def main(argv):
         return 1
     plan = run / "plan.md"
     decisions = plan_decisions(plan.read_text(encoding="utf-8")) if plan.is_file() else None
-    problems = check(data, decisions)
+    diagram = run / "flow.svg"
+    svg = diagram.read_text(encoding="utf-8") if diagram.is_file() else None
+    problems = check(data, decisions) or diagram_problems(svg, diff(data["as_is"]["steps"], data["to_be"]["steps"]))
     if problems:
         print("\n".join(problems))
         return 1
@@ -161,7 +182,7 @@ def main(argv):
         print("OK: no problems found")
         return 0
     out = run / ("flow.artifact.html" if artifact else "flow.html")
-    out.write_text(render(data, decisions or {}, standalone=not artifact), encoding="utf-8")
+    out.write_text(render(data, decisions or {}, XML_DECLARATION.sub("", svg), standalone=not artifact), encoding="utf-8")
     print(out)
     return 0
 

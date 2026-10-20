@@ -6,7 +6,8 @@ One grilling session writes into `docs/grill/<slug>/` under the project root. `<
 | --- | --- | --- |
 | `plan.md` | orchestrator | created before round 1; one decision added the moment it settles |
 | `flow.json` | orchestrator | the current flow before round 1; the planned flow after every round that changes it |
-| `flow.html` / `flow.artifact.html` | `scripts/render_flow.py` | every time `flow.json` changes; never edit them by hand |
+| `flow.svg` | orchestrator, with the diagram-design skill | every time `flow.json` changes, before rendering |
+| `flow.html` / `flow.artifact.html` | `scripts/render_flow.py` | every time `flow.json` or `flow.svg` changes; never edit them by hand |
 | `review-<pass>.md` | plan reviewer | after the interview closes; `<pass>` is 1, then 2 |
 
 The glossary and ADRs do not live here. They go where the repo keeps them (`references/glossary-format.md`, `references/adr-format.md`), because they outlive the session.
@@ -77,6 +78,18 @@ The flow the change touches, twice: as the code does it today (`as_is`) and as t
 `as_is` comes from the code, not from what the user remembers. When the code and the user disagree, that is a question for the next round.
 
 `python <SKILL_DIR>/scripts/render_flow.py docs/grill/<slug>` checks the file against `plan.md` and refuses to render while any difference lacks a decision or cites one `plan.md` does not define. A step counts as changed when its label, actor, outgoing edges, or position relative to the shared steps differ.
+
+## flow.svg
+
+The diagram on the flow page. The orchestrator draws it with the diagram-design skill (`<SKILL_DIR>/../diagram-design/`) every time `flow.json` changes. `render_flow.py` inlines it as is.
+
+- One `<svg>` with a `viewBox`, a `<title>` and a `<desc>`. Two panels side by side: Current (`as_is`) on the left, Planned (`to_be`) on the right. A greenfield change has only the Planned panel.
+- Every step is one `<g data-step="<side>:<id>" data-status="<status>">` that holds its node. `<side>` is `as_is` or `to_be`. `<status>` is the one the step table shows: `added`, `removed`, `changed` or `unchanged`. A changed or unchanged step appears in both panels with the same status.
+- Shared steps sit on the same row in both panels, in the step table's order, so a step on one side only leaves a gap on the other. When you redraw, keep the coordinates of the steps that did not move.
+- Status reads without color, as in diagram-design's change vocabulary (`references/type-architecture-delta.md`): `+ ADDED`, `Δ CHANGED` with an inset rule, `− REMOVED` with a dashed outline. Each badge ends with the step's decision id. Unchanged steps have no badge.
+- No `<script>`, no `on*` attributes, no `javascript:` links, no motion.
+
+`render_flow.py` refuses to render while `flow.svg` is missing, misses a step, shows a step that `flow.json` does not have, or gives a step a different status.
 
 ## review-<pass>.md
 

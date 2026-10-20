@@ -21,7 +21,7 @@ Read, Grep, Glob, Write (only `SESSION_DIR/review-<PASS>.md`), and Bash only to 
 ## Procedure
 
 1. Read `SKILL_DIR/references/session-files.md` for the file formats, then `SESSION_DIR/plan.md` and `SESSION_DIR/flow.json`. On pass 2, read `review-1.md` too, and check that each of its blocking findings was closed by a decision or answered in the plan.
-2. **Trace check.** Run `python SKILL_DIR/scripts/render_flow.py SESSION_DIR --check`. Every problem it prints is a blocking finding.
+2. **Trace check.** Run `python SKILL_DIR/scripts/render_flow.py SESSION_DIR --check`. It checks `flow.json` against `plan.md` and `flow.svg` against `flow.json`. Every problem it prints is a blocking finding.
 3. **Stands on its own.** For each decision, could an engineer who missed the session build it without asking? Flag wording that defers to the conversation ("as discussed", "the usual way"), vague limits ("fast", "small", "handle errors appropriately", "etc."), and decisions that say what to do but not what must not happen when the question was about a boundary.
 4. **Current flow is the real one.** Check each `as_is` step and each factual claim in the plan against the code. Cite `file:line`. A step the code does not do, or does differently, is blocking: every difference on the flow page is measured from it.
 5. **Decisions match the planned flow.** A decision whose **Flow** field names steps that `flow.json` does not change, or a decision that changes behaviour but says `no flow change`, is a finding. So is a planned step that no decision asked for.

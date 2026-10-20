@@ -27,12 +27,25 @@ DATA = {
 DECISIONS = {"D1": "Auto-approve small refunds", "D2": "Drop paper forms", "D3": "Notify by email"}
 
 
+def diagram(steps):
+    """A minimal flow.svg: one group per `(side:id, status)` pair."""
+    groups = "".join(f'<g data-step="{step}" data-status="{status}"><rect width="10" height="10"/></g>' for step, status in steps)
+    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><title>Refund approval</title>{groups}</svg>'
+
+
+STEPS = [
+    ("as_is:submit", "changed"), ("as_is:print", "removed"), ("as_is:review", "changed"),
+    ("to_be:submit", "changed"), ("to_be:review", "changed"), ("to_be:notify", "added"),
+]
+SVG = diagram(STEPS)
+
+
 def rows_in(page):
     return re.findall(r'<tr class="row (\w+)" id="step-([a-z0-9-]+)"', page)
 
 
 def test_page_shows_each_step_once_with_its_status_in_diff_order():
-    page = render_flow.render(DATA, DECISIONS)
+    page = render_flow.render(DATA, DECISIONS, SVG)
 
     assert rows_in(page) == [
         ("changed", "submit"), ("removed", "print"), ("changed", "review"), ("added", "notify"),
@@ -40,7 +53,7 @@ def test_page_shows_each_step_once_with_its_status_in_diff_order():
 
 
 def test_summary_counts_each_kind_of_difference():
-    page = render_flow.render(DATA, DECISIONS)
+    page = render_flow.render(DATA, DECISIONS, SVG)
 
     summary = re.search(r'<ul class="summary">(.*?)</ul>', page, re.S).group(1)
     counts = dict((kind, int(n)) for n, kind in re.findall(r"<b>(\d+)</b> (\w+)", summary))
@@ -51,7 +64,7 @@ def test_step_text_is_escaped():
     data = {**DATA, "title": "A <b> & C", "to_be": {"steps": [
         {"id": "submit", "label": "<script>alert(1)</script>", "decision": "D2"}]}}
 
-    page = render_flow.render(data, DECISIONS)
+    page = render_flow.render(data, DECISIONS, SVG)
 
     assert "<script>alert(1)</script>" not in page
     assert "&lt;script&gt;alert(1)&lt;/script&gt;" in page
@@ -59,7 +72,7 @@ def test_step_text_is_escaped():
 
 
 def test_each_difference_shows_its_decision_and_title():
-    page = render_flow.render(DATA, DECISIONS)
+    page = render_flow.render(DATA, DECISIONS, SVG)
 
     review = re.search(r'id="step-review".*?</tr>', page, re.S).group(0)
     removed = re.search(r'id="step-print".*?</tr>', page, re.S).group(0)
@@ -67,45 +80,37 @@ def test_each_difference_shows_its_decision_and_title():
     assert '<span class="rev">D2</span><span class="dtitle">Drop paper forms</span>' in removed
 
 
-def test_planned_diagram_colors_steps_by_difference_and_labels_branches():
-    text = render_flow.mermaid(DATA["to_be"]["steps"], {"submit": "changed", "review": "changed", "notify": "added"})
+def test_page_inlines_the_flow_diagram_in_place_of_mermaid():
+    page = render_flow.render(DATA, DECISIONS, SVG)
 
-    assert text.splitlines()[0] == "flowchart TD"
-    assert 'n0["Customer submits refund form"]:::changed' in text
-    assert 'n2["Email the customer"]:::added' in text
-    assert 'n1 -->|"amount #lt; 100"| n2' in text
-    assert "n0 --> n1" in text
-
-
-def test_page_draws_the_current_and_planned_diagrams():
-    page = render_flow.render(DATA, DECISIONS)
-
-    diagrams = re.findall(r'<pre class="mermaid">(.*?)</pre>', page, re.S)
-    assert len(diagrams) == 2
-    assert ":::removed" in diagrams[0] and "Clerk prints the form" in diagrams[0]
-    assert ":::added" in diagrams[1] and "Clerk prints the form" not in diagrams[1]
+    figure = re.search(r'<figure class="diagram">(.*?)</figure>', page, re.S).group(1)
+    assert '<g data-step="as_is:print" data-status="removed">' in figure
+    assert '<g data-step="to_be:notify" data-status="added">' in figure
+    assert "mermaid" not in page
 
 
-def test_standalone_page_is_a_full_document_that_loads_mermaid():
-    page = render_flow.render(DATA, DECISIONS, standalone=True)
+def test_standalone_page_is_a_full_document_that_loads_no_script():
+    page = render_flow.render(DATA, DECISIONS, SVG, standalone=True)
 
     assert page.startswith("<!doctype html>")
-    assert re.search(r'<script src="https://cdn\.jsdelivr\.net/npm/mermaid@\d+\.\d+\.\d+/dist/mermaid\.min\.js">', page)
+    assert "<script" not in page
 
 
-def test_artifact_fragment_leaves_the_skeleton_and_mermaid_to_the_host():
-    page = render_flow.render(DATA, DECISIONS)
+def test_artifact_fragment_leaves_the_skeleton_to_the_host():
+    page = render_flow.render(DATA, DECISIONS, SVG)
 
     assert page.startswith("<title>")
-    assert "<html" not in page and "<body" not in page and "mermaid.min.js" not in page
+    assert "<html" not in page and "<body" not in page
 
 
 PLAN = "# Plan: Refund approval\n\n## Decisions\n\n### D1 - Auto-approve small refunds\n\n### D2 - Drop paper forms\n\n### D3 - Notify by email\n"
 
 
-def session(tmp_path, data=DATA, plan=PLAN):
+def session(tmp_path, data=DATA, plan=PLAN, svg=SVG):
     import json
     (tmp_path / "flow.json").write_text(json.dumps(data), encoding="utf-8")
+    if svg is not None:
+        (tmp_path / "flow.svg").write_text(svg, encoding="utf-8")
     if plan is not None:
         (tmp_path / "plan.md").write_text(plan, encoding="utf-8")
     return tmp_path
@@ -117,6 +122,7 @@ def test_cli_writes_the_standalone_page_for_a_valid_session(tmp_path, capsys):
     assert render_flow.main([str(run)]) == 0
     page = (run / "flow.html").read_text(encoding="utf-8")
     assert page.startswith("<!doctype html>") and "Auto-approve small refunds" in page
+    assert '<g data-step="to_be:notify" data-status="added">' in page
     assert str(run / "flow.html") in capsys.readouterr().out
 
 
@@ -148,3 +154,45 @@ def test_cli_check_flag_only_checks(tmp_path, capsys):
     assert render_flow.main([str(run), "--check"]) == 0
     assert capsys.readouterr().out == "OK: no problems found\n"
     assert not (run / "flow.html").exists()
+
+
+def problems(tmp_path, capsys, svg):
+    run = session(tmp_path, svg=svg)
+    assert render_flow.main([str(run), "--check"]) == 1
+    return capsys.readouterr().out.splitlines()
+
+
+def test_cli_requires_the_flow_diagram(tmp_path, capsys):
+    assert problems(tmp_path, capsys, None) == ["flow.svg: missing; draw it from flow.json (SKILL.md step 4)"]
+
+
+def test_cli_reports_steps_the_diagram_misses_or_still_shows(tmp_path, capsys):
+    stale = [s for s in STEPS if s[0] != "to_be:notify"] + [("to_be:print", "unchanged")]
+
+    assert problems(tmp_path, capsys, diagram(stale)) == [
+        "flow.svg: no group for step 'to_be:notify' (data-step)",
+        "flow.svg: step 'to_be:print' is not in flow.json",
+    ]
+
+
+def test_cli_reports_a_status_that_disagrees_with_the_diff(tmp_path, capsys):
+    wrong = [(s, "unchanged" if s == "as_is:review" else status) for s, status in STEPS]
+
+    assert problems(tmp_path, capsys, diagram(wrong)) == [
+        "flow.svg: step 'as_is:review' has data-status 'unchanged', but flow.json makes it 'changed'",
+    ]
+
+
+def test_cli_refuses_a_diagram_that_runs_code(tmp_path, capsys):
+    svg = SVG.replace("<title>", '<script>alert(1)</script><a href="javascript:x"><rect onclick="x"/></a><title>')
+
+    assert problems(tmp_path, capsys, svg) == [
+        "flow.svg: <script> is not allowed",
+        "flow.svg: attribute 'href' runs code",
+        "flow.svg: attribute 'onclick' runs code",
+    ]
+
+
+def test_cli_reports_a_diagram_that_is_not_svg(tmp_path, capsys):
+    assert problems(tmp_path, capsys, "<svg><g></svg>")[0].startswith("flow.svg: not valid XML")
+    assert problems(tmp_path, capsys, "<html/>") == ["flow.svg: the root element must be <svg>"]

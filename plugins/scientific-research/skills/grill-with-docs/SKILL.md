@@ -1,6 +1,6 @@
 ---
 name: grill-with-docs
-description: Grill the user relentlessly about a plan or design in the current repo, in rounds where every question carries a recommended answer, and write what settles as it settles - each decision to a plan file, terms to GLOSSARY.md, hard-to-reverse decisions as ADRs. Draws the current flow against the planned flow on one page (published as an Artifact when the host can) so every difference and the decision behind it is visible, and ends with an isolated plan-reviewer agent that checks the plan against the code before it counts as ready. Runs only when the user types /grill-with-docs.
+description: Grill the user relentlessly about a plan or design in the current repo, in rounds where every question carries a recommended answer, and write what settles as it settles - each decision to a plan file, terms to GLOSSARY.md, hard-to-reverse decisions as ADRs. Draws the current flow against the planned flow on one page with the diagram-design skill (published as an Artifact when the host can) so every difference and the decision behind it is visible, and ends with an isolated plan-reviewer agent that checks the plan against the code before it counts as ready. Runs only when the user types /grill-with-docs.
 disable-model-invocation: true
 ---
 
@@ -13,9 +13,10 @@ Adapted from Matt Pocock's `grill-with-docs` (MIT, see `UPSTREAM-LICENSE.md`). U
 ## Related files
 - `references/session-files.md`: the session directory and the exact format of `plan.md`, `flow.json` and `review-<pass>.md` (always follow it)
 - `references/glossary-format.md`, `references/adr-format.md`: how to write the glossary and ADRs
-- `scripts/render_flow.py`: checks `flow.json` against `plan.md` and renders the flow page
+- `scripts/render_flow.py`: checks `flow.json` against `plan.md` and `flow.svg` against `flow.json`, then renders the flow page
+- `../diagram-design/`: the diagram-design skill that draws `flow.svg`
 - `roles/plan-reviewer.md`: what the reviewer does
-- `examples/grill-with-docs/`: a finished session (upstream's flow against this skill's)
+- `examples/grill-with-docs/`: a finished session (upstream's flow against this skill's), with its `flow.svg`
 
 Below, `<SKILL_DIR>` is the absolute path of this skill's directory and `<run>` is `docs/grill/<slug>` under the project root.
 
@@ -53,7 +54,7 @@ The interview is over when the frontier is empty: every branch visited, nothing 
 - Read `GLOSSARY.md` (or `GLOSSARY-MAP.md` and the context it points to), `docs/adr/`, and the code the change touches.
 - Choose a slug and create `<run>/plan.md` with its header (`Status: grilling`) and empty sections.
 - Pick the one flow the change touches and map its current form from the code into `flow.json` `as_is`; copy it to `to_be`. If the change touches more than one flow, ask which one in round 1 and map that.
-- Render it (step 4). Round 1 opens with "Is this the current flow?" with the page attached: the user confirms the baseline before anything is measured against it. A greenfield change has an empty `as_is`; say so instead.
+- Draw and render it (step 4). Round 1 opens with "Is this the current flow?" with the page attached: the user confirms the baseline before anything is measured against it. A greenfield change has an empty `as_is`; say so instead.
 
 ### 2. Grill
 Run the interview above, round after round.
@@ -63,11 +64,17 @@ After each round, before asking the next:
 - Each settled decision gets its `### D<n>` entry in `plan.md` now, not at the end.
 - A resolved term goes into `GLOSSARY.md` now, in the format in `glossary-format.md`. No implementation detail in the glossary.
 - Offer an ADR only when the decision passes all three tests in `adr-format.md`. Most sessions produce none.
-- A decision that changes the flow updates `to_be` in `flow.json`, with `decision` set as session-files.md says. Then re-render.
+- A decision that changes the flow updates `to_be` in `flow.json`, with `decision` set as session-files.md says. Then redraw `flow.svg` and re-render.
 - A reversed decision is marked superseded, never deleted (session-files.md).
 
 ### 4. Show the flow
-Run `python <SKILL_DIR>/scripts/render_flow.py <run>`. If it prints problems, fix `flow.json` or `plan.md` and run it again.
+First draw `<run>/flow.svg` with the diagram-design skill. It ships beside this skill in `<SKILL_DIR>/../diagram-design/`; if that folder is missing, invoke the `diagram-design` skill instead.
+- Read its `references/type-flowchart.md`, `references/style-guide.md` and `references/primitives-core.md`. Start from the SVG of `assets/example-flowchart.html` (paper, dots, `arrow` marker). Follow the format in session-files.md (`## flow.svg`).
+- Skip diagram-design's style-guide gate: use the project's `.diagram-design` profile when there is one, otherwise the default tokens. Do not interrupt the grilling to ask about branding.
+- The steps come from `flow.json` and override diagram-design's 9-node budget. Its connector rules and taste gate (§9) still apply.
+- `examples/grill-with-docs/flow.svg` is a finished one.
+
+Then run `python <SKILL_DIR>/scripts/render_flow.py <run>`. If it prints problems, fix `flow.json`, `plan.md` or `flow.svg` and run it again.
 - If the host has an Artifact tool, add `--artifact` and publish `<run>/flow.artifact.html`. The page already follows the Artifact page contract; publish it as is (icon `flow` on the first publish). Republish the same file after later renders so the link stays the same.
 - Otherwise give the user the path of `<run>/flow.html`, which opens in a browser.
 
