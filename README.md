@@ -16,6 +16,7 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 | article-advice | Review, rewrite, or draft paper sections from your own material, plus cross-section consistency checks; AI-written text always carries an academic-ethics notice |
 | figure-smith | Make or review paper data figures with matplotlib |
 | table-smith | Make or review paper tables with LaTeX (booktabs) |
+| diagram-design | Make editorial diagrams (architecture, flowchart, sequence, timeline, layer stack, and 40 more types) as self-contained HTML/SVG, exportable to SVG/PNG, with draw.io, Mermaid, and Excalidraw import. Vendored unchanged from [cathrynlavery/diagram-design](https://github.com/cathrynlavery/diagram-design) (MIT) |
 | talk-coach | Make scientific talk slides: English slide text sized for 24 pt, plus a spoken Chinese script for presenting to your professor |
 | theory-auditor | Audit a formula derivation step by step and verify it with Lean 4 + Mathlib (PhysLib for physics definitions); first checks whether this machine can run Lean, otherwise labels results as agent checks not verified by Lean |
 | grill-with-docs | Invoke with `/grill-with-docs`. Grills you round by round about a plan in the current repo (every question has a recommended answer), logs each decision to `docs/grill/<slug>/plan.md`, draws the current flow against the planned flow (an Artifact when the host supports it), and ends with an isolated reviewer agent that checks the plan against the code. Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT) |
