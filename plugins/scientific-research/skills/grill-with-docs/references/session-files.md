@@ -1,6 +1,6 @@
 # Session files
 
-One grilling session writes into `docs/grill/<slug>/` under the project root. `<slug>` is a short kebab-case name for the change (`refund-auto-approval`). Create the directory and `plan.md` before the first round; create the other files when you first have something to put in them.
+One grilling session writes into `docs/grill/<slug>/` under the project root. `<slug>` is a short kebab-case name for the change (`refund-auto-approval`). Create each file at the time the table below gives.
 
 | File | Written by | When |
 | --- | --- | --- |

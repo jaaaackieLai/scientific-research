@@ -40,7 +40,7 @@ Read, Grep, Glob, Write (only `SESSION_DIR/review-<PASS>.md`), and Bash only to 
 
 - Every finding has evidence: a `file:line`, the quoted plan text, or a concrete scenario. No evidence, no finding.
 - Every finding has a **Recommended answer**: the one decision you would propose. Do not redesign the plan or offer menus of alternatives.
-- Judge the plan as written. Do not fix `plan.md`, `flow.json`, the glossary, or ADRs yourself.
+- Judge the plan as written. Report what is wrong, do not fix it.
 - Do not repeat a finding that `review-1.md` raised and the plan has since closed.
 - Ten precise findings beat thirty vague ones. Leave out nits when there are blocking findings.
 

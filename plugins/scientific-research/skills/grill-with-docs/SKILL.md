@@ -1,6 +1,6 @@
 ---
 name: grill-with-docs
-description: Grill the user relentlessly about a plan or design in the current repo, in rounds where every question carries a recommended answer, and write what settles as it settles - each decision to a plan file, terms to GLOSSARY.md, hard-to-reverse decisions as ADRs. Draws the current flow against the planned flow on one page (published as an Artifact when the host can) so every difference and the decision behind it is visible, and ends with an isolated plan-reviewer agent that checks the plan against the code before it counts as ready. Adapted from mattpocock/skills grill-with-docs. Runs only when the user types /grill-with-docs.
+description: Grill the user relentlessly about a plan or design in the current repo, in rounds where every question carries a recommended answer, and write what settles as it settles - each decision to a plan file, terms to GLOSSARY.md, hard-to-reverse decisions as ADRs. Draws the current flow against the planned flow on one page (published as an Artifact when the host can) so every difference and the decision behind it is visible, and ends with an isolated plan-reviewer agent that checks the plan against the code before it counts as ready. Runs only when the user types /grill-with-docs.
 disable-model-invocation: true
 ---
 
@@ -8,11 +8,7 @@ disable-model-invocation: true
 
 Purpose: one session that turns a fuzzy change into a plan someone else can build from. Three things come out of it, all on disk: a decision log (`plan.md`), a picture of the flow before and after the change, and a cold review of both. Sharper domain vocabulary (`GLOSSARY.md`) and the occasional ADR come along the way.
 
-Adapted from Matt Pocock's `grill-with-docs` (MIT, see `UPSTREAM-LICENSE.md`). Differences from upstream:
-- Self-contained. Upstream's `SKILL.md` delegates to the `grilling` and `domain-modeling` skills, and when they fail to load the interview loses its structure. Their rules are written here.
-- Every settled decision goes to `plan.md`, not only the ones that earn an ADR.
-- The current and planned flow are drawn side by side, and every difference must name its decision.
-- The plan is reviewed by an agent that never saw the conversation before it counts as ready.
+Adapted from Matt Pocock's `grill-with-docs` (MIT, see `UPSTREAM-LICENSE.md`). Upstream delegates to the `grilling` and `domain-modeling` skills, and when they fail to load the interview loses its structure, so their rules are written here.
 
 ## Related files
 - `references/session-files.md`: the session directory and the exact format of `plan.md`, `flow.json` and `review-<pass>.md` (always follow it)
@@ -64,14 +60,14 @@ Run the interview above, round after round.
 
 ### 3. Write as it settles
 After each round, before asking the next:
-- Each settled decision gets its `### D<n>` entry in `plan.md` now, not at the end. Keep the user's numbers, orderings, limits and negatives exactly; later steps soften them.
+- Each settled decision gets its `### D<n>` entry in `plan.md` now, not at the end.
 - A resolved term goes into `GLOSSARY.md` now, in the format in `glossary-format.md`. No implementation detail in the glossary.
-- Offer an ADR only when the decision is hard to reverse, surprising without context, and the result of a real trade-off, all three (`adr-format.md`). Most sessions produce none.
-- A decision that changes the flow updates `to_be` in `flow.json`, with `decision` set on each step it adds or changes, and on the `as_is` entry of each step it removes. Then re-render.
+- Offer an ADR only when the decision passes all three tests in `adr-format.md`. Most sessions produce none.
+- A decision that changes the flow updates `to_be` in `flow.json`, with `decision` set as session-files.md says. Then re-render.
 - A reversed decision is marked superseded, never deleted (session-files.md).
 
 ### 4. Show the flow
-Run `python <SKILL_DIR>/scripts/render_flow.py <run>`. If it prints problems, fix `flow.json` or `plan.md` and run it again; it renders nothing until every difference names a decision that `plan.md` defines.
+Run `python <SKILL_DIR>/scripts/render_flow.py <run>`. If it prints problems, fix `flow.json` or `plan.md` and run it again.
 - If the host has an Artifact tool, add `--artifact` and publish `<run>/flow.artifact.html`. The page already follows the Artifact page contract; publish it as is (icon `flow` on the first publish). Republish the same file after later renders so the link stays the same.
 - Otherwise give the user the path of `<run>/flow.html`, which opens in a browser.
 
@@ -102,6 +98,4 @@ In chat, give only:
 
 ## Do not
 - Do not write code or change anything outside `<run>`, `GLOSSARY.md` and `docs/adr/` during the session. The session produces a plan; building it is a separate step the user starts.
-- Do not ask the user for facts the repo can answer.
-- Do not edit `flow.html`, `flow.artifact.html` or a `review-<pass>.md` by hand.
 - Do not skip the baseline confirmation or the review because the session ran long; they are the two checks that the plan rests on something real.

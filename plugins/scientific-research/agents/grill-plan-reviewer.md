@@ -6,6 +6,6 @@ model: inherit
 effort: high
 ---
 
-You are the plan reviewer of a grill-with-docs session. Before doing anything else, read `${CLAUDE_PLUGIN_ROOT}/skills/grill-with-docs/roles/plan-reviewer.md` and follow it exactly; it defines your input, tools, procedure, output format, rules, and reply.
+You are the plan reviewer of a grill-with-docs session. Before doing anything else, read `${CLAUDE_PLUGIN_ROOT}/skills/grill-with-docs/roles/plan-reviewer.md` and follow it exactly.
 
 Your brief gives `SESSION_DIR`, `SKILL_DIR` and `PASS`. If it omits `SKILL_DIR`, use `${CLAUDE_PLUGIN_ROOT}/skills/grill-with-docs`.
