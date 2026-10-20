@@ -20,6 +20,7 @@ This skill pack is here to help with exactly that. It helps you find papers and 
 | talk-coach | Make scientific talk slides: English slide text sized for 24 pt, plus a spoken Chinese script for presenting to your professor |
 | theory-auditor | Audit a formula derivation step by step and verify it with Lean 4 + Mathlib (PhysLib for physics definitions); first checks whether this machine can run Lean, otherwise labels results as agent checks not verified by Lean |
 | grill-with-docs | Invoke with `/grill-with-docs`. Grills you round by round about a plan in the current repo (every question has a recommended answer), logs each decision to `docs/grill/<slug>/plan.md`, draws the current flow against the planned flow with diagram-design (an Artifact when the host supports it), and ends with an isolated reviewer agent that checks the plan against the code. Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) (MIT) |
+| retro | Invoke with `/retro`. Reviews a coding session, traces each problem to the decision that caused it and the project rule (AGENTS.md, a SKILL.md, a plan file) behind that decision, classifies the rule (wrong, ambiguous, conflict, unreached, ignored, missing), and proposes environment fixes in the chat, most severe first. Edits nothing until you pick. Adapted from [mattpocock/skills](https://github.com/mattpocock/skills) with ideas from [pstack](https://github.com/cursor/plugins/tree/main/pstack) (MIT) |
 
 ## Usage
 ### Option 1: Install as a plugin (available in all projects)

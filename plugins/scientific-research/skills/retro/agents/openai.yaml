@@ -1,0 +1,5 @@
+interface:
+  display_name: "Retro"
+  short_description: "Trace session problems to rules, propose fixes"
+policy:
+  allow_implicit_invocation: false
