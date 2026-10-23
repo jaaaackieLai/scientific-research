@@ -31,15 +31,13 @@
   .figure { overflow-x: auto; border: 1px solid var(--rule); border-radius: 6px; background: var(--paper); }
   .figure svg { display: block; width: 100%; height: auto; }
   .sr { position: absolute; opacity: 0; width: 1px; height: 1px; }
-  #show-current:checked ~ .body .form-planned,
-  #show-planned:checked ~ .body .form-current { display: none; }
-  .switch { display: inline-flex; margin-top: 0.75rem; border: 1px solid var(--ink); border-radius: 6px; overflow: hidden; }
+  .frame:has(#show-current:checked) .form-planned,
+  .frame:has(#show-planned:checked) .form-current { display: none; }
+  .switch { position: relative; display: inline-flex; margin-top: 0.75rem; border: 1px solid var(--ink); border-radius: 6px; overflow: hidden; }
   .switch label { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; padding: 0.5rem 1.1rem; cursor: pointer; color: var(--ink); background: var(--paper); }
-  .switch label + label { border-left: 1px solid var(--ink); }
-  #show-current:checked ~ .body label[for="show-current"],
-  #show-planned:checked ~ .body label[for="show-planned"] { background: var(--ink); color: var(--paper); }
-  #show-current:focus-visible ~ .body label[for="show-current"],
-  #show-planned:focus-visible ~ .body label[for="show-planned"] { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .switch label[for="show-planned"] { border-left: 1px solid var(--ink); }
+  .switch input:checked + label { background: var(--ink); color: var(--paper); }
+  .switch input:focus-visible + label { outline: 2px solid var(--accent); outline-offset: -4px; }
   .hint { color: var(--muted); font-size: 0.8rem; margin: 0.5rem 0 0; }
   .ledger h2 { font-family: var(--font-mono); font-size: 0.7rem; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.75rem; }
   .ledger ol { list-style: none; margin: 0; padding: 0; display: grid; gap: 0.6rem; }
@@ -53,8 +51,6 @@
     <h1>grill-with-docs session flow: current flow against planned flow</h1>
     <p class="lede">Switch between Current and Planned under the drawing. Unchanged steps stay where they are; every step that moves, appears or disappears carries the decision behind it.</p>
   </header>
-  <input class="sr" type="radio" name="form" id="show-current">
-  <input class="sr" type="radio" name="form" id="show-planned" checked>
   <div class="body">
     <div>
       <div class="figure">
@@ -238,7 +234,9 @@
         </svg>
       </div>
       <div class="switch">
+        <input class="sr" type="radio" name="form" id="show-current">
         <label for="show-current">Current</label>
+        <input class="sr" type="radio" name="form" id="show-planned" checked>
         <label for="show-planned">Planned</label>
       </div>
       <p class="hint">Planned is shown first. Removed steps appear only under Current.</p>

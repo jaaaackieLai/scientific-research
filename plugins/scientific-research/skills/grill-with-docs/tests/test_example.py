@@ -34,6 +34,14 @@ def test_example_flow_page_switches_current_and_planned_without_script():
     assert "<script" not in page
 
 
+def test_example_flow_page_keeps_the_radio_inputs_inside_the_switch():
+    """A focused radio scrolls into view; one far from its label sends the page back to the top on click."""
+    page = (EXAMPLE / "flow.html").read_text(encoding="utf-8")
+    switch = re.search(r'<div class="switch"[^>]*>(.*?)</div>', page, re.S)
+
+    assert switch and len(re.findall(r'<input[^>]*type="radio"', switch.group(1))) == 2
+
+
 def test_skill_files_name_no_removed_session_file():
     files = [*SKILL_DIR.rglob("*.md"), PLUGIN_DIR / "agents" / "grill-plan-reviewer.md"]
 
