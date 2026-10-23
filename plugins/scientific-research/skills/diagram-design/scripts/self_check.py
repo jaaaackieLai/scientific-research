@@ -673,7 +673,136 @@ def check_motion(parser: DiagramParser, source: str, errors: list[str]) -> None:
             errors.append("motion file needs a <noscript> explanation of the complete static frame")
 
 
-def verify(path: Path, offline: bool = False) -> list[str]:
+INLINE_TAGS = {"a", "b", "code", "em", "i", "kbd", "small", "span", "strong", "sub", "sup"}
+LAYOUT_DISPLAY_RE = re.compile(r"display\s*:\s*(?:inline-)?grid\b")
+SIMPLE_COMPOUND_RE = re.compile(r"^([a-zA-Z][\w-]*)?((?:\.[\w-]+)*)$")
+
+
+class NodeBoxParser(HTMLParser):
+    """Collects node boxes (rect rx=6, per SKILL.md node grammar) per accessible SVG."""
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=True)
+        self.svgs: list[set[tuple[str, str, str, str]]] = []
+        self._depth = 0
+        self._defs = 0
+        self._skip = False
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        data = {key.casefold(): value or "" for key, value in attrs}
+        if tag == "svg" and self._depth == 0:
+            self._depth = 1
+            self._skip = data.get("aria-hidden", "").casefold() == "true"
+            self.svgs.append(set())
+            return
+        if not self._depth:
+            return
+        self._depth += 1
+        if tag in {"defs", "pattern", "marker", "symbol"}:
+            self._defs += 1
+        if tag == "rect" and not self._defs and not self._skip and data.get("rx", "").strip() == "6":
+            self.svgs[-1].add(tuple(data.get(k, "") for k in ("x", "y", "width", "height")))
+
+    def handle_endtag(self, tag: str) -> None:
+        if not self._depth:
+            return
+        if tag in {"defs", "pattern", "marker", "symbol"} and self._defs:
+            self._defs -= 1
+        self._depth -= 1
+
+
+def check_node_budget(source: str, budget: int, errors: list[str]) -> None:
+    """Opt-in node budget (SKILL.md §7 schematic budget is 9; per-type budgets differ, so no default).
+
+    A node is a rect with rx=6; a mask rect and its box share geometry and count once,
+    and a retained node drawn at the same local coordinates in two panels counts once.
+    """
+    parser = NodeBoxParser()
+    parser.feed(source)
+    parser.close()
+    for number, boxes in enumerate(parser.svgs, 1):
+        if len(boxes) > budget:
+            errors.append(
+                f"svg {number} has {len(boxes)} node boxes; the budget is {budget} "
+                "(split into an overview and a detail diagram)"
+            )
+
+
+def layout_selectors(styles: str) -> list[tuple[str, set[str]]]:
+    """(tag, classes) of the last compound of every simple selector that sets display grid."""
+    found: list[tuple[str, set[str]]] = []
+    for selectors, declarations in CSS_RULE_RE.findall(styles):
+        if not LAYOUT_DISPLAY_RE.search(declarations):
+            continue
+        for selector in selectors.split(","):
+            last = CSS_COMBINATOR_RE.split(selector.strip())[-1]
+            match = SIMPLE_COMPOUND_RE.match(last)
+            if not match or not last:
+                continue
+            found.append(((match.group(1) or "").casefold(), set(CSS_CLASS_RE.findall(match.group(2)))))
+    return found
+
+
+class MixedLayoutParser(HTMLParser):
+    """Finds grid containers outside SVG whose direct children mix text with inline elements."""
+
+    def __init__(self, selectors: list[tuple[str, set[str]]]) -> None:
+        super().__init__(convert_charrefs=True)
+        self.selectors = selectors
+        self.stack: list[dict[str, object]] = []
+        self.findings: list[str] = []
+        self._svg = 0
+
+    def _matches(self, tag: str, classes: set[str]) -> bool:
+        return any((not want_tag or want_tag == tag) and want_classes <= classes
+                   for want_tag, want_classes in self.selectors)
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "svg" or self._svg:
+            self._svg += 1
+            return
+        if tag in {"br", "img", "input", "meta", "link", "hr", "wbr", "source"}:
+            return
+        if self.stack and self.stack[-1]["layout"] and tag in INLINE_TAGS:
+            self.stack[-1]["inline"] = True
+        classes = set(dict((k, v or "") for k, v in attrs).get("class", "").split())
+        self.stack.append({"tag": tag, "classes": classes, "layout": self._matches(tag, classes),
+                           "text": False, "inline": False})
+
+    def handle_endtag(self, tag: str) -> None:
+        if self._svg:
+            self._svg -= 1
+            return
+        for index in range(len(self.stack) - 1, -1, -1):
+            if self.stack[index]["tag"] == tag:
+                node = self.stack[index]
+                if node["layout"] and node["text"] and node["inline"]:
+                    label = tag + "".join("." + c for c in sorted(node["classes"]))
+                    self.findings.append(
+                        f"<{label}> is display grid and mixes text with inline elements; "
+                        "each inline element becomes its own row. Wrap the text in one <span> or <p>"
+                    )
+                del self.stack[index:]
+                break
+
+    def handle_data(self, data: str) -> None:
+        if self._svg or not self.stack:
+            return
+        if self.stack[-1]["layout"] and data.strip():
+            self.stack[-1]["text"] = True
+
+
+def check_mixed_layout(parser: DiagramParser, source: str, errors: list[str]) -> None:
+    selectors = layout_selectors("".join(parser.styles))
+    if not selectors:
+        return
+    mixed = MixedLayoutParser(selectors)
+    mixed.feed(source)
+    mixed.close()
+    errors.extend(dict.fromkeys(mixed.findings))
+
+
+def verify(path: Path, offline: bool = False, node_budget: int | None = None) -> list[str]:
     source = path.read_text(encoding="utf-8")
     parser = parsed_document(source)
     errors: list[str] = []
@@ -691,6 +820,9 @@ def verify(path: Path, offline: bool = False) -> list[str]:
     check_viewbox(source, errors)
     check_scripts(parser, errors)
     check_motion(parser, source, errors)
+    if node_budget is not None:
+        check_node_budget(source, node_budget, errors)
+    check_mixed_layout(parser, source, errors)
     return errors
 
 
@@ -702,11 +834,16 @@ def main() -> int:
         action="store_true",
         help="also fail on the Google Fonts link, for system-font output that makes no network requests",
     )
+    argument_parser.add_argument(
+        "--node-budget",
+        type=int,
+        help="fail when an SVG has more node boxes (rect rx=6) than this; grill-with-docs passes 9",
+    )
     args = argument_parser.parse_args()
     failed = False
     for path in args.files:
         try:
-            errors = verify(path, offline=args.offline)
+            errors = verify(path, offline=args.offline, node_budget=args.node_budget)
         except (OSError, UnicodeError) as exc:
             errors = [str(exc)]
         if errors:
