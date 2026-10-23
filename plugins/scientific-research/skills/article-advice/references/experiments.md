@@ -36,7 +36,7 @@ Experimental setup (datasets, metrics and the reason for choosing them, baseline
 
 ## Statistical rigor
 
-- [ ] Main results use at least 3 random seeds and report mean ± standard deviation; if run only once, explain why
+- [ ] Main results use at least 3 random seeds and report mean ± standard deviation; if training is too expensive for more than one seed, say so and report variance over deployment-time randomness instead (keys, messages, prompts, images)
 - [ ] When the gap to the strongest baseline is smaller than the standard deviation, there is a significance test or confidence interval; otherwise weaken the claim
 - [ ] Baseline methods get the same tuning budget as the proposed method; state the search range, number of trials, and which split was used for selection
 - [ ] Release final hyperparameters (optimizer, learning rate schedule, batch size, steps) and compute resources (GPU model, count, GPU hours)
@@ -45,13 +45,12 @@ Experimental setup (datasets, metrics and the reason for choosing them, baseline
 - [ ] Claims of no degradation (distortion-free, lossless, same level as) rest on an equivalence test (TOST), a confidence interval with a pre-set margin, or an effect size; a non-significant t-test alone means "no difference detected", and a lower t-value is not stronger support for H0
 - [ ] Very low false-positive rates (e.g., FPR = 1e-6) state how the threshold was derived (analytic, or from N negatives); an empirical check on N negatives supports rates down to about 1/N only. With search-based decoding, state how the threshold accounts for multiple candidates
 - [ ] The number of test samples is stated next to each main table (rates from 50 images move in steps of 0.02)
-- [ ] When training is expensive and only one seed is run, the reported variance comes from the deployment-time randomness instead (keys, messages, prompts, images), and the text says so
 
 ## Other checks
 
 - [ ] Baseline and proposed-method numbers come from the same source (do not use paper-reported numbers on one side and your own runs on the other); explain when they differ
 - [ ] Metrics are the standard metrics for this task
-- [ ] Custom measures have a name, are defined on first appearance, are placed in a table column, and are referred to by name afterward (do not write by this measure)
+- [ ] Custom measures get a table column and are referred to by name afterward (do not write by this measure)
 - [ ] Reimplemented baselines reproduce the originally reported numbers, or the discrepancy and its likely cause are stated
 - [ ] Differences in training data, compute, and parameter count from the baselines are stated, including costs outside the compared module
 - [ ] Evaluation on a subset: the subset was chosen in advance and checked to be representative; missing baselines or settings are explained
@@ -62,11 +61,10 @@ Experimental setup (datasets, metrics and the reason for choosing them, baseline
 
 ## Figures and tables
 
-- Captions: define every method name, variant, abbreviation, and subscript in them, plus what bold, underline, and colors mean. Readers should understand from the figure and caption alone.
+- Captions: define every method name, variant, abbreviation, and subscript in them, plus what bold, underline, and colors mean.
 - Architecture figure captions explain the pipeline, not just Overview of the model; the first sentence of a results figure caption states the point to be read from it. For trade-off plots, say which direction is better (lower-right is better); state where each number comes from (reported vs. reproduced) and key settings.
-- Tables: caption goes above; headers mark the metric direction (Acc ↑, Error ↓) and units; decimal places are consistent within a column; one point per table; highlight with bold or underline, not heavy coloring.
-- A teaser figure that places the method and baselines on the paper's two axes is effective when the claim is a trade-off; its caption states which direction is better and avoids words the data cannot prove (optimal). See writing-patterns.md 1.9.
-- Bold the best value in every column, including baseline wins, and define bold/underline in the caption. Bolding only the proposed method's row, or only the average column, hides losses.
+- Tables: caption goes above; headers mark the metric direction (Acc ↑, Error ↓) and units; decimal places are consistent within a column; highlight with bold or underline, not heavy coloring.
+- Bold the best value in every column, including baseline wins. Bolding only the proposed method's row, or only the average column, hides losses.
 - Report overhead as a ratio and an absolute value (1.4 ms to 6.5 ms per image, 4.6x); do not call a several-fold increase marginal.
 
 ## Rewrite example

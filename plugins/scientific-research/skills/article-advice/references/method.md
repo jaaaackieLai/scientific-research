@@ -38,4 +38,4 @@
 
 - Original (the user has defined positive and negative samples elsewhere): We adopt a contrastive loss to make the features better.
 - Rewrite: We apply a contrastive loss that pulls together features of augmented views from the same image and pushes apart those from different images.
-- Explanation: adopt is replaced with an operational verb, better with concrete behavior. If the original does not define positive and negative samples, this is a content gap.
+- Explanation: adopt is replaced with an operational verb, better with concrete behavior.

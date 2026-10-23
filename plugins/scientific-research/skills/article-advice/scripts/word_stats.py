@@ -43,10 +43,10 @@ TERMS = {
     "seriously": r"\bseriously\b",
     "very": r"\bvery\b",
     "marginal/negligible": r"\b(marginal\w*|negligibl\w*)",
-    # C2. urgency words
+    # D. urgency words
     "crucial": r"\bcrucial\b",
     "pressing/urgent": r"\b(pressing|urgent\w*|imperative)\b",
-    # D. result verbs, strong to weak
+    # result verbs, strong to weak (principles.md Section 2)
     "prove": r"\bprov(e|es|ed|en)\b",
     "show": r"\bshow(s|ed|n)?\b",
     "demonstrate": r"\bdemonstrat\w*",
@@ -64,7 +64,7 @@ TERMS = {
     "specifically": r"\bspecifically\b",
     "however": r"\bhowever\b",
     "in contrast": r"\bin contrast\b",
-    # G. phrasings common among native Chinese-speaking authors
+    # H. phrasings common among native Chinese-speaking authors
     "besides": r"\bbesides\b",
     "it can be seen": r"\bit (can|could) be (seen|observed)\b|\bas we can see\b",
 }

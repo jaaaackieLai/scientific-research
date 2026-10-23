@@ -6,8 +6,8 @@ For each issue, mark the two locations involved (e.g., abstract sentence 5 vs. T
 
 | Check | What a break looks like |
 |---|---|
-| Limitation → key idea | The limitation is about scalability, but the idea only addresses accuracy |
-| Key idea → challenge | The challenge is borrowed from another paper, not one encountered when implementing this paper's idea |
+| Limitation → challenge | The challenge is a difficulty of this paper's own method, not of the problem the limitation exposes |
+| Challenge → key idea | The challenge is about scalability, but the key idea only addresses accuracy |
 | Challenge ↔ module | A module with no challenge, or a challenge with no module |
 | Module → contribution | The contributions mention theoretical analysis, but the paper has no theory subsection |
 | Contribution → experiment | A contribution claims better efficiency, but the experiments do not measure time |
@@ -26,13 +26,11 @@ List every claim in the abstract and introduction in the "Claims vs. evidence" f
 
 ## 4. Names
 
-- Module names are the same in three places: the introduction overview, the method subsection titles, and the ablation row names.
 - Keywords in the method name (Adaptive, Sparse) are explained in the body text as to what operation they denote.
 - List all key terms (method and variants, categories, model roles, metrics) and confirm what each refers to section by section (e.g., Ours is the full version in one table and the simplified version in another). The ones most likely to silently change meaning are generic words: target, source, baseline, original.
 - If the project has `GLOSSARY.md`, start that list from its terms and `## Notation` table.
-- The method name in the title is used in the body and tables (not replaced by "the lightweight model"); an acronym name is expanded once in the body, and if the letters are not obvious, they are marked at first mention (a **syn**chronization **tag**).
-- When several components are listed (e.g., DO then PH), they appear in the same order in the abstract, contributions, method subsections, tables and conclusion.
-- Symbols in tables, figures and text match (a strength called f in the table is not s in the text).
+- Components keep the same names and order (e.g., DO then PH) in the abstract, introduction overview and contributions, method subsection titles, table and ablation rows, and conclusion.
+- When the letters of an acronym method name are not obvious from its expansion, they are marked at first mention (a **syn**chronization **tag**).
 
 ## 5. Consistent statements
 

@@ -24,10 +24,9 @@ Reading only the abstract, the reader can say: what problem is solved, why exist
 - [ ] Terms are understandable without relying on definitions in the body text
 - [ ] Word count meets the limit (commonly 150 to 250 words); when over, cut implementation details and secondary numbers first, not the problem statement or mechanism sentences
 - [ ] For a trade-off or balance claim, give one number per axis with its comparison target, not "achieves an optimal balance"
-- [ ] A ratio claim (only 2.2% of the parameters) names the reference model
 
 ## Rewrite example
 
 - Original: We propose a novel method that utilizes attention to achieve better performance.
 - Rewrite: [first state the problem and challenge] To address this, we weight each token by its relevance to the query, which reduces the influence of irrelevant context.
-- Explanation: says what attention actually does. To keep "better performance", the user must provide numbers.
+- Explanation: says what attention actually does.

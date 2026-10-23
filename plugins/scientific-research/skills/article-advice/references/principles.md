@@ -13,12 +13,15 @@
 
 ## 2. Wording strength matches evidence strength
 
-| Content | Tone | Verbs |
+| Strength | Verbs | Used for |
 |---|---|---|
-| Measured results | Assertive | achieves, reduces, outperforms, shows |
-| Interpretation beyond the data | Hedged | suggests, indicates, is consistent with |
+| Strongest | prove | Mathematical proofs only |
+| Strong (assertive) | show, demonstrate, confirm, establish, achieve, reduce, outperform | Results measured directly by experiments |
+| Medium | find, observe | Observed phenomena, without explaining causes |
+| Weak (hedged) | suggest, indicate, is consistent with | Interpretation beyond the data, not directly verified |
+| Weakest | may, likely, tend to, might | Possible causes, general tendencies |
 
-- Do not mix the two tones in the same clause.
+- Do not mix assertive and hedged verbs in the same clause.
 - Do not write measured results as may / seems; do not write speculation as fact (the experiment only measures accuracy, yet writes proves the model learns semantics).
 - Do not over-hedge: main conclusions with clear evidence use assertive sentences; hedging is reserved for explanations where the gap is smaller than the standard deviation, the result holds only in some settings, or there is no control experiment. When rewriting, do not weaken assertive sentences that have sufficient evidence.
 
