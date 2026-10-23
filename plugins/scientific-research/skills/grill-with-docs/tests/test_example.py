@@ -18,6 +18,22 @@ def test_example_flow_page_cites_only_decisions_the_plan_defines():
     assert cited and cited <= defined
 
 
+def test_example_flow_page_follows_the_artifact_page_contract():
+    page = (EXAMPLE / "flow.html").read_text(encoding="utf-8")
+
+    assert page.lstrip().startswith("<title>")
+    assert not re.search(r"<(?:!DOCTYPE|html|head|body)\b", page, re.I)
+
+
+def test_example_flow_page_switches_current_and_planned_without_script():
+    page = (EXAMPLE / "flow.html").read_text(encoding="utf-8")
+
+    assert len(re.findall(r'<input[^>]*type="radio"', page)) == 2
+    assert re.search(r"<label[^>]*>\s*Current\s*</label>", page)
+    assert re.search(r"<label[^>]*>\s*Planned\s*</label>", page)
+    assert "<script" not in page
+
+
 def test_skill_files_name_no_removed_session_file():
     files = [*SKILL_DIR.rglob("*.md"), PLUGIN_DIR / "agents" / "grill-plan-reviewer.md"]
 

@@ -49,10 +49,13 @@ Rules:
 
 The flow the change touches, as the code does it today (current) and as the plan will make it (planned), on one page drawn with the diagram-design skill. It is the page the user aligns on and the file the reviewer reads, so it has to stand on its own. Pick one flow per session: the path a user, a request, or a piece of data takes through the part of the system the change touches.
 
-- One self-contained HTML page as diagram-design writes it, in the type diagram-design picks for the shape of the change.
+- One HTML file in the Artifact page contract, whether or not the host can publish it: no `<!DOCTYPE>`, `<html>`, `<head>` or `<body>`, with `<title>` and `<style>` first. The same file is published and opened locally.
+- The drawing uses the type diagram-design picks for the shape of the change.
 - Before round 1 it shows only the current form. The planned form appears with the first decision that changes the flow. A greenfield change has only the planned form.
 - The current form comes from the code, not from what the user remembers. When the code and the user disagree, that is a question for the next round.
-- A part that exists in both forms sits at the same position in both, so a reader can pair them. Labels use the glossary's words.
+- Both forms share one drawing area. A switch under the drawing (`Current` / `Planned`, with Planned selected) shows one form at a time. Build it from two radio inputs and `:checked` selectors, with no script. A part that exists in both forms sits at the same coordinates in both, so switching moves only what changed. This replaces diagram-design's side-by-side panels. Before round 1 there is no switch.
+- A change ledger beside or under the drawing lists every difference with its mark, the part, and the decision. It stays visible in both forms.
+- Labels use the glossary's words.
 - Every difference carries a mark in diagram-design's change vocabulary (`references/type-architecture-delta.md`), readable without color: `+ ADDED`, `Δ CHANGED`, `− REMOVED`, `REWIRED`. Each mark ends with the decision in force (`· D2`). Unchanged parts carry no mark.
 - Static: no animation.
 

@@ -69,7 +69,8 @@ After each round, before asking the next:
 ### 4. Show the flow
 Draw `<run>/flow.html` with the diagram-design skill. It ships beside this skill in `<SKILL_DIR>/../diagram-design/`; if that folder is missing, invoke the `diagram-design` skill instead. This page is what you and the user align on, and what the reviewer reads.
 - Let diagram-design pick the type from the shape of the change (its §3 guide). A rewired data path or module graph is usually an architecture delta; a process with branches is a flowchart. Never flatten a graph into a list of steps to fit a type.
-- Follow the format in session-files.md (`## flow.html`).
+- Follow the format in session-files.md (`## flow.html`). Its layout, one drawing with a Current/Planned switch, replaces diagram-design's side-by-side panels.
+- Write `flow.html` once and edit it in place at each redraw. Do not write a script that generates it.
 - Skip diagram-design's style-guide gate and its pause to confirm the type: use the project's `.diagram-design` profile when there is one, otherwise the default tokens. Do not interrupt the grilling to ask about the drawing.
 - `examples/grill-with-docs/flow.html` is a finished one.
 
