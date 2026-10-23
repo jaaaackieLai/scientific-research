@@ -5,9 +5,7 @@ One grilling session writes into `docs/grill/<slug>/` under the project root. `<
 | File | Written by | When |
 | --- | --- | --- |
 | `plan.md` | orchestrator | created before round 1; one decision added the moment it settles |
-| `flow.json` | orchestrator | the current flow before round 1; the planned flow after every round that changes it |
-| `flow.svg` | orchestrator, with the diagram-design skill | every time `flow.json` changes, before rendering |
-| `flow.html` / `flow.artifact.html` | `scripts/render_flow.py` | every time `flow.json` or `flow.svg` changes; never edit them by hand |
+| `flow.html` | orchestrator, with the diagram-design skill | the current flow before round 1; redrawn after every round that changes the plan |
 | `review-<pass>.md` | plan reviewer | after the interview closes; `<pass>` is 1, then 2 |
 
 The glossary and ADRs do not live here. They go where the repo keeps them (`references/glossary-format.md`, `references/adr-format.md`), because they outlive the session.
@@ -23,7 +21,7 @@ The decision log. Its job is to hold every decision the session settled, precise
 
 - Goal: <one sentence: what changes, for whom>
 - Status: grilling | reviewing | ready
-- Flow: <which flow flow.json maps, in one line>
+- Flow: <which flow flow.html draws, in one line>
 
 ## Decisions
 
@@ -31,7 +29,7 @@ The decision log. Its job is to hold every decision the session settled, precise
 - **Question:** <the question as it was put to the user>
 - **Decision:** <what was decided; keep numbers, orderings, limits and the things that must NOT happen exactly as the user said them>
 - **Why:** <the reason the user gave or accepted>
-- **Flow:** <ids of the steps it adds, changes or removes, or `no flow change`>
+- **Flow:** <the parts of the flow it adds, changes, removes or rewires, named as flow.html names them, or `no flow change`>
 - **Records:** <GLOSSARY.md terms and ADR files it produced, or `none`>
 
 ## Out of scope
@@ -42,54 +40,21 @@ The decision log. Its job is to hold every decision the session settled, precise
 ```
 
 Rules:
-- Number decisions in the order they settle and never renumber; `flow.json` cites them by number.
-- A decision the user later reverses stays in the log with one more field, `- **Status:** superseded by D<m>`, and the new decision says what it replaces. Steps in `flow.json` cite the decision that is in force.
+- Number decisions in the order they settle and never renumber; `flow.html` cites them by number.
+- A decision the user later reverses stays in the log with one more field, `- **Status:** superseded by D<m>`, and the new decision says what it replaces. Marks on `flow.html` cite the decision that is in force.
 - A fact you found in the code is not a decision. It goes into the question that needed it, not into the log.
 - `Out of scope` gets an entry whenever the user says no to something; the reviewer reads it as deliberate.
 
-## flow.json
+## flow.html
 
-The flow the change touches, twice: as the code does it today (`as_is`) and as the plan will make it (`to_be`). Pick one flow per session: the path a user, a request, or a piece of data takes through the part of the system the change touches. Keep each side between 3 and 15 steps; merge steps that never differ, split a step only when the plan changes part of it.
+The flow the change touches, as the code does it today (current) and as the plan will make it (planned), on one page drawn with the diagram-design skill. It is the page the user aligns on and the file the reviewer reads, so it has to stand on its own. Pick one flow per session: the path a user, a request, or a piece of data takes through the part of the system the change touches.
 
-```json
-{
-  "title": "Refund approval",
-  "as_is": {"steps": [
-    {"id": "submit", "label": "Customer submits the refund form", "actor": "Customer", "next": ["review"]},
-    {"id": "review", "label": "Manager reviews every refund", "actor": "Manager"}
-  ]},
-  "to_be": {"steps": [
-    {"id": "submit", "label": "Customer submits the refund form", "actor": "Customer", "next": ["review"]},
-    {"id": "review", "label": "Rules engine reviews the refund", "actor": "System", "decision": "D1",
-     "next": [{"to": "pay", "when": "amount < 100"}, {"to": "escalate", "when": "amount >= 100"}]},
-    {"id": "pay", "label": "Refund is paid", "actor": "System", "decision": "D1"},
-    {"id": "escalate", "label": "Manager reviews the refund", "actor": "Manager", "decision": "D1"}
-  ]}
-}
-```
-
-- `id`: kebab-case, unique within its side. The same step keeps the same id on both sides; that is how the diff pairs them. Give a step a new id only when it is a different step, not a reworded one.
-- `label`: what happens, in the glossary's words.
-- `actor` (optional): who or what does it.
-- `next` (optional): the steps that follow, as ids, or as `{"to": "<id>", "when": "<condition>"}` for a branch. A step with no `next` ends the flow.
-- `decision`: the `D<n>` that explains the difference. Required on every step the plan adds or changes (on its `to_be` entry) and on every step it removes (on its `as_is` entry).
-- A greenfield change has `"as_is": {"steps": []}`.
-
-`as_is` comes from the code, not from what the user remembers. When the code and the user disagree, that is a question for the next round.
-
-`python <SKILL_DIR>/scripts/render_flow.py docs/grill/<slug>` checks the file against `plan.md` and refuses to render while any difference lacks a decision or cites one `plan.md` does not define. A step counts as changed when its label, actor, outgoing edges, or position relative to the shared steps differ.
-
-## flow.svg
-
-The diagram on the flow page. The orchestrator draws it with the diagram-design skill (`<SKILL_DIR>/../diagram-design/`) every time `flow.json` changes. `render_flow.py` inlines it as is.
-
-- One `<svg>` with a `viewBox`, a `<title>` and a `<desc>`. Two panels side by side: Current (`as_is`) on the left, Planned (`to_be`) on the right. A greenfield change has only the Planned panel.
-- Every step is one `<g data-step="<side>:<id>" data-status="<status>">` that holds its node. `<side>` is `as_is` or `to_be`. `<status>` is the one the step table shows: `added`, `removed`, `changed` or `unchanged`. A changed or unchanged step appears in both panels with the same status.
-- Shared steps sit on the same row in both panels, in the step table's order, so a step on one side only leaves a gap on the other. When you redraw, keep the coordinates of the steps that did not move.
-- Status reads without color, as in diagram-design's change vocabulary (`references/type-architecture-delta.md`): `+ ADDED`, `Δ CHANGED` with an inset rule, `− REMOVED` with a dashed outline. Each badge ends with the step's decision id. Unchanged steps have no badge.
-- No `<script>`, no `on*` attributes, no `javascript:` links, no motion.
-
-`render_flow.py` refuses to render while `flow.svg` is missing, misses a step, shows a step that `flow.json` does not have, or gives a step a different status.
+- One self-contained HTML page as diagram-design writes it, in the type diagram-design picks for the shape of the change.
+- Before round 1 it shows only the current form. The planned form appears with the first decision that changes the flow. A greenfield change has only the planned form.
+- The current form comes from the code, not from what the user remembers. When the code and the user disagree, that is a question for the next round.
+- A part that exists in both forms sits at the same position in both, so a reader can pair them. Labels use the glossary's words.
+- Every difference carries a mark in diagram-design's change vocabulary (`references/type-architecture-delta.md`), readable without color: `+ ADDED`, `Δ CHANGED`, `− REMOVED`, `REWIRED`. Each mark ends with the decision in force (`· D2`). Unchanged parts carry no mark.
+- Static: no animation.
 
 ## review-<pass>.md
 
@@ -100,7 +65,7 @@ Written by the plan reviewer, never edited afterwards. Pass 2 is a new file; pas
 
 - Verdict: ready | revise | rethink
 - Pass: <1 | 2>
-- Read: plan.md (D1-D<n>), flow.json, <ADRs, glossary, code paths read>
+- Read: plan.md (D1-D<n>), flow.html, <ADRs, glossary, code paths read>
 
 ## Findings
 

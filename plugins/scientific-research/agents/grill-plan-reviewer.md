@@ -1,6 +1,6 @@
 ---
 name: grill-plan-reviewer
-description: "grill-with-docs role: review a finished grilling plan cold, without the conversation - check plan.md and flow.json against the code, glossary and ADRs, and write review-<pass>.md with a ready/revise/rethink verdict. Spawned by the grill-with-docs orchestrator."
+description: "grill-with-docs role: review a finished grilling plan cold, without the conversation - check plan.md and the flow page (flow.html) against the code, glossary and ADRs, and write review-<pass>.md with a ready/revise/rethink verdict. Spawned by the grill-with-docs orchestrator."
 tools: Read, Grep, Glob, Write, Bash
 model: inherit
 effort: high

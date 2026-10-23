@@ -2,7 +2,7 @@
 
 - Verdict: ready
 - Pass: 1
-- Read: plan.md (D1-D4), flow.json, `skills/grill-with-docs/SKILL.md`, `roles/plan-reviewer.md`, `scripts/render_flow.py`
+- Read: plan.md (D1-D4), flow.html, `skills/grill-with-docs/SKILL.md`, `roles/plan-reviewer.md`
 
 ## Findings
 

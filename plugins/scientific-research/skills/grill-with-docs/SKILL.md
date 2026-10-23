@@ -11,12 +11,11 @@ Purpose: one session that turns a fuzzy change into a plan someone else can buil
 Adapted from Matt Pocock's `grill-with-docs` (MIT, see `UPSTREAM-LICENSE.md`). Upstream delegates to the `grilling` and `domain-modeling` skills, and when they fail to load the interview loses its structure, so their rules are written here.
 
 ## Related files
-- `references/session-files.md`: the session directory and the exact format of `plan.md`, `flow.json` and `review-<pass>.md` (always follow it)
+- `references/session-files.md`: the session directory and the exact format of `plan.md`, `flow.html` and `review-<pass>.md` (always follow it)
 - `references/glossary-format.md`, `references/adr-format.md`: how to write the glossary and ADRs
-- `scripts/render_flow.py`: checks `flow.json` against `plan.md` and `flow.svg` against `flow.json`, then renders the flow page
-- `../diagram-design/`: the diagram-design skill that draws `flow.svg`
+- `../diagram-design/`: the diagram-design skill that draws `flow.html`
 - `roles/plan-reviewer.md`: what the reviewer does
-- `examples/grill-with-docs/`: a finished session (upstream's flow against this skill's), with its `flow.svg`
+- `examples/grill-with-docs/`: a finished session (upstream's flow against this skill's), with its `flow.html`
 
 Below, `<SKILL_DIR>` is the absolute path of this skill's directory and `<run>` is `docs/grill/<slug>` under the project root.
 
@@ -53,8 +52,8 @@ The interview is over when the frontier is empty: every branch visited, nothing 
 ### 1. Ground the session
 - Read `GLOSSARY.md` (or `GLOSSARY-MAP.md` and the context it points to), `docs/adr/`, and the code the change touches.
 - Choose a slug and create `<run>/plan.md` with its header (`Status: grilling`) and empty sections.
-- Pick the one flow the change touches and map its current form from the code into `flow.json` `as_is`; copy it to `to_be`. If the change touches more than one flow, ask which one in round 1 and map that.
-- Draw and render it (step 4). Round 1 opens with "Is this the current flow?" with the page attached: the user confirms the baseline before anything is measured against it. A greenfield change has an empty `as_is`; say so instead.
+- Pick the one flow the change touches and map its current form from the code. If the change touches more than one flow, ask which one in round 1 and map that.
+- Draw the current form alone (step 4). Round 1 opens with "Is this the current flow?" with the page attached: the user confirms the baseline before anything is measured against it. A greenfield change has no current form; say so instead.
 
 ### 2. Grill
 Run the interview above, round after round.
@@ -64,21 +63,19 @@ After each round, before asking the next:
 - Each settled decision gets its `### D<n>` entry in `plan.md` now, not at the end.
 - A resolved term goes into `GLOSSARY.md` now, in the format in `glossary-format.md`. No implementation detail in the glossary.
 - Offer an ADR only when the decision passes all three tests in `adr-format.md`. Most sessions produce none.
-- A decision that changes the flow updates `to_be` in `flow.json`, with `decision` set as session-files.md says. Then redraw `flow.svg` and re-render.
+- A decision that changes the flow changes the planned form on the flow page, marked with its decision id as session-files.md says. Redraw `flow.html` and republish it.
 - A reversed decision is marked superseded, never deleted (session-files.md).
 
 ### 4. Show the flow
-First draw `<run>/flow.svg` with the diagram-design skill. It ships beside this skill in `<SKILL_DIR>/../diagram-design/`; if that folder is missing, invoke the `diagram-design` skill instead.
-- Read its `references/type-flowchart.md`, `references/style-guide.md` and `references/primitives-core.md`. Start from the SVG of `assets/example-flowchart.html` (paper, dots, `arrow` marker). Follow the format in session-files.md (`## flow.svg`).
-- Skip diagram-design's style-guide gate: use the project's `.diagram-design` profile when there is one, otherwise the default tokens. Do not interrupt the grilling to ask about branding.
-- The steps come from `flow.json` and override diagram-design's 9-node budget. Its connector rules and taste gate (§9) still apply.
-- `examples/grill-with-docs/flow.svg` is a finished one.
+Draw `<run>/flow.html` with the diagram-design skill. It ships beside this skill in `<SKILL_DIR>/../diagram-design/`; if that folder is missing, invoke the `diagram-design` skill instead. This page is what you and the user align on, and what the reviewer reads.
+- Let diagram-design pick the type from the shape of the change (its §3 guide). A rewired data path or module graph is usually an architecture delta; a process with branches is a flowchart. Never flatten a graph into a list of steps to fit a type.
+- Follow the format in session-files.md (`## flow.html`).
+- Skip diagram-design's style-guide gate and its pause to confirm the type: use the project's `.diagram-design` profile when there is one, otherwise the default tokens. Do not interrupt the grilling to ask about the drawing.
+- `examples/grill-with-docs/flow.html` is a finished one.
 
-Then run `python <SKILL_DIR>/scripts/render_flow.py <run>`. If it prints problems, fix `flow.json`, `plan.md` or `flow.svg` and run it again.
-- If the host has an Artifact tool, add `--artifact` and publish `<run>/flow.artifact.html`. The page already follows the Artifact page contract; publish it as is (icon `flow` on the first publish). Republish the same file after later renders so the link stays the same.
-- Otherwise give the user the path of `<run>/flow.html`, which opens in a browser.
+If the host has an Artifact tool, publish `<run>/flow.html` (icon `flow` on the first publish) and republish the same file after each redraw so the link stays the same. Otherwise give the user its path; it opens in a browser.
 
-Show the page at three points: the baseline before round 1, after any round that changed `to_be`, and at the end. Rounds that change no step publish nothing.
+Show the page at three points: the baseline before round 1, after any round that changed the planned form, and at the end. Rounds that change nothing on the flow publish nothing.
 
 ### 5. Close the interview
 When the frontier is empty, list the decisions (id and title), link the flow page, and ask the user to confirm that this is the shared understanding. On confirmation, set `Status: reviewing`.
@@ -90,7 +87,7 @@ If that agent type is not available (the skill was copied without the plugin), s
 
 Then read `<run>/review-1.md`:
 - `ready` → set `Status: ready`. Mention any `should` findings in the report.
-- `revise` → the blocking findings become the next round: each is a question carrying the reviewer's recommended answer. Never close a blocking finding by editing the plan without the user's answer. Errors of fact in the plan (a wrong file path, a step the code does not do) you correct yourself, and say so in that round. Update `plan.md` and `flow.json` as in step 3, then run the reviewer again with `PASS: 2`.
+- `revise` → the blocking findings become the next round: each is a question carrying the reviewer's recommended answer. Never close a blocking finding by editing the plan without the user's answer. Errors of fact in the plan (a wrong file path, a step the code does not do) you correct yourself, and say so in that round. Update `plan.md` and `flow.html` as in step 3, then run the reviewer again with `PASS: 2`.
 - `rethink` → stop grilling details. Put the reviewer's strongest objection to the user and ask whether the goal or approach changes; continue from step 2 with what they decide.
 
 At most two review passes. If pass 2 is still not `ready`, report the open findings and let the user decide whether the plan is ready anyway.
@@ -98,10 +95,10 @@ At most two review passes. If pass 2 is still not `ready`, report the open findi
 ### 7. Report
 In chat, give only:
 - the path of `plan.md`, the number of decisions, and the link or path of the flow page;
-- the count of added, changed and removed steps;
+- the count of added, changed and removed parts on the flow page;
 - the glossary terms and ADRs written (or none);
 - the reviewer's verdict and its strongest risk;
-- the next step: build from `plan.md`, starting with the steps the flow page marks added or changed, test first.
+- the next step: build from `plan.md`, starting with the parts the flow page marks added or changed, test first.
 
 ## Do not
 - Do not write code or change anything outside `<run>`, `GLOSSARY.md` and `docs/adr/` during the session. The session produces a plan; building it is a separate step the user starts.
