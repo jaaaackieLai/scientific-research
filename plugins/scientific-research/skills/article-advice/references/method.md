@@ -10,9 +10,9 @@
 
 **Threat model or application scenario** (security, watermarking, privacy, forensics papers): before the overview, name the parties (provider, legitimate user, adversary), what each can access, what the adversary may do, and the success criterion for each scenario as a formula (detection: S(s', s) >= tau at a fixed FPR; tracing: argmax_i S(s', s_i)). Avoid absolute wording for statistical decisions (incontrovertible proof).
 
-**Overview subsection**: task setting (input, output) → core contribution → point to the architecture figure (when the pipeline is new) → one prose sentence per following subsection saying what it covers.
+**Overview subsection**: task setting (input, output) → core contribution → point to the architecture figure (when the pipeline is new) → one sentence per following subsection on what it covers.
 
-**Cross-references**: in the method body, refer to another section with a full sentence (Section 3.3 defines the views), and only where a step depends on it. Section numbers in parentheses are an introduction device (introduction.md, paragraphs 5 and 6).
+**Cross-references**: cite another section in a full sentence (Section 3.3 defines the views). Parenthetical section numbers belong to the introduction.
 
 **One subsection per module**, in data-flow order, each containing three elements:
 
@@ -26,7 +26,7 @@
 
 **Equations**: follow with a where clause defining new symbols, then one sentence explaining what it does (e.g., minimizing this term pushes features of the same class closer together).
 
-**Dimensions**: give a tensor's size as set membership in the sentence or equation that introduces it ($f_\theta(\tilde X)\in\mathbb{R}^{N\times T\times D}$), and describe an operation by what it does in words (pools the $C$ channel tokens at each position into one vector). Shape columns and `(B, L, C, D)` annotations in code documentation, such as a project's glossary, are lookups for the author; translate them into these two forms.
+**Dimensions**: state a tensor's symbolic size as set membership where it is introduced ($f_\theta(\tilde X)\in\mathbb{R}^{N\times T\times D}$), without the batch dimension. In prose, describe an operation by what it does (pools the $C$ channel tokens at each position into one vector), not as a shape mapping (maps B×L×C×D to B×L×D). A function signature such as $g:\mathbb{R}^{C\times D}\to\mathbb{R}^{D}$ is fine. Do not copy shape annotations from code or a glossary. Numeric sizes stay in implementation details.
 
 ## Checklist
 
@@ -34,7 +34,8 @@
 - [ ] Advantages are linked to measurable results, or marked as still needing experimental support; effect claims without experimental support are changed into design intent
 - [ ] Symbols are not mixed with symbols from prior papers
 - [ ] Every numbered equation is referenced in the body text
-- [ ] Dimensions appear as set membership and operations as prose (Dimensions above); cross-references are full sentences (Cross-references above)
+- [ ] Tensor sizes are set membership, operations are prose (Dimensions). Search for `shape` and `形狀`, and check each hit
+- [ ] Cross-references are full sentences, not parenthetical numbers (Cross-references). Search for `(Section` and `（第`, and check each hit
 - [ ] Components with nothing new are covered briefly; "why not use other methods" goes in related work or ablation
 - [ ] Information is sufficient for reproduction; missing parts are listed
 - [ ] Security-style papers: every attack in the experiments maps to a capability in the threat model, and every listed capability is tested or explicitly out of scope
