@@ -36,7 +36,7 @@ description: Use when the user wants to review or rewrite a deep learning paper 
 **Rewrite mode**:
 1. Check the main line before fixing sentences: the chain of argument in the section file (and consistency.md Section 1 for two or more sections). Breaks are listed as must fix, with the specific questions to ask the author. You may reorder, merge, or split content already in the original.
 2. Only change sentences that have problems; when replacing words, name the corresponding category in word-bank.md.
-3. After rewriting, actually check the result against ethical boundaries 2 to 5 and principles.md Sections 4 and 5.
+3. After rewriting, actually check the result against ethical boundaries 2 to 5 and principles.md Sections 4 and 5, and the section file's checklist.
 
 **Draft mode** (the user has no text for this section):
 1. Collect material: list what the section needs (from its section file's "Common structure") and map each item to the user's material.
