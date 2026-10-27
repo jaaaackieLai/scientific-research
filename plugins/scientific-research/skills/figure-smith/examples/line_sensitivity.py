@@ -81,7 +81,6 @@ if __name__ == "__main__":
                       zorder=ps.line_zorder(ps.OURS))
     ax.set_ylabel(name_l, color=ps.OURS, alpha=0.4)
     ax2 = ax.twinx()
-    ax2.spines["right"].set_visible(True)
     line_r, = ax2.plot(pos, y_r, color=ps.OURS, marker="o", label=f"{name_r} (right)",
                        zorder=ps.line_zorder(ps.OURS))
     ax2.set_ylabel(name_r, color=ps.OURS, rotation=270, labelpad=40)
