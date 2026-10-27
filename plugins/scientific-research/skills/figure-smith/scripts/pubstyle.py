@@ -15,7 +15,7 @@ from matplotlib.patches import Patch
 from matplotlib.ticker import FuncFormatter
 
 # Font sizes in pt. Sized for panels of about 7-12 x 6-8 inches.
-FONT = {"title": 36, "label": 32, "tick": 28, "legend": 28, "annot": 24}
+FONT = {"title": 36, "label": 28, "tick": 28, "legend": 24, "annot": 24}
 
 # Approved family palettes. Arrays are dark -> light: index 0 is the strongest shade, -1 the softest.
 # OURS is the darkest red; REDS contains its four lighter ablation shades.
@@ -58,8 +58,8 @@ def apply_style():
         "ytick.major.width": 2,
         "xtick.major.size": 8,
         "ytick.major.size": 8,
-        "axes.spines.top": False,
-        "axes.spines.right": False,
+        "axes.spines.top": True,  # full four-sided frame
+        "axes.spines.right": True,
         "lines.linewidth": 5,
         "lines.markersize": 10,
         "hatch.linewidth": 1.5,

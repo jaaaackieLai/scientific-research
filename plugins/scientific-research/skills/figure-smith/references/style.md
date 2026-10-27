@@ -11,9 +11,11 @@ A figure should make the data understandable at a glance, and look good enough t
 
 ## Font sizes and canvas
 
-| Figure title | Axis title | Ticks, legend | Value labels, event annotations |
-|---|---|---|---|
-| 36 | 32 | 28 | 24 |
+| Figure title | Axis title | Ticks | Legend | Value labels, event annotations |
+|---|---|---|---|---|
+| 36 | 28 | 28 | 24 | 24 |
+
+Every axes is framed on all four sides (top and right spines stay on).
 
 Each subplot is 7 to 12 inches wide and 6 to 8 inches tall; a single subplot with a time axis or many categories can be widened to 28 inches. When placed in the paper, scale the whole figure to column width. If labels are too crowded, widen the canvas; do not shrink the font size.
 
