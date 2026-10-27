@@ -34,8 +34,10 @@ PASTELS = [GRAY, YELLOWS[-1], PURPLES[-1], GREENS[-1], BLUES[-1],
 AREA_BLUE = (BLUES[-1], BLUES[0])
 AREA_RED = (REDS[-1], OURS)
 AREA_GREEN = (GREENS[-1], GREENS[0])
+# Width of every data and reference line, plain or faded.
+LINEWIDTH = 3
 # Horizontal reference line, e.g. "SFT only" or "random policy".
-REFERENCE = {"color": "black", "alpha": 0.3, "linewidth": 4, "linestyle": "--", "zorder": 1}
+REFERENCE = {"color": "black", "alpha": 0.3, "linewidth": LINEWIDTH, "linestyle": "--", "zorder": 1}
 # Uncertainty band around a mean curve (+-1 std).
 BAND_ALPHA = 0.2
 
@@ -60,7 +62,7 @@ def apply_style():
         "ytick.major.size": 8,
         "axes.spines.top": True,  # full four-sided frame
         "axes.spines.right": True,
-        "lines.linewidth": 5,
+        "lines.linewidth": LINEWIDTH,
         "lines.markersize": 10,
         "hatch.linewidth": 1.5,
         "pdf.fonttype": 42,  # embed TrueType so PDF text stays selectable text
@@ -167,9 +169,9 @@ def fade_line(ax, x, y, color, label=None, alpha=(0.3, 0.9), marker="o"):
     rgb = to_rgb(color)
     zorder = line_zorder(color)
     colors = [(*rgb, a) for a in np.linspace(*alpha, len(segments))]
-    ax.add_collection(LineCollection(segments, colors=colors, linewidths=4, capstyle="round", zorder=zorder))
+    ax.add_collection(LineCollection(segments, colors=colors, linewidths=LINEWIDTH, capstyle="round", zorder=zorder))
     ax.plot(x, y, linestyle="none", marker=marker, markersize=16, color=color, zorder=zorder)
-    ax.plot([], [], color=color, linewidth=4, marker=marker, markersize=16, label=label, zorder=zorder)  # legend entry
+    ax.plot([], [], color=color, linewidth=LINEWIDTH, marker=marker, markersize=16, label=label, zorder=zorder)  # legend entry
     ax.autoscale_view()
 
 

@@ -36,6 +36,16 @@ class StyleTest(unittest.TestCase):
         legend_text = self.ax.legend().get_texts()[0]
         self.assertEqual(legend_text.get_fontsize(), 24)
 
+    def test_line_widths_are_three(self):
+        plain, = self.ax.plot([0, 1], [0, 1])
+        self.assertEqual(plain.get_linewidth(), 3)
+        ps.fade_line(self.ax, [0, 1, 2], [0, 1, 2], ps.OURS, label="ours")
+        segments = self.ax.collections[-1]
+        self.assertTrue(all(w == 3 for w in segments.get_linewidths()))
+        legend_entry = self.ax.lines[-1]
+        self.assertEqual(legend_entry.get_linewidth(), 3)
+        self.assertEqual(self.ax.axhline(0.5, **ps.REFERENCE).get_linewidth(), 3)
+
 
 if __name__ == "__main__":
     unittest.main()
