@@ -1,5 +1,6 @@
 % Illustrative numbers only, not real experimental results.
-% Multiple datasets in an ablation: one block per dataset, stacked vertically and separated by \midrule.
+% Multiple datasets in an ablation: one block per dataset, stacked vertically and separated by
+% \midrule[\heavyrulewidth] (as thick as \toprule), so dataset boundaries stand out from the header \midrule.
 % Every block repeats the full two-level header; the upper header names the dataset instead of "Metrics".
 % \checkmark = module used, blank = not used; full model in the last row of every block.
 % Bold = best, underline = second best, compared per column WITHIN each dataset block (higher is better).
@@ -24,7 +25,7 @@
 \checkmark & \checkmark &            & \underline{0.681 $\pm$ 0.002} & \underline{0.670 $\pm$ 0.003} \\
 \checkmark & \checkmark & \checkmark & \textbf{0.694 $\pm$ 0.001}    & \textbf{0.682 $\pm$ 0.002} \\
 
-\midrule
+\midrule[\heavyrulewidth]
 \multicolumn{3}{c}{\textbf{Components}} & \multicolumn{2}{c}{\textbf{Cifar-100}} \\
 \cmidrule(lr){1-3} \cmidrule(lr){4-5}
 \textbf{Module A} & \textbf{Module B} & \textbf{Module C} & \textbf{ACC} & \textbf{F1} \\

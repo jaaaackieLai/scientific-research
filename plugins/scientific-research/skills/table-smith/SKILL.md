@@ -25,7 +25,7 @@ Save output tables as `.tex` files in the project's `tables/` folder (e.g. `tabl
 | `scripts/table_template.tex` | **Use by default**. |
 | `scripts/multi_dataset_template.tex` | **Multiple datasets**. Dataset in the first column with `\multirow{n}{*}{\textbf{Dataset}}`, methods in the second column, one row group per dataset separated by `\midrule`; includes a yes/no `\checkmark` property column |
 | `scripts/ablation_template.tex` | **Ablation**, single dataset. Module columns use `\checkmark`, and upper grouped headers (Components / Metrics) are separated with `\cmidrule` instead of vertical lines |
-| `scripts/ablation_multi_dataset_template.tex` | **Ablation, multiple datasets**. One block per dataset stacked vertically, separated by `\midrule`; each block repeats the full two-level header, with the dataset name in place of "Metrics" |
+| `scripts/ablation_multi_dataset_template.tex` | **Ablation, multiple datasets**. One block per dataset stacked vertically, separated by a thick `\midrule[\heavyrulewidth]`; each block repeats the full two-level header, with the dataset name in place of "Metrics" |
 
 Required packages: `booktabs`, `graphicx` (`\resizebox`), `amssymb` (`\checkmark`), `multirow` (when there are merged rows).
 
@@ -56,7 +56,7 @@ Required packages: `booktabs`, `graphicx` (`\resizebox`), `amssymb` (`\checkmark
 - With standard deviations, mark the whole cell: `\textbf{0.694 $\pm$ 0.001}`.
 - When tied for best, bold all of them, and do not mark a second best in that case.
 - **Ablations**: one column per module, `\checkmark` if used, blank if not; the full model goes in the last row. See `scripts/ablation_template.tex`.
-- **Ablations on multiple datasets**: stack one block per dataset vertically (not side by side, not a `Dataset` column); each block repeats the two-level header with the dataset name as the upper metric header, and the full model is the last row of every block. Compare bold/underline within each block only. See `scripts/ablation_multi_dataset_template.tex`.
+- **Ablations on multiple datasets**: stack one block per dataset vertically (not side by side, not a `Dataset` column), separating blocks with `\midrule[\heavyrulewidth]` so they stand out from the thinner header `\midrule`; each block repeats the two-level header with the dataset name as the upper metric header, and the full model is the last row of every block. Compare bold/underline within each block only. See `scripts/ablation_multi_dataset_template.tex`.
 
 ## Checks before delivery
 
