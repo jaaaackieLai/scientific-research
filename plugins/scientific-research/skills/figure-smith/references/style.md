@@ -15,7 +15,7 @@ A figure should make the data understandable at a glance, and look good enough t
 |---|---|---|---|---|
 | 36 | 28 | 28 | 24 | 24 |
 
-Every axes is framed on all four sides (top and right spines stay on).
+Every axes is framed on all four sides (top and right spines stay on). The frame and tick marks keep matplotlib's default widths and lengths, so the data lines stay heavier than the frame.
 
 Each subplot is 7 to 12 inches wide and 6 to 8 inches tall; a single subplot with a time axis or many categories can be widened to 28 inches. When placed in the paper, scale the whole figure to column width. If labels are too crowded, widen the canvas; do not shrink the font size.
 

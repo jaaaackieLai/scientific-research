@@ -27,6 +27,15 @@ class StyleTest(unittest.TestCase):
         for side in ("top", "right", "bottom", "left"):
             self.assertTrue(self.ax.spines[side].get_visible(), side)
 
+    def test_frame_and_ticks_use_matplotlib_defaults(self):
+        default = matplotlib.rcParamsDefault
+        for side in ("top", "right", "bottom", "left"):
+            self.assertEqual(self.ax.spines[side].get_linewidth(), default["axes.linewidth"], side)
+        for axis, name in ((self.ax.xaxis, "xtick"), (self.ax.yaxis, "ytick")):
+            tick = axis.get_major_ticks()[0].tick1line
+            self.assertEqual(tick.get_markeredgewidth(), default[f"{name}.major.width"], name)
+            self.assertEqual(tick.get_markersize(), default[f"{name}.major.size"], name)
+
     def test_font_sizes(self):
         self.assertEqual(self.ax.xaxis.label.get_fontsize(), 28)
         self.assertEqual(self.ax.yaxis.label.get_fontsize(), 28)
