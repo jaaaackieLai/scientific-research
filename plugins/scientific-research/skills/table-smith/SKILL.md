@@ -24,14 +24,15 @@ Save output tables as `.tex` files in the project's `tables/` folder (e.g. `tabl
 |---|---|
 | `scripts/table_template.tex` | **Use by default**. |
 | `scripts/multi_dataset_template.tex` | **Multiple datasets**. Dataset in the first column with `\multirow{n}{*}{\textbf{Dataset}}`, methods in the second column, one row group per dataset separated by `\midrule`; includes a yes/no `\checkmark` property column |
-| `scripts/ablation_template.tex` | Ablation. Same layout as above; module columns use `\checkmark`, and upper grouped headers (Components / Metrics) are separated with `\cmidrule` instead of vertical lines |
+| `scripts/ablation_template.tex` | **Ablation**, single dataset. Module columns use `\checkmark`, and upper grouped headers (Components / Metrics) are separated with `\cmidrule` instead of vertical lines |
+| `scripts/ablation_multi_dataset_template.tex` | **Ablation, multiple datasets**. One block per dataset stacked vertically, separated by `\midrule`; each block repeats the full two-level header, with the dataset name in place of "Metrics" |
 
 Required packages: `booktabs`, `graphicx` (`\resizebox`), `amssymb` (`\checkmark`), `multirow` (when there are merged rows).
 
 ## Row and column arrangement
 
 - **Metrics always go on the top horizontal axis**: metrics such as ACC and F1 are columns and methods are rows, so the reader compares the same metric vertically. Do not move metrics to rows.
-- **Multiple datasets go in the first column**, not in grouped headers: add a `Dataset` column before `Method`, write each dataset once with `\multirow{n}{*}{\textbf{APAVA}}` (n = number of methods), leave that cell empty in the group's other rows, and separate dataset groups with `\midrule`. Use `scripts/multi_dataset_template.tex`.
+- **Multiple datasets go in the first column**, not in grouped headers (except ablations, see below): add a `Dataset` column before `Method`, write each dataset once with `\multirow{n}{*}{\textbf{APAVA}}` (n = number of methods), leave that cell empty in the group's other rows, and separate dataset groups with `\midrule`. Use `scripts/multi_dataset_template.tex`.
 - **Binary attributes get their own `\checkmark` column**: when rows differ by a yes/no property (e.g. channelwise or not, with or without pretraining, a module on or off), do not encode it as a suffix in the method name such as `SoftCLT (channelwise)`. Keep the base method name and add one column per property (header = property name), with `\checkmark` if it applies and blank if not. The same applies to ablations, where each module is such a property.
 - **The proposed method always goes in the last row** (of every dataset group); in ablations the full model is the proposed method, and also goes in the last row. The proposed method's name may be bold (e.g. `\textbf{Ours}`).
 
@@ -55,11 +56,12 @@ Required packages: `booktabs`, `graphicx` (`\resizebox`), `amssymb` (`\checkmark
 - With standard deviations, mark the whole cell: `\textbf{0.694 $\pm$ 0.001}`.
 - When tied for best, bold all of them, and do not mark a second best in that case.
 - **Ablations**: one column per module, `\checkmark` if used, blank if not; the full model goes in the last row. See `scripts/ablation_template.tex`.
+- **Ablations on multiple datasets**: stack one block per dataset vertically (not side by side, not a `Dataset` column); each block repeats the two-level header with the dataset name as the upper metric header, and the full model is the last row of every block. Compare bold/underline within each block only. See `scripts/ablation_multi_dataset_template.tex`.
 
 ## Checks before delivery
 
 - Metrics on the top horizontal axis, proposed method in the last row (of every dataset group)
-- Multiple datasets: `Dataset` first column with `\multirow`, groups separated by `\midrule`
+- Multiple datasets: `Dataset` first column with `\multirow`, groups separated by `\midrule`; for ablations, vertically stacked blocks with the dataset name in each block's header
 - Yes/no properties are `\checkmark` columns, not suffixes in method names
 - No extra vertical lines, `\hline`, or double rules
 - Bold and underline in each column follow that metric's direction, with only one best (unless tied)
