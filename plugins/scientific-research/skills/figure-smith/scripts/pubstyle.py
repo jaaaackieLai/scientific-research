@@ -55,11 +55,6 @@ def apply_style():
         "ytick.labelsize": FONT["tick"],
         "legend.fontsize": FONT["legend"],
         "legend.frameon": False,
-        "axes.linewidth": 3,
-        "xtick.major.width": 2,
-        "ytick.major.width": 2,
-        "xtick.major.size": 8,
-        "ytick.major.size": 8,
         "axes.spines.top": True,  # full four-sided frame
         "axes.spines.right": True,
         "lines.linewidth": LINEWIDTH,
